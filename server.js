@@ -23,8 +23,8 @@ var Server = IgeClass.extend({
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			.network.start(7600, function () {
-            //.network.start(2000, function () {
+			//.network.start(7600, function () {
+            .network.start(2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
@@ -77,8 +77,8 @@ var Server = IgeClass.extend({
                             .id('orb2')
                             .streamMode(1)
                             .mount(ige.$('scene1'))
-                            .height(100)
-                            .width(100)
+                            //.height(100)
+                            //.width(100)
                             .addComponent(IgeVelocityComponent)
                             .velocity.byAngleAndPower(Math.radians(20), 0.01);
 
@@ -88,8 +88,9 @@ var Server = IgeClass.extend({
                             .id('orb3')
                             .streamMode(1)
                             .mount(ige.$('scene1'))
-                            .height(40)
-                            .width(40)
+                            .scaleBy(0.5,0.5,0.5)
+                            //.height(40)
+                            //.width(40)
                             .addComponent(IgeVelocityComponent)
                             .translateTo(100, -200, 0)
                             .velocity.byAngleAndPower(Math.radians(100), 0.02);

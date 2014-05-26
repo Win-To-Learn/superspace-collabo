@@ -6,6 +6,8 @@ var Player = IgeEntityBox2d.extend({
 
 		var self = this;
 
+
+
 		this.drawBounds(false);
 
 		// Rotate to point upwards
@@ -24,16 +26,12 @@ var Player = IgeEntityBox2d.extend({
 			self.texture(ige.client.textures.ship)
 			.width(20)
 			.height(20);
-
-            var tex = new IgeTexture('./assets/OrbTexture.js');
 		}
-
-
-
 
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+
 	},
 
 	/**
@@ -66,6 +64,8 @@ var Player = IgeEntityBox2d.extend({
 		}
 	},
 
+
+
 	/**
 	 * Called every frame by the engine when this entity is mounted to the
 	 * scenegraph.
@@ -73,6 +73,9 @@ var Player = IgeEntityBox2d.extend({
 	 */
 	tick: function (ctx) {
 		/* CEXCLUDE */
+        myx1 = this._translate.x;
+        myy1 = this._translate.y;
+        myrot1 = this.worldRotationZ();
 		if (ige.isServer) {
 			if (this.controls.left) {
 				this.rotateBy(0, 0, Math.radians(-0.02 * ige._tickDelta));
@@ -99,53 +102,18 @@ var Player = IgeEntityBox2d.extend({
                     ige.network.send('playerControlThrustDown');
 
 
-                    //var myent = new IgeEntityBox2d();
                     var myent = new Orb();
                     myent.mount(ige.client.scene1);
-                    //myent.scaleTo(0.2,0.2,0.2);
-                    //var worldrot = this._worldRotationZ;
-                    //var worldRot = self.screenPosition();
+
                     myent
                         .addComponent(IgeVelocityComponent)
-                        //.translate
-                        //.velocity.x(-0.01)
-                        //.velocity.y(0.01)
-                        //.velocity.byAngleAndPower(Math.radians(worldRot), 0.1)
-                        .velocity.byAngleAndPower(Math.radians(mouseX-90), 0.1)
+
+                        .velocity.byAngleAndPower(myrot1-Math.radians(90), 0.1)
                         .width(1)
                         .height(1)
                         .streamMode(1)
-                        //.translateTo(self._translate.x, self._translate.y, 0);
-                        //.box2dBody({
-                        //    type: 'dynamic',
-                        //    bullet: 'true',
-                        //    gravitic: false
-                        //})
+                        .translateTo(myx1, myy1, 0);
 
-                        /*.box2dBody({
-                            type: 'dynamic',
-                            linearDamping: 0.0,
-                            angularDamping: 0.05,
-                            allowSleep: true,
-                            bullet: true,
-                            gravitic: false,
-                            fixedRotation: false,
-                            fixtures: [
-                                {
-                                    density: 1,
-                                    filter: {
-                                        categoryBits: 0x0100,
-                                        maskBits: 0xffff
-                                    },
-                                    shape: {
-                                        type: 'circle'
-                                    }
-                                }
-                            ]
-                        });*/
-
-                    //myent.texture(ige.client.textures.orb);
-                    //ige.network.send('orbEntity');
 
                 }
             });

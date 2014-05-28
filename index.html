@@ -12,11 +12,6 @@
 	<!-- STYLES -->
 	<link href="../css/default.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="lib/editor/style.css">
-  <style type="text/css" media="screen">
-      #igeStatsFloater {
-        display: none;
-      }
-  </style>
 	<!-- Isogenic Loader -->
 	<script type="text/javascript">var igeRoot = '../../engine/';</script>
 	<script type="text/javascript" src="../../engine/loader.js"></script>
@@ -24,6 +19,7 @@
 <body>
 
 <div id="codeArea">
+<div id="editorTab" class="editorTab">code <span class='arrow'></span></div>
 <div id="editor">var image = {
   render: function (ctx, entity) {
     // Draw the player entity
@@ -37,7 +33,9 @@
     ctx.stroke();
   }
 };</div>
-  <button class="submit">Submit Code</button>
+  <div id="bottomBar">
+    <button class="submit">Submit Code</button>
+  </div>
 </div>
 
     <div class="igeLoading loadingFloat">
@@ -55,6 +53,7 @@
         Powered By Isogenic Game Engine
         <a href="http://www.isogenicengine.com" target="_blank">http://www.isogenicengine.com</a>
     </div>
+    <script src="lib/vendor/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="lib/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="lib/editor/index.js" type="text/javascript" charset="utf-8"></script>
 </body>

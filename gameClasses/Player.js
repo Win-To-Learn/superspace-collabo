@@ -75,7 +75,8 @@ var Player = IgeEntityBox2d.extend({
 		/* CEXCLUDE */
         myx1 = this._translate.x;
         myy1 = this._translate.y;
-        myrot1 = this.worldRotationZ();
+        //myrot1 = this.worldRotationZ();
+        myrot1 = this._rotate.z;
 		if (ige.isServer) {
 			if (this.controls.left) {
 				this.rotateBy(0, 0, Math.radians(-0.02 * ige._tickDelta));

@@ -73,26 +73,36 @@ var Server = IgeClass.extend({
 
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
 
+                        randNum = Math.random()
+                        var orb3 = new Orb()
+                            //.id('orb3')
+                            .streamMode(1)
+                            .mount(ige.$('scene1'))
+
+                            .scaleBy(randNum,randNum,1)
+                            //.height(40)
+                            //.width(40)
+                            .addComponent(IgeVelocityComponent)
+                            .translateTo(Math.random()*500, Math.random()*-500, 0)
+                            .velocity.byAngleAndPower(randNum*Math.radians(360), randNum*0.02);
+
+
                         var orb2 = new Orb()
                             .id('orb2')
                             .streamMode(1)
                             .mount(ige.$('scene1'))
-                            .height(100)
-                            .width(100)
+                            //.height(100)
+                            //.width(100)
                             .addComponent(IgeVelocityComponent)
                             .velocity.byAngleAndPower(Math.radians(20), 0.01);
 
 
+                        setInterval(function(){
+                            orb3.translateTo(Math.random()*500, Math.random()*-500, 0);
+                            orb2.translateTo(Math.random()*500, Math.random()*-500, 0);
+                            },20000);
 
-                        var orb3 = new Orb()
-                            .id('orb3')
-                            .streamMode(1)
-                            .mount(ige.$('scene1'))
-                            .height(40)
-                            .width(40)
-                            .addComponent(IgeVelocityComponent)
-                            .translateTo(100, -200, 0)
-                            .velocity.byAngleAndPower(Math.radians(100), 0.02);
+                        //setInterval(self.orb,500);
 
                         ige.box2d.contactListener(
                             function (contact) {
@@ -100,7 +110,8 @@ var Server = IgeClass.extend({
                                 if (contact.igeEitherCategory('Orb') && contact.igeEitherCategory('Orb')) {
                                     // The player has taken off
                                     //orb2._translateTo(200,200,0);
-                                    //orb3.destroy;
+                                    orb2.destroy;
+                                    orb3.destroy;
                                     //delete ige.servers.players(1);
                                     //delete ige.servers.players(2);
                                     //delete ige.servers.players(3);

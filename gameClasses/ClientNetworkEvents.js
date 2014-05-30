@@ -22,6 +22,10 @@ var ClientNetworkEvents = {
 			var self = this;
 			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
 				if (entity.id() === data) {
+
+                    // Store reference to player
+                    ige.data('player', ige.$(data));
+
 					// Tell the camera to track out player entity
 					ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
 

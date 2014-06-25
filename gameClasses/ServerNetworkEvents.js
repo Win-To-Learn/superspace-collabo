@@ -44,6 +44,17 @@ var ServerNetworkEvents = {
             ige.network.send('orbEntity', ige.server.orbs[clientId].id(), clientId);
         }
     },
+	
+	_onCode: function(data, clientId) {
+		var player = ige.server.players[clientId];
+		console.log(player);
+		try {
+			eval(data);
+		}
+		catch(e) {
+			console.log(e);
+		}
+	},
 
 
 

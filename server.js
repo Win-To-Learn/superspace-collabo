@@ -31,6 +31,7 @@ var Server = IgeClass.extend({
 					if (success) {
 						// Create some network commands we will need
 						ige.network.define('playerEntity', self._onPlayerEntity);
+						ige.network.define('code', self._onCode);
                         ige.network.define('orbEntity', self._onOrbEntity);
 
 						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);

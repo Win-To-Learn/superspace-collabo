@@ -20,7 +20,8 @@ var Client = IgeClass.extend({
 		// Load the textures we want to use
 		this.textures = {
 			ship: new IgeTexture('./assets/PlayerTexture.js'),
-            orb: new IgeTexture('./assets/OrbTexture.js')
+            orb: new IgeTexture('./assets/OrbTexture.js'),
+            bullet: new IgeTexture('./assets/BulletTexture.js')
 		};
 
 
@@ -51,8 +52,8 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					ige.network.start('http://aequoreagames.com:7600', function () {
-                    //ige.network.start('http://localhost:2000', function () {
+					//ige.network.start('http://aequoreagames.com:7600', function () {
+                    ige.network.start('http://localhost:2000', function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
                         //ige.network.define('orbEntity', self._onOrbEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
@@ -170,7 +171,7 @@ var Client = IgeClass.extend({
 
                         ige.box2d.contactListener(
                             // Listen for when contact's begin
-                            /*function (contact) {
+                            /**function (contact) {
                                 //console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 
                                 // If player ship collides with lunar surface, crash!
@@ -221,12 +222,14 @@ var Client = IgeClass.extend({
                             // Listen for when contact's end
                             function (contact) {
                                 //console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-                                if (contact.igeEitherCategory('Orb') && contact.igeEitherCategory('Orb')) {
+                                if (contact.igeEitherCategory('bullet') && contact.igeEitherCategory('orb')) {
                                     // The player has taken off
-                                    delete ige.servers.players(0);
-                                    delete ige.servers.players(1);
-                                    delete ige.servers.players(2);
-                                    delete ige.servers.players(3);
+                                    console.log('contact between bullet and orb');
+                                    //this.player.destroy();
+                                    //delete ige.servers.players(0);
+                                    //delete ige.servers.players(1);
+                                    //delete ige.servers.players(2);
+                                    //delete ige.servers.players(3);
                                 }
                             }/*,
                              // Handle pre-solver events

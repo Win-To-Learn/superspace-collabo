@@ -79,15 +79,15 @@ var Player = IgeEntityBox2d.extend({
         myrot1 = this._rotate.z;
 		if (ige.isServer) {
 			if (this.controls.left) {
-				this.rotateBy(0, 0, Math.radians(-0.02 * ige._tickDelta));
+				this.rotateBy(0, 0, Math.radians(-0.04 * ige._tickDelta));
 			}
 
 			if (this.controls.right) {
-				this.rotateBy(0, 0, Math.radians(0.02 * ige._tickDelta));
+				this.rotateBy(0, 0, Math.radians(0.04 * ige._tickDelta));
 			}
 
 			if (this.controls.thrust) {
-				this.velocity.byAngleAndPower(this._rotate.z + Math.radians(-90), 0.1);
+				this.velocity.byAngleAndPower(this._rotate.z + Math.radians(-90), 0.3);
 			} else {
 				this.velocity.x(0);
 				this.velocity.y(0);
@@ -103,15 +103,15 @@ var Player = IgeEntityBox2d.extend({
                     ige.network.send('playerControlThrustDown');
 
 
-                    var myent = new Orb();
+                    var myent = new Bullet();
                     myent.mount(ige.client.scene1);
 
                     myent
                         .addComponent(IgeVelocityComponent)
 
-                        .velocity.byAngleAndPower(myrot1-Math.radians(90), 0.1)
-                        .width(1)
-                        .height(1)
+                        .velocity.byAngleAndPower(myrot1-Math.radians(90), 0.4)
+                        //.width(1)
+                        //.height(1)
                         .streamMode(1)
                         .translateTo(myx1, myy1, 0);
 

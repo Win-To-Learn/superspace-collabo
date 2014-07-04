@@ -1,26 +1,27 @@
 //var Orb = IgeEntityBox2d.extend({
-var Orb = IgeEntityBox2d.extend({
+var Bullet = IgeEntityBox2d.extend({
 
-    classId: 'Orb',
+    classId: 'Bullet',
 
     init: function () {
         //IgeEntityBox2d.prototype.init.call(this);
         IgeEntity.prototype.init.call(this);
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
-        this._rectColor = '#ffc600';
+        this._rectColor = '#ffffff';
 
         if (!ige.isServer) {
-            this.texture(ige.client.textures.orb);
+            this.texture(ige.client.textures.bullet);
 
         }
 
-        this.category('orb')
+        this.category('bullet')
             //.texture(ige.client.textures.orb)
-            .width(100)
-            .height(100)
+            .width(10)
+            .height(10)
+
             .box2dBody({
-                type: 'dynamic',
+                type: 'kinematic',
                 linearDamping: 0.0,
                 angularDamping: 0.00,
                 allowSleep: true,
@@ -28,7 +29,7 @@ var Orb = IgeEntityBox2d.extend({
                 gravitic: false,
                 fixedRotation: false,
                 fixtures: [{
-                    density: 0,
+                    density: 1,
                     filter: {
                         categoryBits: 0x0100,
                         maskBits: 0xffff
@@ -38,11 +39,12 @@ var Orb = IgeEntityBox2d.extend({
                     }
                 }]
             });
+
     },
 
-    originalStart: function (translate) {
-        this._originalStart = translate.clone();
-    }
+    //originalStart: function (translate) {
+    //    this._originalStart = translate.clone();
+    //}
 
 /*    scoreValue: function (val) {
         if (val !== undefined) {
@@ -90,4 +92,4 @@ var Orb = IgeEntityBox2d.extend({
     }*/
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Orb; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Bullet; }

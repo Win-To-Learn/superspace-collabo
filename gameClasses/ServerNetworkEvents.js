@@ -44,6 +44,18 @@ var ServerNetworkEvents = {
             ige.network.send('orbEntity', ige.server.orbs[clientId].id(), clientId);
         }
     },
+
+    _onBulletEntity: function (data, clientId) {
+        if (!ige.server.bullets[clientId]) {
+            ige.server.bullets[clientId] = new Bullet(clientId)
+                .streamMode(1)
+                .mount(ige.server.scene1);
+
+            //Tell the client to track their player entity
+            ige.network.send('bulletEntity', ige.server.bullets[clientId].id(), clientId);
+        }
+    },
+
 	
 	_onCode: function(data, clientId) {
 		var player = ige.server.players[clientId];

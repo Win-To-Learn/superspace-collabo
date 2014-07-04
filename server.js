@@ -9,6 +9,7 @@ var Server = IgeClass.extend({
 		// Define an object to hold references to our player entities
 		this.players = {};
         this.orbs = {};
+        this.bullets = {};
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -23,70 +24,73 @@ var Server = IgeClass.extend({
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			.network.start(7600, function () {
-            //.network.start(2000, function () {
+			//.network.start(7600, function () {
+            .network.start(2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
-						// Create some network commands we will need
-						ige.network.define('playerEntity', self._onPlayerEntity);
-						ige.network.define('code', self._onCode);
+                        // Create some network commands we will need
+                        ige.network.define('playerEntity', self._onPlayerEntity);
+                        ige.network.define('code', self._onCode);
                         ige.network.define('orbEntity', self._onOrbEntity);
+                        ige.network.define('bulletEntity', self._onBulletEntity);
+                        ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
+                        ige.network.define('playerControlRightDown', self._onPlayerRightDown);
+                        ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
 
-						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
-						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
-						ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
+                        ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
+                        ige.network.define('playerControlRightUp', self._onPlayerRightUp);
+                        ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
 
-						ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
-						ige.network.define('playerControlRightUp', self._onPlayerRightUp);
-						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
+                        ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
+                        ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 
-						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
-						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
+                        // Add the network stream component
+                        ige.network.addComponent(IgeStreamComponent)
+                            .stream.sendInterval(30) // Send a stream update once every 30 milliseconds
+                            .stream.start(); // Start the stream
 
-						// Add the network stream component
-						ige.network.addComponent(IgeStreamComponent)
-							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
-							.stream.start(); // Start the stream
+                        // Accept incoming network connections
+                        ige.network.acceptConnections(true);
 
-						// Accept incoming network connections
-						ige.network.acceptConnections(true);
+                        // Create the scene
+                        self.mainScene = new IgeScene2d()
+                            .id('mainScene');
 
-						// Create the scene
-						self.mainScene = new IgeScene2d()
-							.id('mainScene');
+                        // Create the scene
+                        self.scene1 = new IgeScene2d()
+                            .id('scene1')
+                            .mount(self.mainScene);
 
-						// Create the scene
-						self.scene1 = new IgeScene2d()
-							.id('scene1')
-							.mount(self.mainScene);
-
-						// Create the main viewport and set the scene
-						// it will "look" at as the new scene1 we just
-						// created above
-						self.vp1 = new IgeViewport()
-							.id('vp1')
-							.autoSize(true)
-							.scene(self.mainScene)
-							.drawBounds(true)
-							.mount(ige);
+                        // Create the main viewport and set the scene
+                        // it will "look" at as the new scene1 we just
+                        // created above
+                        self.vp1 = new IgeViewport()
+                            .id('vp1')
+                            .autoSize(true)
+                            .scene(self.mainScene)
+                            .drawBounds(true)
+                            .mount(ige);
 
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
 
-                        randNum = Math.random()
+
+
+                        for (int1 = 0; int1 < 10; int1++) {
+                        randNum = Math.random();
                         var orb3 = new Orb()
                             //.id('orb3')
                             .streamMode(1)
                             .mount(ige.$('scene1'))
 
-                            .scaleBy(randNum,randNum,1)
+                            .scaleBy(randNum, randNum, 1)
                             //.height(40)
                             //.width(40)
                             .addComponent(IgeVelocityComponent)
-                            .translateTo(Math.random()*500, Math.random()*-500, 0)
-                            .velocity.byAngleAndPower(randNum*Math.radians(360), randNum*0.02);
-
+                            .translateTo(Math.random() * 1500, Math.random() * -1500, 0)
+                            .velocity.byAngleAndPower(randNum * Math.radians(360), randNum * 0.05);
+                        }
 
                         var orb2 = new Orb()
                             .id('orb2')
@@ -95,30 +99,17 @@ var Server = IgeClass.extend({
                             //.height(100)
                             //.width(100)
                             .addComponent(IgeVelocityComponent)
-                            .velocity.byAngleAndPower(Math.radians(20), 0.01);
+                            .velocity.byAngleAndPower(Math.radians(20), 0.02);
 
 
                         setInterval(function(){
                             orb3.translateTo(Math.random()*500, Math.random()*-500, 0);
                             orb2.translateTo(Math.random()*500, Math.random()*-500, 0);
-                            },20000);
+                            },100000);
 
                         //setInterval(self.orb,500);
 
-                        ige.box2d.contactListener(
-                            function (contact) {
-                                //console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-                                if (contact.igeEitherCategory('Orb') && contact.igeEitherCategory('Orb')) {
-                                    // The player has taken off
-                                    //orb2._translateTo(200,200,0);
-                                    orb2.destroy;
-                                    orb3.destroy;
-                                    //delete ige.servers.players(1);
-                                    //delete ige.servers.players(2);
-                                    //delete ige.servers.players(3);
-                                }
-                            }
-                            );
+
 
 
 

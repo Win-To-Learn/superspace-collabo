@@ -89,7 +89,7 @@ var Player = IgeEntityBox2d.extend({
 					.streamMode(1)
 					.addComponent(IgeVelocityComponent)
 					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1 + velocity)
-					.translateTo(myx1, myy1, 0)
+					.translateTo(this._translate.x, this._translate.y, 0)
 					.mount(ige.server.scene1);
 				this._lastShoot = ige._timeScaleLastTimestamp;
 			}

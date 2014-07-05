@@ -29,10 +29,6 @@ var ClientNetworkEvents = {
 					// Tell the camera to track out player entity
 					ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
 
-					// Set the time stream UI entity to monitor our player entity
-					// time stream data
-					ige.client.tsVis.monitor(ige.$(data));
-
 					// Turn off the listener for this event now that we
 					// have found and started tracking our player entity
 					ige.network.stream.off('entityCreated', self._eventListener, function (result) {

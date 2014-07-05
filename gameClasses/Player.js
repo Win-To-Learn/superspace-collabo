@@ -79,11 +79,11 @@ var Player = IgeEntityBox2d.extend({
         myrot1 = this._rotate.z;
 		if (ige.isServer) {
 			if (this.controls.left) {
-				this.rotateBy(0, 0, Math.radians(-0.02 * ige._tickDelta));
+				this.rotateBy(0, 0, Math.radians(-0.05 * ige._tickDelta));
 			}
 
 			if (this.controls.right) {
-				this.rotateBy(0, 0, Math.radians(0.02 * ige._tickDelta));
+				this.rotateBy(0, 0, Math.radians(0.05 * ige._tickDelta));
 			}
 
 			if (this.controls.thrust) {

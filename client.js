@@ -77,7 +77,7 @@ var Client = IgeClass.extend({
 							});
 
 						self.mainScene = new IgeScene2d()
-							.backgroundPattern(self.textures.stars, 'repeat', true, false)
+							//.backgroundPattern(self.textures.stars, 'repeat', true, false)
 							.id('mainScene');
 
 						// Create the scene
@@ -188,7 +188,7 @@ var Client = IgeClass.extend({
 
                         ige.box2d.contactListener(
                             // Listen for when contact's begin
-                            /*function (contact) {
+                            /**function (contact) {
                                 //console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 
                                 // If player ship collides with lunar surface, crash!
@@ -239,24 +239,19 @@ var Client = IgeClass.extend({
                             // Listen for when contact's end
                             function (contact) {
                                 //console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-                                if (contact.igeEitherCategory('Orb') && contact.igeEitherCategory('Orb')) {
+                                if (contact.igeEitherCategory('bullet') && contact.igeEitherCategory('orb')) {
                                     // The player has taken off
-                                    delete ige.servers.players(0);
-                                    delete ige.servers.players(1);
-                                    delete ige.servers.players(2);
-                                    delete ige.servers.players(3);
+                                    console.log('contact between bullet and orb');
+                                    //this.player.destroy();
+                                    //delete ige.servers.players(0);
+                                    //delete ige.servers.players(1);
+                                    //delete ige.servers.players(2);
+                                    //delete ige.servers.players(3);
                                 }
-                            }/*,
-                             // Handle pre-solver events
-                             function (contact) {
-                             // If player ship collides with lunar surface, crash!
-                             if (contact.igeEitherCategory('orb') && contact.igeEitherCategory('ship')) {
-                             // Cancel the contact
-                             contact.SetEnabled(false);
-                             }
+                            }
 
                              // You can also check an entity by it's category using igeEitherCategory('categoryName')
-                             }*/
+                             
                         );
 
 

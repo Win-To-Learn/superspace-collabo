@@ -21,19 +21,61 @@
 <button onclick="TogetherJS(this); return false;" style="position:absolute;">Start TogetherJS</button>
 <div id="codeArea">
 <div id="editorTab" class="editorTab">code <span class='arrow'></span></div>
-<div id="editor">var image = {
-  render: function (ctx, entity) {
-    // Draw the player entity
-    ctx.strokeStyle = 'rgba(0, 255, 0, 1)';
-    ctx.beginPath();
-    ctx.moveTo(0, -entity._geometry.y2);
-    ctx.lineTo(entity._geometry.x2, entity._geometry.y2);
-    ctx.lineTo(0, entity._geometry.y2 - 10);
-    ctx.lineTo(-entity._geometry.x2, entity._geometry.y2);
-    ctx.lineTo(0, -entity._geometry.y2);
-    ctx.stroke();
-  }
-};</div>
+<div id="editor">
+    //player.translateBy(15,-15,0);
+    //player.drawBounds(true); does not work
+    //player.clone(); does not work
+    //player.mode(1); does not work
+    //player.scaleTo(1,1,1);
+    //player.destroy();
+    //player.hide(); does not work
+    //player.velocity.byAngleAndPower(0,5);
+    //player.lifeSpan(1000);
+    //ige.server.players[clientId].controls.thrust = true;
+    //player.translateTo(0,0,0);
+
+    //this code allows you to create 20 asteroids
+    
+    /*var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 20) {
+     new Orb(0.5); // 0.5 is the scale
+    i++;
+    }
+    }, 100);*/
+    
+    // destroy all asteroids
+    //for(var i in ige.server.orbs) {
+        //ige.server.orbs[i].destroy();
+    //}
+    
+    //this code allows you to rapid fire 20 shots
+
+    //var i = 0;
+    //var moveInterval = setInterval(function(){
+    //if(i < 20) {
+    //player.shoot();
+    //i++;
+    //}
+    //}, 100);
+
+
+
+
+    //this makes the ship travel diagonally on a timer
+    /**
+    var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 20) {
+    player.translateBy(15,-15,0);
+    i++;
+    }
+    else {
+    clearInterval(moveInterval);
+    }
+    }, 100);
+    **/
+</div>
   <div id="bottomBar">
     <button id="submitCode" class="submit">Submit Code</button>
   </div>

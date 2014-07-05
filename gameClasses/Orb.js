@@ -76,6 +76,8 @@ var Orb = IgeEntityBox2d.extend({
 				.category('orb')
 				.streamMode(1)
 				.mount(ige.$('scene1'));
+				
+			ige.server.orbs.push(this);
 			
 		}
 

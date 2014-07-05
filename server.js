@@ -8,7 +8,7 @@ var Server = IgeClass.extend({
 
 		// Define an object to hold references to our player entities
 		this.players = {};
-        this.orbs = {};
+        this.orbs = [];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -29,51 +29,51 @@ var Server = IgeClass.extend({
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
-						// Create some network commands we will need
-						ige.network.define('playerEntity', self._onPlayerEntity);
-						ige.network.define('code', self._onCode);
+                        // Create some network commands we will need
+                        ige.network.define('playerEntity', self._onPlayerEntity);
+                        ige.network.define('code', self._onCode);
                         ige.network.define('orbEntity', self._onOrbEntity);
+                        ige.network.define('bulletEntity', self._onBulletEntity);
+                        ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
+                        ige.network.define('playerControlRightDown', self._onPlayerRightDown);
+                        ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
 
-						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
-						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
-						ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
-
-						ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
-						ige.network.define('playerControlRightUp', self._onPlayerRightUp);
-						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
+                        ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
+                        ige.network.define('playerControlRightUp', self._onPlayerRightUp);
+                        ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
 						
 						ige.network.define('playerShoot', self._onPlayerShoot);
 
-						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
-						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
+                        ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
+                        ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 
-						// Add the network stream component
-						ige.network.addComponent(IgeStreamComponent)
-							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
-							.stream.start(); // Start the stream
+                        // Add the network stream component
+                        ige.network.addComponent(IgeStreamComponent)
+                            .stream.sendInterval(30) // Send a stream update once every 30 milliseconds
+                            .stream.start(); // Start the stream
 
-						// Accept incoming network connections
-						ige.network.acceptConnections(true);
+                        // Accept incoming network connections
+                        ige.network.acceptConnections(true);
 
-						// Create the scene
-						self.mainScene = new IgeScene2d()
-							.id('mainScene');
+                        // Create the scene
+                        self.mainScene = new IgeScene2d()
+                            .id('mainScene');
 
-						// Create the scene
-						self.scene1 = new IgeScene2d()
-							.id('scene1')
-							.mount(self.mainScene);
+                        // Create the scene
+                        self.scene1 = new IgeScene2d()
+                            .id('scene1')
+                            .mount(self.mainScene);
 
-						// Create the main viewport and set the scene
-						// it will "look" at as the new scene1 we just
-						// created above
-						self.vp1 = new IgeViewport()
-							.id('vp1')
-							.autoSize(true)
-							.scene(self.mainScene)
-							.drawBounds(true)
-							.mount(ige);
-
+                        // Create the main viewport and set the scene
+                        // it will "look" at as the new scene1 we just
+                        // created above
+                        self.vp1 = new IgeViewport()
+                            .id('vp1')
+                            .autoSize(true)
+                            .scene(self.mainScene)
+                            .drawBounds(true)
+                            .mount(ige);
+						
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
 						
 						for(var i = 0; i < 3; i++) {
@@ -99,9 +99,6 @@ var Server = IgeClass.extend({
 								//console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 							}
 						);
-
-
-
 
 					}
 				});

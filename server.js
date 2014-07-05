@@ -15,7 +15,7 @@ var Server = IgeClass.extend({
 
         ige.addComponent(IgeBox2dComponent)
             .box2d.sleep(true)
-            .box2d.gravity(0, 1)
+            //.box2d.gravity(0, 1)
             .box2d.createWorld()
             .box2d.mode(0)
             .box2d.start();
@@ -41,6 +41,8 @@ var Server = IgeClass.extend({
 						ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
 						ige.network.define('playerControlRightUp', self._onPlayerRightUp);
 						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
+						
+						ige.network.define('playerShoot', self._onPlayerShoot);
 
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
@@ -73,66 +75,30 @@ var Server = IgeClass.extend({
 							.mount(ige);
 
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
-
-                        randNum = Math.random()
-                        var orb3 = new Orb()
-                            //.id('orb3')
-                            .streamMode(1)
-                            .mount(ige.$('scene1'))
-
-                            .scaleBy(randNum,randNum,1)
-                            //.height(40)
-                            //.width(40)
-                            .addComponent(IgeVelocityComponent)
-                            .translateTo(Math.random()*500, Math.random()*-500, 0)
-                            .velocity.byAngleAndPower(randNum*Math.radians(360), randNum*0.02);
-
-
-                        var orb2 = new Orb()
-                            .id('orb2')
-                            .streamMode(1)
-                            .mount(ige.$('scene1'))
-                            //.height(100)
-                            //.width(100)
-                            .addComponent(IgeVelocityComponent)
-                            .velocity.byAngleAndPower(Math.radians(20), 0.01);
-
-
-                        setInterval(function(){
-                            orb3.translateTo(Math.random()*500, Math.random()*-500, 0);
-                            orb2.translateTo(Math.random()*500, Math.random()*-500, 0);
-                            },20000);
-
-                        //setInterval(self.orb,500);
-
-                        ige.box2d.contactListener(
-                            function (contact) {
-                                //console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-                                if (contact.igeEitherCategory('Orb') && contact.igeEitherCategory('Orb')) {
-                                    // The player has taken off
-                                    //orb2._translateTo(200,200,0);
-                                    orb2.destroy;
-                                    orb3.destroy;
-                                    //delete ige.servers.players(1);
-                                    //delete ige.servers.players(2);
-                                    //delete ige.servers.players(3);
-                                }
-                            }
-                            );
-
-
-
-
-                        //orb2.texture(ige.client.textures.orb);
-
-                        //orb2._translate.tween()
-                        //    .stepTo({x: -200},60000)
-                        //    .start();
-
-
-                            //.velocity.x(-0.01)
-                            //.velocity.y(0.01)
-                            //.velocity.byAngleAndPower(Math.radians(45), 0.1)
+						
+						for(var i = 0; i < 3; i++) {
+							scale = 1 + Math.random();
+							var orb3 = new Orb(scale)
+								.translateTo((Math.random()-0.5)*400, (Math.random()-0.5)*400, 0)
+								.rotateTo(0,0,Math.radians(Math.random()*360))
+						}
+						
+						ige.box2d.contactListener(
+							// Listen for when contact's begin
+							function (contact) {
+								var A = contact.igeEntityA();
+								var B = contact.igeEntityB();
+								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
+								if(A.category() == 'orb' && B.category() == 'bullet') {
+									A.exploding = true;
+									B.destroy();
+								}
+							},
+							// Listen for when contact's end
+							function (contact) {
+								//console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
+							}
+						);
 
 
 

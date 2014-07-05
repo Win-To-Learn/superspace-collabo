@@ -27,6 +27,7 @@ var ServerNetworkEvents = {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.streamMode(1)
+				.translateTo(0,-200,0)
 				.mount(ige.server.scene1);
 
 			// Tell the client to track their player entity
@@ -47,7 +48,7 @@ var ServerNetworkEvents = {
 	
 	_onCode: function(data, clientId) {
 		var player = ige.server.players[clientId];
-		console.log(player);
+		//console.log(player);
 		try {
 			eval(data);
 		}
@@ -82,6 +83,10 @@ var ServerNetworkEvents = {
 
 	_onPlayerThrustUp: function (data, clientId) {
 		ige.server.players[clientId].controls.thrust = false;
+	},
+	
+	_onPlayerShoot: function (data, clientId) {
+		ige.server.players[clientId].shoot();
 	}
 };
 

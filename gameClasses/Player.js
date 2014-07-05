@@ -2,13 +2,17 @@ var Player = IgeEntityBox2d.extend({
 	classId: 'Player',
 
 	init: function () {
-		IgeEntity.prototype.init.call(this);
+		//IgeEntity.prototype.init.call(this);
+		IgeEntityBox2d.prototype.init.call(this);
 
 		var self = this;
 
-
-
 		this.drawBounds(false);
+		
+		self._thrustPower = 15;
+		self._shootInterval = 100;
+		self._lastShoot = ige._timeScaleLastTimestamp;
+		var scale = 0.5;
 
 		// Rotate to point upwards
 		this.controls = {
@@ -18,20 +22,78 @@ var Player = IgeEntityBox2d.extend({
 		};
 
 		if (ige.isServer) {
-			this.addComponent(IgeVelocityComponent);
+			// Define the polygon for collision
+			var triangles,
+				fixDefs,
+				collisionPoly = new IgePoly2d()
+				.addPoint(0, -this._geometry.y * scale)
+				.addPoint(this._geometry.x * scale, this._geometry.y * scale)
+				.addPoint(-this._geometry.x * scale, this._geometry.y * scale);
 
+			// Scale the polygon by the box2d scale ratio
+			collisionPoly.divide(ige.box2d._scaleRatio);
+
+			// Now convert this polygon into an array of triangles
+			triangles = collisionPoly.triangulate();
+			self.triangles = triangles;
+
+			// Create an array of box2d fixture definitions
+			// based on the triangles
+			fixDefs = [];
+
+			for (var i = 0; i < self.triangles.length; i++) {
+				fixDefs.push({
+					density: 1,
+					friction: 1.0,
+					restitution: 0.2,
+					filter: {
+						categoryBits: 0x0001,
+						maskBits: 0x000B
+					},
+					shape: {
+						type: 'polygon',
+						data: self.triangles[i]
+					}
+				});
+			}
+			// collision definition END
+
+			self.box2dBody({
+				type: 'dynamic',
+				linearDamping: 1,
+				angularDamping: 1,
+				allowSleep: true,
+				bullet: true,
+				fixtures: fixDefs,
+				fixedRotation: false
+			});
+			
+			self.addComponent(IgeVelocityComponent)
+				.category('ship');
 		}
 
 		if (!ige.isServer) {
 			self.texture(ige.client.textures.ship)
-			.width(20)
-			.height(20);
 		}
 
+		self.scaleTo(scale,scale,1);
 
-		// Define the data sections that will be included in the stream
-		this.streamSections(['transform', 'score']);
-
+	},
+	
+	shoot: function() {
+		if(ige.isServer) {
+			if(ige._timeScaleLastTimestamp - this._lastShoot > this._shootInterval) {
+				var b2vel = this._box2dBody.GetLinearVelocity();
+				var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
+				var bullet = new Bullet()
+					.streamMode(1)
+					.addComponent(IgeVelocityComponent)
+					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1 + velocity)
+					.translateTo(myx1, myy1, 0)
+					.mount(ige.server.scene1);
+				this._lastShoot = ige._timeScaleLastTimestamp;
+			}
+		}
 	},
 
 	/**
@@ -72,25 +134,25 @@ var Player = IgeEntityBox2d.extend({
 	 * @param ctx The canvas context to render to.
 	 */
 	tick: function (ctx) {
-		/* CEXCLUDE */
         myx1 = this._translate.x;
         myy1 = this._translate.y;
         //myrot1 = this.worldRotationZ();
         myrot1 = this._rotate.z;
+		/* CEXCLUDE */
 		if (ige.isServer) {
 			if (this.controls.left) {
-				this.rotateBy(0, 0, Math.radians(-0.05 * ige._tickDelta));
+				this.rotateBy(0, 0, Math.radians(-0.15 * ige._tickDelta));
 			}
 
 			if (this.controls.right) {
-				this.rotateBy(0, 0, Math.radians(0.05 * ige._tickDelta));
+				this.rotateBy(0, 0, Math.radians(0.15 * ige._tickDelta));
 			}
 
 			if (this.controls.thrust) {
-				this.velocity.byAngleAndPower(this._rotate.z + Math.radians(-90), 0.1);
-			} else {
-				this.velocity.x(0);
-				this.velocity.y(0);
+				var radians = this._rotate.z + Math.radians(-90),
+				thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
+				this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
+				this._box2dBody.SetAwake(true);
 			}
 		}
 		/* CEXCLUDE */
@@ -101,21 +163,7 @@ var Player = IgeEntityBox2d.extend({
                 if (which == 1 && mouseY<-200) {
                     //the left mouse button was clicked or a touch happened
                     ige.network.send('playerControlThrustDown');
-
-
-                    var myent = new Orb();
-                    myent.mount(ige.client.scene1);
-
-                    myent
-                        .addComponent(IgeVelocityComponent)
-
-                        .velocity.byAngleAndPower(myrot1-Math.radians(90), 0.1)
-                        .width(1)
-                        .height(1)
-                        .streamMode(1)
-                        .translateTo(myx1, myy1, 0);
-
-
+                    ige.network.send('playerShoot');
                 }
             });
 
@@ -211,6 +259,10 @@ var Player = IgeEntityBox2d.extend({
 					// Tell the server about our control change
 					ige.network.send('playerControlThrustUp');
 				}
+			}
+			
+			if (ige.input.actionState('shoot')) {
+				ige.network.send('playerShoot');
 			}
 		}
 

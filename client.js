@@ -22,7 +22,10 @@ var Client = IgeClass.extend({
 		// Load the textures we want to use
 		this.textures = {
 			ship: new IgeTexture('./assets/PlayerTexture.js'),
-            orb: new IgeTexture('./assets/OrbTexture.js')
+            orb: new IgeTexture('./assets/OrbTexture.js'),
+            bullet: new IgeTexture('./assets/BulletTexture.js'),
+            stars: new IgeTexture('./assets/stars2.png'),
+            boundary: new IgeTexture('./assets/boundaryTexture.js')
 		};
 
 
@@ -74,6 +77,7 @@ var Client = IgeClass.extend({
 							});
 
 						self.mainScene = new IgeScene2d()
+							.backgroundPattern(self.textures.stars, 'repeat', true, false)
 							.id('mainScene');
 
 						// Create the scene
@@ -95,6 +99,13 @@ var Client = IgeClass.extend({
 							.scene(self.mainScene)
 							.drawBounds(false)
 							.mount(ige);
+							
+						new IgeEntity()
+							.id('boundaries')
+							.width(500)
+							.height(500)
+							.texture(self.textures.boundary)
+							.mount(self.scene1)
 
                         /*self.vp2 = new IgeViewport()
                             .id('vp2')
@@ -120,6 +131,7 @@ var Client = IgeClass.extend({
 						ige.input.mapAction('left', ige.input.key.left);
 						ige.input.mapAction('right', ige.input.key.right);
 						ige.input.mapAction('thrust', ige.input.key.up);
+						ige.input.mapAction('shoot', ige.input.key.space);
 
 
 						// Ask the server to create an entity for us

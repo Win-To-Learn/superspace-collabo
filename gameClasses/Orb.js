@@ -2,92 +2,144 @@
 var Orb = IgeEntityBox2d.extend({
 
     classId: 'Orb',
-
-    init: function () {
-        //IgeEntityBox2d.prototype.init.call(this);
-        IgeEntity.prototype.init.call(this);
+	
+    init: function (scale) {
+		IgeEntityBox2d.prototype.init.call(this);
+		
+		var self = this;
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         this._rectColor = '#ffc600';
+		
+		if(arguments.length < 1) {
+			scale = 2;
+		}
+		self.scale = scale;
+		self.exploding = false;
+		
+		if (ige.isServer) {
+			// Define the polygon for collision
+			var triangles,
+				fixDefs,
+				collisionPoly = new IgePoly2d()
+					.addPoint(-this._geometry.x * scale, -this._geometry.y * scale / 2)
+					.addPoint(-this._geometry.x * scale / 2, -this._geometry.y * scale)
+					.addPoint(this._geometry.x * scale / 2, -this._geometry.y * scale)
+					.addPoint(this._geometry.x * scale, -this._geometry.y * scale / 2)
+					.addPoint(this._geometry.x * scale, this._geometry.y * scale / 2)
+					.addPoint(this._geometry.x * scale / 2, this._geometry.y * scale)
+					.addPoint(-this._geometry.x * scale / 2, this._geometry.y * scale)
+					.addPoint(-this._geometry.x * scale, this._geometry.y * scale / 2)
+					
+			// Scale the polygon by the box2d scale ratio
+			collisionPoly.divide(ige.box2d._scaleRatio);
+
+			// Now convert this polygon into an array of triangles
+			triangles = collisionPoly.triangulate();
+			self.triangles = triangles;
+
+			// Create an array of box2d fixture definitions
+			// based on the triangles
+			fixDefs = [];
+
+			for (var i = 0; i < self.triangles.length; i++) {
+				fixDefs.push({
+					density: 0.1,
+					friction: 1.0,
+					restitution: 0.2,
+					filter: {
+						categoryBits: 0x00ff,
+						maskBits: 0xffff & ~0x0008
+					},
+					shape: {
+						type: 'polygon',
+						data: self.triangles[i]
+					}
+				});
+			}
+			// collision definition END
+			
+		
+			self._thrustPower = 2*scale;
+
+			self.box2dBody({
+				type: 'dynamic',
+				linearDamping: 2,
+				angularDamping: 2,
+				allowSleep: true,
+				fixtures: fixDefs,
+				fixedRotation: false,
+			});
+			
+			
+			self.addComponent(IgeVelocityComponent)
+				.category('orb')
+				.streamMode(1)
+				.mount(ige.$('scene1'));
+			
+		}
 
         if (!ige.isServer) {
             this.texture(ige.client.textures.orb);
-
         }
 
-        this.category('orb')
-            //.texture(ige.client.textures.orb)
-            .width(100)
-            .height(100)
-/*            .box2dBody({
-                type: 'dynamic',
-                linearDamping: 0.0,
-                angularDamping: 0.05,
-                allowSleep: true,
-                bullet: true,
-                gravitic: false,
-                fixedRotation: false,
-                fixtures: [{
-                    density: 1,
-                    filter: {
-                        categoryBits: 0x0100,
-                        maskBits: 0xffff
-                    },
-                    shape: {
-                        type: 'circle'
-                    }
-                }]
-            });*/
+        this.scaleTo(scale,scale,1);
+		
     },
 
-    originalStart: function (translate) {
-        this._originalStart = translate.clone();
-    }
-
-/*    scoreValue: function (val) {
-        if (val !== undefined) {
-            this._scoreValue = val;
-            return this;
-        }
-
-        return this._scoreValue;
+    tick: function (ctx) {
+		if (ige.isServer) {
+			if(this.exploding) {
+				this.explode();
+			}
+			else {
+				if(this._translate.x < -250) {
+					this.translateTo(250,0,0);
+				}
+				else if(this._translate.x > 250) {
+					this.translateTo(-250,0,0);
+				}
+				if(this._translate.y < -250) {
+					this.translateTo(0,250,0);
+				}
+				else if(this._translate.y > 250) {
+					this.translateTo(0,-250,0);
+				}
+				var radians = this._rotate.z,
+				thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
+				this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
+				
+				this._box2dBody.SetAngularVelocity(-0.2);
+			}
+			
+		}
+		IgeEntity.prototype.tick.call(this, ctx);
     },
-
-    distanceBonus: function (landingPad) {
-        var distX = (landingPad._translate.x - this._originalStart.x),
-            distY = (landingPad._translate.y - this._originalStart.y),
-            dist = Math.sqrt(distX * distX + distY * distY);
-
-        return Math.floor(dist / 10);
-    },
-
-    deposit: function (beingCarried, landingPad) {
-        if (beingCarried) {
-            ige.client.player.dropOrb();
-        }
-
-        var distScore = this.distanceBonus(landingPad);
-
-        // Create a score text anim
-        new ClientScore('+' + this._scoreValue + ' for orb')
-            .translateTo(this._translate.x, this._translate.y, 0)
-            .mount(ige.client.objectScene)
-            .start();
-
-        new ClientScore('+' + distScore + ' for distance')
-            .translateTo(this._translate.x, this._translate.y - 30, 0)
-            .mount(ige.client.objectScene)
-            .start(500);
-
-        new ClientScore('+' + (this._scoreValue + distScore) + ' total')
-            .translateTo(this._translate.x, this._translate.y - 15, 0)
-            .mount(ige.client.objectScene)
-            .start(3000);
-
-        ige.client.player._score += this._scoreValue + distScore;
-
-        this.destroy();
-    }*/
+	
+	explode: function() {
+		var count = 2;
+		if(this.scale / 2 > 0.3) {
+			for(var i = 0; i < count; i++) {
+				new Orb(this.scale/2)
+					.streamMode(1)
+					.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * i * this.scale, this._translate.y, 0)
+					.rotateTo(0,0,Math.radians((i+1)/count*360));
+					//.mount(ige.$('scene1'));
+				//var thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
+				//this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
+			}
+		}
+		else {
+			if(Math.random() > 0.9) {
+				new Orb(3)
+					.streamMode(1)
+					.translateTo(this._translate.x, this._translate.y, 0)
+					.mount(ige.$('scene1'));
+			}
+		}
+		this.destroy();
+	}
+	
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Orb; }

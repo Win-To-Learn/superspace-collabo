@@ -9,10 +9,10 @@ var Player = IgeEntityBox2d.extend({
 
 		this.drawBounds(false);
 		
-		self._thrustPower = 15;
+		self._thrustPower = 8;
 		self._shootInterval = 100;
 		self._lastShoot = ige._timeScaleLastTimestamp;
-		var scale = 0.5;
+		var scale = 0.3;
 
 		// Rotate to point upwards
 		this.controls = {
@@ -88,7 +88,7 @@ var Player = IgeEntityBox2d.extend({
 				var bullet = new Bullet()
 					.streamMode(1)
 					.addComponent(IgeVelocityComponent)
-					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1 + velocity)
+					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.07 + velocity)
 					.translateTo(this._translate.x, this._translate.y, 0)
 					.mount(ige.server.scene1);
 				this._lastShoot = ige._timeScaleLastTimestamp;

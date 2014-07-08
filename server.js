@@ -4,6 +4,7 @@ var Server = IgeClass.extend({
 
 	init: function (options) {
 		var self = this;
+        serverScore = 0;
 		ige.timeScale(1);
 
 		// Define an object to hold references to our player entities
@@ -23,7 +24,7 @@ var Server = IgeClass.extend({
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			.network.start(7600, function () {
+			.network.start(7611, function () {
             //.network.start(2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
@@ -76,10 +77,10 @@ var Server = IgeClass.extend({
 						
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
 						
-						for(var i = 0; i < 3; i++) {
+						for(var i = 0; i < 20; i++) {
 							scale = 1 + Math.random();
 							var orb3 = new Orb(scale)
-								.translateTo((Math.random()-0.5)*400, (Math.random()-0.5)*400, 0)
+								.translateTo((Math.random()-0.5)*3000, (Math.random()-0.5)*3000, 0)
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
 						
@@ -92,6 +93,7 @@ var Server = IgeClass.extend({
 								if(A.category() == 'orb' && B.category() == 'bullet') {
 									A.exploding = true;
 									B.destroy();
+
 								}
 							},
 							// Listen for when contact's end

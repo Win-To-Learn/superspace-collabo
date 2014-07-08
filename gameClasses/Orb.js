@@ -46,7 +46,7 @@ var Orb = IgeEntityBox2d.extend({
 				fixDefs.push({
 					density: 0.1,
 					friction: 1.0,
-					restitution: 0.2,
+					restitution: 0.5,
 					filter: {
 						categoryBits: 0x00ff,
 						maskBits: 0xffff & ~0x0008
@@ -69,6 +69,7 @@ var Orb = IgeEntityBox2d.extend({
 				allowSleep: true,
 				fixtures: fixDefs,
 				fixedRotation: false,
+                gravityScale: 0.0,
 			});
 			
 			
@@ -89,13 +90,14 @@ var Orb = IgeEntityBox2d.extend({
 		
     },
 
+
     tick: function (ctx) {
 		if (ige.isServer) {
 			if(this.exploding) {
 				this.explode();
 			}
 			else {
-				if(this._translate.x < -250) {
+/*				if(this._translate.x < -250) {
 					this.translateTo(250,0,0);
 				}
 				else if(this._translate.x > 250) {
@@ -106,7 +108,7 @@ var Orb = IgeEntityBox2d.extend({
 				}
 				else if(this._translate.y > 250) {
 					this.translateTo(0,-250,0);
-				}
+				}*/
 				var radians = this._rotate.z,
 				thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 				this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());

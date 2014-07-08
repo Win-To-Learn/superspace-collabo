@@ -25,8 +25,10 @@ var Client = IgeClass.extend({
             orb: new IgeTexture('./assets/OrbTexture.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
-            boundary: new IgeTexture('./assets/boundaryTexture.js')
-		};
+            boundary: new IgeTexture('./assets/BoundaryTexture.js'),
+            font: new IgeFontSheet('./assets/agency_fb_20pt.png', 3)
+
+    };
 
 
 
@@ -56,9 +58,9 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					var serverUrl = 'http://aequoreagames.com:7600';
+					var serverUrl = 'http://aequoreagames.com:7610';
 					if(location.origin = "file://") {
-						serverUrl = 'http://localhost:7600';
+						serverUrl = 'http://localhost:7611';
 					}
 					//ige.network.start(, function () {
                     ige.network.start(serverUrl, function () {
@@ -100,12 +102,12 @@ var Client = IgeClass.extend({
 							.drawBounds(false)
 							.mount(ige);
 							
-						new IgeEntity()
-							.id('boundaries')
-							.width(500)
-							.height(500)
-							.texture(self.textures.boundary)
-							.mount(self.scene1)
+						//new IgeEntity()
+						//	.id('boundaries')
+						//	.width(500)
+						//	.height(500)
+						//	.texture(self.textures.boundary)
+						//	.mount(self.scene1)
 
                         /*self.vp2 = new IgeViewport()
                             .id('vp2')
@@ -123,7 +125,23 @@ var Client = IgeClass.extend({
                             .drawBounds(true)
                             .mount(ige);*/
 
+                        self.score = new IgeFontEntity()
+                            .texture(ige.client.textures.font)
+                            .width(100)
+                            .text('Score')
+                            .top(5)
+                            .right(10)
+                            .mount(self.uiScene);
 
+                        self.scoreText = new IgeFontEntity()
+                            .id('scoreText')
+                            .texture(ige.client.textures.font)
+                            .width(100)
+                            .text('0 points')
+                            .colorOverlay('#ff6000')
+                            .top(35)
+                            .right(10)
+                            .mount(self.uiScene);
 
 
 
@@ -254,7 +272,10 @@ var Client = IgeClass.extend({
                              
                         );
 
-
+                         new Score('+1 for orb')
+                         .translateTo(0, 0, 0)
+                         //.mount(this.uiScene)
+                         .start(1000);
 
 
 

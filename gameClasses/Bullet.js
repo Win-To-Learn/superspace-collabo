@@ -9,7 +9,7 @@ var Orb = IgeEntityBox2d.extend({
 		
 		var self = this;
 		
-		self.liveFor = 2000;
+		self.liveFor = 1500;
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         this._rectColor = '#ffc600';
@@ -34,7 +34,7 @@ var Orb = IgeEntityBox2d.extend({
 				shape: {
 					type: 'circle',
 					data: {
-						radius: 5
+						radius: 3
 					}
 				}
 			});
@@ -44,8 +44,8 @@ var Orb = IgeEntityBox2d.extend({
 
 			self.box2dBody({
 				type: 'dynamic',
-				linearDamping: 2,
-				angularDamping: 2,
+				linearDamping: 2.5,
+				angularDamping: 2.5,
 				bullet: true,
 				isSensor: true,
 				allowSleep: true,
@@ -58,8 +58,8 @@ var Orb = IgeEntityBox2d.extend({
 		}
 
         this.category('bullet')
-            .width(5)
-            .height(5);
+            .width(2)
+            .height(2);
     },
 
     tick: function (ctx) {

@@ -80,7 +80,7 @@ var Player = IgeEntityBox2d.extend({
 
 	},
 	
-	shoot: function() {
+	shoot: function(clientId) {
 		if(ige.isServer) {
 			if(ige._timeScaleLastTimestamp - this._lastShoot > this._shootInterval) {
 				var b2vel = this._box2dBody.GetLinearVelocity();
@@ -91,6 +91,7 @@ var Player = IgeEntityBox2d.extend({
 					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.07 + velocity)
 					.translateTo(this._translate.x, this._translate.y, 0)
 					.mount(ige.server.scene1);
+				bullet.sourceClient = clientId;
 				this._lastShoot = ige._timeScaleLastTimestamp;
 			}
 		}

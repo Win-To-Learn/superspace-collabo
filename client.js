@@ -58,14 +58,17 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					var serverUrl = 'http://aequoreagames.com:7610';
-					if(location.origin = "file://") {
-						serverUrl = 'http://localhost:7611';
+					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					console.log(location);
+					if(location.origin == "file://" || location.origin == "http://localhost") {
+						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
 					}
 					//ige.network.start(, function () {
                     ige.network.start(serverUrl, function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
+						ige.network.define('scored', self._onScored); // Defined in ./gameClasses/ClientNetworkEvents.js
+						ige.network.define('updateScore', self._onUpdateScore); // Defined in ./gameClasses/ClientNetworkEvents.js
                         //ige.network.define('orbEntity', self._onOrbEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
 
 						// Setup the network stream handler
@@ -102,12 +105,12 @@ var Client = IgeClass.extend({
 							.drawBounds(false)
 							.mount(ige);
 							
-						//new IgeEntity()
-						//	.id('boundaries')
-						//	.width(500)
-						//	.height(500)
-						//	.texture(self.textures.boundary)
-						//	.mount(self.scene1)
+						new IgeEntity()
+							.id('boundaries')
+							.width(500)
+							.height(500)
+							.texture(self.textures.boundary)
+							//.mount(self.scene1)
 
                         /*self.vp2 = new IgeViewport()
                             .id('vp2')
@@ -206,54 +209,9 @@ var Client = IgeClass.extend({
 
                         ige.box2d.contactListener(
                             // Listen for when contact's begin
-                            /**function (contact) {
-                                //console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-
-                                // If player ship collides with lunar surface, crash!
-                                if (contact.igeEitherCategory('floor') && contact.igeEitherCategory('ship')) {
-                                    // The player has crashed!
-                                    self.player.crash();
-                                } else if (contact.igeEitherCategory('landingPad') && contact.igeEitherCategory('ship')) {
-                                    // Clear the old orb data
-                                    delete self.player._oldOrb;
-
-                                    // If the player ship touches a landing pad, check velocity and angle
-                                    var degrees = Math.degrees(self.player._rotate.z),
-                                        wound = Math.round(degrees / 360);
-
-                                    if (wound > 0) {
-                                        degrees -= (360 * wound);
-                                    }
-
-                                    if (wound < 0) {
-                                        degrees -= (360 * wound);
-                                    }
-
-                                    self.player._rotate.z = Math.radians(degrees);
-
-                                    if (degrees > 30 || degrees < -30) {
-                                        self.player.crash();
-                                    } else {
-                                        // The player has landed
-                                        self.player._landed = true;
-                                    }
-                                } else if (!self.player._carryingOrb && contact.igeEitherCategory('orb') && contact.igeEitherCategory('ship')) {
-                                    // Check if it is our sensor
-                                    if (contact.m_fixtureA.IsSensor() || contact.m_fixtureB.IsSensor()) {
-                                        // Sensor has collided, attach orb to ship!
-                                        // Set carrying orb
-                                        self.player.carryOrb(contact.igeEntityByCategory('orb'), contact);
-                                    }
-                                } else if (contact.igeEitherCategory('orb') && contact.igeEitherCategory('landingPad')) {
-                                    // Orb has reached landing pad, score!
-                                    if (self.player._carryingOrb && self.player._orb === contact.igeEntityByCategory('orb')) {
-                                        // The orb the player was carrying has reached a pad
-                                        self.player._orb.deposit(true, contact.igeEntityByCategory('landingPad'));
-                                    } else {
-                                        contact.igeEntityByCategory('orb').deposit(false, contact.igeEntityByCategory('landingPad'));
-                                    }
-                                }
-                            },*/
+                            function (contact) {
+								
+                            },
                             // Listen for when contact's end
                             function (contact) {
                                 //console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
@@ -271,11 +229,6 @@ var Client = IgeClass.extend({
                              // You can also check an entity by it's category using igeEitherCategory('categoryName')
                              
                         );
-
-                         new Score('+1 for orb')
-                         .translateTo(0, 0, 0)
-                         //.mount(this.uiScene)
-                         .start(1000);
 
 
 

@@ -24,7 +24,7 @@ var Server = IgeClass.extend({
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			.network.start(7611, function () {
+			.network.start(7610, function () {
             //.network.start(2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
@@ -32,6 +32,8 @@ var Server = IgeClass.extend({
 					if (success) {
                         // Create some network commands we will need
                         ige.network.define('playerEntity', self._onPlayerEntity);
+                        ige.network.define('scored');
+                        ige.network.define('updateScore');
                         ige.network.define('code', self._onCode);
                         ige.network.define('orbEntity', self._onOrbEntity);
                         ige.network.define('bulletEntity', self._onBulletEntity);
@@ -77,6 +79,8 @@ var Server = IgeClass.extend({
 						
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
 						
+						self.score = 0;
+						
 						for(var i = 0; i < 20; i++) {
 							scale = 1 + Math.random();
 							var orb3 = new Orb(scale)
@@ -93,7 +97,7 @@ var Server = IgeClass.extend({
 								if(A.category() == 'orb' && B.category() == 'bullet') {
 									A.exploding = true;
 									B.destroy();
-
+									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
 								}
 							},
 							// Listen for when contact's end

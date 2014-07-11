@@ -32,6 +32,7 @@ var ServerNetworkEvents = {
 
 			// Tell the client to track their player entity
 			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+			ige.network.send('updateScore', ige.server.score, clientId);
 		}
 	},
 
@@ -98,7 +99,7 @@ var ServerNetworkEvents = {
 	},
 	
 	_onPlayerShoot: function (data, clientId) {
-		ige.server.players[clientId].shoot();
+		ige.server.players[clientId].shoot(clientId);
 	}
 };
 

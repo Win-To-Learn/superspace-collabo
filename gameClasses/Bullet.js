@@ -10,6 +10,7 @@ var Orb = IgeEntityBox2d.extend({
 		var self = this;
 		
 		self.liveFor = 1500;
+		self.sourceClient; // the clientId that fired this bullet
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         this._rectColor = '#ffc600';

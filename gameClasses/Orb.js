@@ -15,6 +15,7 @@ var Orb = IgeEntityBox2d.extend({
 			scale = 2;
 		}
 		self.scale = scale;
+		self.pointWorth = Math.round(self.scale*10);
 		self.exploding = false;
 		
 		if (ige.isServer) {
@@ -141,6 +142,8 @@ var Orb = IgeEntityBox2d.extend({
 					.mount(ige.$('scene1'));
 			}
 		}
+		ige.server.score += this.pointWorth;
+		ige.network.send('updateScore', ige.server.score);
 		this.destroy();
 	}
 	

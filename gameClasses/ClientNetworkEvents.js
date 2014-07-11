@@ -40,6 +40,17 @@ var ClientNetworkEvents = {
 			});
 		}
 	},
+	
+	_onScored: function (data) {
+		new ClientScore(data)
+			.translateTo(0, 0, 0)
+			.mount(ige.client.uiScene)
+			.start();
+	},
+	
+	_onUpdateScore: function(data) {
+		ige.client.scoreText.text(data+' points');
+	},
 
     _onOrbEntity: function (data) {
         if (ige.$(data)) {

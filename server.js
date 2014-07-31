@@ -81,10 +81,10 @@ var Server = IgeClass.extend({
 						
 						self.score = 0;
 						
-						for(var i = 0; i < 20; i++) {
+						for(var i = 0; i < 10; i++) {
 							scale = 1 + Math.random();
 							var orb3 = new Orb(scale)
-								.translateTo((Math.random()-0.5)*3000, (Math.random()-0.5)*3000, 0)
+								.translateTo((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, 0)
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
 						
@@ -93,12 +93,22 @@ var Server = IgeClass.extend({
 							function (contact) {
 								var A = contact.igeEntityA();
 								var B = contact.igeEntityB();
+                                //var C = contact.igeEntityC();
 								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 								if(A.category() == 'orb' && B.category() == 'bullet') {
 									A.exploding = true;
 									B.destroy();
 									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                    console.log('contact with bullet');
 								}
+                                else if(A.category() == 'orb' && B.category() == 'ship') {
+                                    A.exploding = true;
+                                    B.destroy();
+                                    ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                    console.log('contact with ship');
+                                }
+
+
 							},
 							// Listen for when contact's end
 							function (contact) {

@@ -47,8 +47,8 @@ var Player = IgeEntityBox2d.extend({
 					friction: 1.0,
 					restitution: 0.2,
 					filter: {
-						categoryBits: 0x0001,
-						maskBits: 0x000B
+						categoryBits: 0x0004,
+						maskBits: 0x0001
 					},
 					shape: {
 						type: 'polygon',
@@ -61,6 +61,8 @@ var Player = IgeEntityBox2d.extend({
 			self.box2dBody({
 				type: 'dynamic',
 				linearDamping: 1,
+                isSensor: true,
+                //restitution: 0.0,
 				angularDamping: 1,
 				allowSleep: true,
 				bullet: true,

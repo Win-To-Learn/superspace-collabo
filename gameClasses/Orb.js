@@ -15,7 +15,7 @@ var Orb = IgeEntityBox2d.extend({
 			scale = 2;
 		}
 		self.scale = scale;
-		self.pointWorth = Math.round(self.scale*10);
+		self.pointWorth = Math.round(Math.pow(1/self.scale,2)*100);
 		self.exploding = false;
 		
 		if (ige.isServer) {
@@ -61,7 +61,7 @@ var Orb = IgeEntityBox2d.extend({
 			// collision definition END
 			
 		
-			self._thrustPower = 2*scale;
+			self._thrustPower = 8*scale;
 
 			self.box2dBody({
 				type: 'dynamic',
@@ -114,7 +114,7 @@ var Orb = IgeEntityBox2d.extend({
 				thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 				this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
 				
-				this._box2dBody.SetAngularVelocity(-0.2);
+				this._box2dBody.SetAngularVelocity(-0.4);
 			}
 			
 		}

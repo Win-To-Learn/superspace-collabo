@@ -58,13 +58,14 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
-					console.log(location);
-					if(location.origin == "file://" || location.origin == "http://localhost") {
-						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
-					}
-					//ige.network.start(, function () {
-                    ige.network.start(serverUrl, function () {
+					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					//console.log(location);
+					//if(location.origin == "file://" || location.origin == "http://localhost") {
+					//	serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
+					//}
+                    var port = process.env.PORT || 5000;
+					ige.network.start(port, function () {
+                    //ige.network.start(serverUrl, function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
 						ige.network.define('scored', self._onScored); // Defined in ./gameClasses/ClientNetworkEvents.js
@@ -104,7 +105,9 @@ var Client = IgeClass.extend({
 							.scene(self.mainScene)
 							.drawBounds(false)
 							.mount(ige);
-							
+                            //.minimumVisibleArea(7800,5600);
+
+                        //console.log(self.vp1.viewArea());
 						new IgeEntity()
 							.id('boundaries')
 							.width(500)
@@ -152,7 +155,7 @@ var Client = IgeClass.extend({
 						ige.input.mapAction('left', ige.input.key.left);
 						ige.input.mapAction('right', ige.input.key.right);
 						ige.input.mapAction('thrust', ige.input.key.up);
-						ige.input.mapAction('shoot', ige.input.key.space);
+						ige.input.mapAction('shoot', ige.input.key.b);
 
 
 						// Ask the server to create an entity for us

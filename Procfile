@@ -1,0 +1,1 @@
+web: node ./server/ige.js -g .

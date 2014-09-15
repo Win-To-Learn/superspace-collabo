@@ -70,9 +70,15 @@ var ServerNetworkEvents = {
 		}
 	},
 
+	_onChatJoin: function(data, clientId) {
+		ige.network.send('chatJoin', ige.server.chatBuffer, clientId);
+	},
 
-
-
+	_onChatMessage: function(data, clientId) {
+		var msg = {'time' : new Date(), 'message' : data, 'client' : clientId};
+		ige.server.chatBuffer.push(msg);
+		ige.network.send('chatMessage', msg);
+	},
 
 	_onPlayerLeftDown: function (data, clientId) {
 		ige.server.players[clientId].controls.left = true;

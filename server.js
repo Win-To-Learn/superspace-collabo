@@ -32,6 +32,8 @@ var Server = IgeClass.extend({
 					if (success) {
                         // Create some network commands we will need
                         ige.network.define('playerEntity', self._onPlayerEntity);
+                        ige.network.define('chatJoin', self._onChatJoin);
+                        ige.network.define('chatMessage', self._onChatMessage);
                         ige.network.define('scored');
                         ige.network.define('updateScore');
                         ige.network.define('code', self._onCode);
@@ -58,6 +60,9 @@ var Server = IgeClass.extend({
                         // Accept incoming network connections
                         ige.network.acceptConnections(true);
 
+						// Create chat buffer
+						self.chatBuffer = [];
+						
                         // Create the scene
                         self.mainScene = new IgeScene2d()
                             .id('mainScene');

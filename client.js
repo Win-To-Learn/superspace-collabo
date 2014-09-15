@@ -26,7 +26,8 @@ var Client = IgeClass.extend({
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
             boundary: new IgeTexture('./assets/BoundaryTexture.js'),
-            font: new IgeFontSheet('./assets/agency_fb_20pt.png', 3)
+            font: new IgeFontSheet('./assets/agency_fb_20pt.png', 3),
+            fontChat: new IgeFontSheet('./assets/verdana_10px.png', 3)
 
     };
 
@@ -58,16 +59,18 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
-					//console.log(location);
-					//if(location.origin == "file://" || location.origin == "http://localhost") {
-					//	serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
-					//}
-                    var port = process.env.PORT || 5000;
-					ige.network.start(port, function () {
-                    //ige.network.start(serverUrl, function () {
+					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					console.log(location);
+					if(location.origin == "file://" || location.origin == "http://localhost") {
+						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
+					}
+                    //var port = process.env.PORT || 5000;
+					//ige.network.start(port, function () {
+                    ige.network.start(serverUrl, function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
+						ige.network.define('chatJoin', self._onChatJoin); // Defined in ./gameClasses/ClientNetworkEvents.js
+						ige.network.define('chatMessage', self._onChatMessage); // Defined in ./gameClasses/ClientNetworkEvents.js
 						ige.network.define('scored', self._onScored); // Defined in ./gameClasses/ClientNetworkEvents.js
 						ige.network.define('updateScore', self._onUpdateScore); // Defined in ./gameClasses/ClientNetworkEvents.js
                         //ige.network.define('orbEntity', self._onOrbEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
@@ -81,7 +84,26 @@ var Client = IgeClass.extend({
 								self.log('Stream entity created with ID: ' + entity.id());
 
 							});
-
+							
+						// Chat system
+						ige.network.send("chatJoin");
+						self.chatBox = $("#chatBox>#chatHistory");
+						$("INPUT[name=chatInputSubmit]").on("click", function() {
+							ige.network.send("chatMessage", $(this).siblings("#chatInputField").val());
+							$(this).siblings("#chatInputField").val("");
+						});
+						$("INPUT[name=chatInputField]").on("keyup", function(e) {
+							if(e.keyCode == 13) { // enter
+								ige.network.send("chatMessage", $(this).val());
+								$(this).val("");
+							}
+						});
+						self.formatMessage = function(data) {
+							var date = new Date(data['time']);
+							return "["+(date.getHours()<10 ? '0'+date.getHours() : date.getHours())+":"+(date.getMinutes()<10 ? '0'+date.getMinutes() : date.getMinutes())+":"+(date.getSeconds()<10 ? '0'+date.getSeconds() : date.getSeconds())+"] "+data['client']+": "+data['message'];
+						}
+						
+						// Scene setup
 						self.mainScene = new IgeScene2d()
 							//.backgroundPattern(self.textures.stars, 'repeat', true, false)
 							.id('mainScene');
@@ -130,6 +152,34 @@ var Client = IgeClass.extend({
                             .scene(self.scene1)
                             .drawBounds(true)
                             .mount(ige);*/
+						
+						ige.ui.style('.chatInput', {
+							'borderColor': "rgb(200,200,200)",
+							'borderWidth': 1,
+							'color': "white"
+						});
+						ige.ui.style('.chatInput:hover', {
+							'borderColor': "rgb(255,255,255)",
+						});
+						ige.ui.style('.chatInput:focus', {
+							'borderColor': "rgb(200,200,255)",
+						});
+						
+						self.chatHistory = new IgeUiLabel
+						/*
+						self.chatInput = new IgeUiTextBox()
+							.id("chatInputBox")
+							.width(350)
+							.height(20)
+							.bottom(1)
+							.right(1)
+							.styleClass("chatInput")
+							.placeHolder("Input message:")
+							.placeHolderColor('rgb(150,150,150)')
+							.value('')
+                            .fontSheet(ige.client.textures.fontChat)
+                            .mount(self.uiScene);
+						*/
 
                         self.score = new IgeFontEntity()
                             .texture(ige.client.textures.font)
@@ -175,6 +225,8 @@ var Client = IgeClass.extend({
 						// data messages.
 						ige.network.debugMax(10);
 						ige.network.debug(true);
+						
+						ige.debug(true);
 
 						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
 						// timestream data being interpolated by the player entity

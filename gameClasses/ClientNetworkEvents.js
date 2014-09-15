@@ -48,6 +48,19 @@ var ClientNetworkEvents = {
 			.start();
 	},
 	
+	_onChatJoin: function(data) {
+		var msgs = "";
+		for(var i in data) {
+			msgs += "<div>"+ige.client.formatMessage(data[i])+"</div>";
+		}
+		ige.client.chatBox.html(msgs);
+	},
+	
+	_onChatMessage: function(data) {
+		console.log("Got chat message");
+		ige.client.chatBox.append(ige.client.formatMessage(data));
+	},
+	
 	_onUpdateScore: function(data) {
 		ige.client.scoreText.text(data+' points');
 	},

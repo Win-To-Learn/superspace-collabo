@@ -54,11 +54,13 @@ var ClientNetworkEvents = {
 			msgs += "<div>"+ige.client.formatMessage(data[i])+"</div>";
 		}
 		ige.client.chatBox.html(msgs);
+		ige.client.chatBox.scrollTop(ige.client.chatBox.prop('scrollHeight'));
 	},
 	
 	_onChatMessage: function(data) {
 		console.log("Got chat message");
-		ige.client.chatBox.append(ige.client.formatMessage(data));
+		ige.client.chatBox.append("<div>"+ige.client.formatMessage(data)+"</div>");
+		ige.client.chatBox.scrollTop(ige.client.chatBox.prop('scrollHeight'));
 	},
 	
 	_onUpdateScore: function(data) {

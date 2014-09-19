@@ -59,10 +59,12 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
-					var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
+					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+
+                    //var serverUrl = 'http://localhost:7610';
+					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					console.log(location);
-					if(location.origin == "file://" || location.origin == "http://localhost") {
+					if(location.origin == "file://" || location.origin == "http://localhost:8888") {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
 					}
                     //var port = process.env.PORT || 5000;
@@ -103,7 +105,13 @@ var Client = IgeClass.extend({
 							var date = new Date(data['time']);
 							return "["+(date.getHours()<10 ? '0'+date.getHours() : date.getHours())+":"+(date.getMinutes()<10 ? '0'+date.getMinutes() : date.getMinutes())+":"+(date.getSeconds()<10 ? '0'+date.getSeconds() : date.getSeconds())+"] "+data['client']+": "+data['message'];
 						}
-						
+
+                        ige.addComponent(IgeAudioComponent);
+                        //self.thrust = new IgeAudioComponent()
+                        //.load("assets/thrust.mp3");
+
+                        //self.thrust.play();
+
 						// Scene setup
 						self.mainScene = new IgeScene2d()
 							//.backgroundPattern(self.textures.stars, 'repeat', true, false)
@@ -225,9 +233,9 @@ var Client = IgeClass.extend({
 						// then stop logging them. This is a demo of how to help you debug network
 						// data messages.
 						ige.network.debugMax(10);
-						ige.network.debug(true);
-						
-						ige.debug(true);
+						ige.network.debug(false);
+
+						ige.debug(false);
 
 						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
 						// timestream data being interpolated by the player entity

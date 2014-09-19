@@ -98,7 +98,7 @@ var IgeClass = (function () {
 						console.log(indent + 'IGE *' + type + '* [' + (this._classId || this.prototype._classId) + thisId + '] : ' + text);
 					}
 				} else {
-					console.log(indent + 'IGE *' + type + '* [' + (this._classId || this.prototype._classId) + thisId + '] : ' + text);
+					//console.log(indent + 'IGE *' + type + '* [' + (this._classId || this.prototype._classId) + thisId + '] : ' + text);
 				}
 			}
 

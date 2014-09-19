@@ -14,6 +14,7 @@ var igeCoreConfig = {
 		/* Components */
 		['csap', 'IgeTimeComponent', 'components/IgeTimeComponent.js'],
 		['csap', 'IgeAnimationComponent', 'components/IgeAnimationComponent.js'],
+        ['csap', 'IgeAudioComponent', 'components/IgeAudioComponent.js'],
 		['csap', 'IgeVelocityComponent', 'components/IgeVelocityComponent.js'],
 		['csap', 'IgeTweenComponent', 'components/IgeTweenComponent.js'],
 		['csap', 'IgePathComponent', 'components/IgePathComponent.js'],

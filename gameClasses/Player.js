@@ -76,6 +76,7 @@ var Player = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			self.texture(ige.client.textures.ship)
+
 		}
 
 		self.scaleTo(scale,scale,1);

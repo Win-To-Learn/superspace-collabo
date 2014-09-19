@@ -59,7 +59,8 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					console.log(location);
 					if(location.origin == "file://" || location.origin == "http://localhost") {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally

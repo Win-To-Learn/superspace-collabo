@@ -10,6 +10,7 @@ var Server = IgeClass.extend({
 		// Define an object to hold references to our player entities
 		this.players = {};
         this.orbs = [];
+        this.fixedorbs = [];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -92,7 +93,27 @@ var Server = IgeClass.extend({
 								.translateTo((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, 0)
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
-						
+
+                        var fixedorb1 = new FixedOrb(1)
+                            .rotateTo(0,0,Math.radians(Math.random()*360))
+                            .translateTo(100, 100, 0);
+
+                        var fixedorb2 = new FixedOrb(1)
+                        .rotateTo(0,0,Math.radians(Math.random()*360))
+                        .translateTo(500, -500, 0)
+
+                        var fixedorb3 = new FixedOrb(1)
+                            .rotateTo(0,0,Math.radians(Math.random()*360))
+                            .translateTo(1000, -1000, 0)
+
+                        var fixedorb4 = new FixedOrb(1)
+                            .rotateTo(0,0,Math.radians(Math.random()*360))
+                            .translateTo(-300, -1200, 0)
+
+                        var fixedorb5 = new FixedOrb(1)
+                            .rotateTo(0,0,Math.radians(Math.random()*360))
+                            .translateTo(-700, -500, 0)
+
 						ige.box2d.contactListener(
 							// Listen for when contact's begin
 							function (contact) {

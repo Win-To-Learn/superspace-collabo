@@ -6,6 +6,7 @@ var image = {
 		ctx.beginPath();
 		ctx.arc(0,0,entity._geometry.x,0,2*Math.PI);
 		ctx.fill();
+        ctx.lineWidth = 2;
 		ctx.stroke();
 	}
 };

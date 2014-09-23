@@ -21,9 +21,9 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture.js'),
+			ship: new IgeTexture('./assets/PlayerTexture2.js'),
             orb: new IgeTexture('./assets/OrbTexture.js'),
-            fixedorb: new IgeTexture('./assets/FixedOrbTexture.js'),
+            fixedorb: new IgeTexture('./assets/FixedOrbTexture2.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
             boundary: new IgeTexture('./assets/BoundaryTexture.js'),
@@ -161,7 +161,7 @@ var Client = IgeClass.extend({
                             .id('top-left')
                             .left(0)
                             .top(0)
-                            .width(200)
+                            .width(260)
                             .height(150)
                             .autoSize(false)
                             .borderColor('#ffffff')

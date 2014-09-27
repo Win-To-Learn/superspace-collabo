@@ -1,7 +1,9 @@
 var igeClientConfig = {
 	include: [
+        './gameClasses/sound.js',
 		/* Your custom game JS scripts */
 		'./gameClasses/ClientNetworkEvents.js',
+
         './gameClasses/Orb.js',
         './gameClasses/FixedOrb.js',
         './gameClasses/FixedOrb3.js',
@@ -9,7 +11,9 @@ var igeClientConfig = {
 		'./gameClasses/Player.js',
         './gameClasses/Score.js',
 		/* Standard game scripts */
+
 		'./client.js',
+
 		'./index.js'
 	]
 };

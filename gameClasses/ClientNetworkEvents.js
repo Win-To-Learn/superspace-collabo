@@ -26,6 +26,8 @@ var ClientNetworkEvents = {
                     // Store reference to player
                     ige.data('player', ige.$(data));
 
+
+                    //ige.data('player').nametagfont.text(entity.id().substr(0,3)); 
 					// Tell the camera to track out player entity
 					ige.client.vp1.camera.trackTranslate(ige.$(data), 30);
 					//ige.$(data)._texture.script.color = ige.client.floatToRgb();
@@ -66,6 +68,16 @@ var ClientNetworkEvents = {
 	_onUpdateScore: function(data) {
 		ige.client.scoreText.text(data+' points');
 	},
+
+    _onUpdateTouchScore: function(data) {
+
+        var scores = []; 
+        for(var i in data)
+        { scores.push(data[i]['id'].substring(0,3)+" "+data[i]['score']); } 
+        ige.client.playerscore.text(scores.join("\n"));
+        //console.log(data);
+
+    },
 
     _onOrbEntity: function (data) {
         if (ige.$(data)) {

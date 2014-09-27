@@ -1,11 +1,15 @@
 var Player = IgeEntityBox2d.extend({
 	classId: 'Player',
 
-	init: function () {
+	init: function (clientID) {
 		//IgeEntity.prototype.init.call(this);
 		IgeEntityBox2d.prototype.init.call(this);
 
+
+
 		var self = this;
+        self.clientID = clientID;
+        self.score = 0;
 
 		this.drawBounds(false);
 		
@@ -41,7 +45,7 @@ var Player = IgeEntityBox2d.extend({
 			// based on the triangles
 			fixDefs = [];
 
-			for (var i = 0; i < self.triangles.length; i++) {
+			//for (var i = 0; i < self.triangles.length; i++) {
 				fixDefs.push({
 					density: 1,
 					friction: 1.0,
@@ -50,12 +54,16 @@ var Player = IgeEntityBox2d.extend({
 						categoryBits: 0x0004,
 						maskBits: 0x0001
 					},
-					shape: {
-						type: 'polygon',
-						data: self.triangles[i]
-					}
+					//shape: {
+					//	type: 'polygon',
+					//	data: self.triangles[i]
+					//}
+                    shape: {
+                     	type: 'circle', 
+                        data: { 		radius: 10 	} 
+                    }
 				});
-			}
+			//}
 			// collision definition END
 
 			self.box2dBody({
@@ -77,6 +85,50 @@ var Player = IgeEntityBox2d.extend({
 		if (!ige.isServer) {
 			self.texture(ige.client.textures.ship);
 			this._texture.script.color = "yellow";
+
+            //self.nametag =  ige.data('player')._id;
+            self.nametag = self.id().substr(0,3);
+
+            self.scoretag = self.score.toString();
+
+            //console.log(self._id);
+            //console.log(ige.data('player'));
+            //console.log(self.nametag);
+
+
+
+            self.nametagfont = new IgeFontEntity() 
+
+            .texture(ige.client.textures.fontid) 
+            .width(500)
+            .colorOverlay('#ff6000')
+            .height(500)
+            .text(self.nametag) 
+            //.left(250)
+            .textAlignX(1)
+            .top(-100) 
+            //.right(250) 
+            .mount(self); 
+
+
+            /*self.scoretagfont = new IgeFontEntity() 
+
+            .texture(ige.client.textures.fontid) 
+            .width(500)
+                .colorOverlay('#ff6000')
+                .height(500)
+                .text(self.nametag) 
+            //.left(250)
+            .textAlignX(1)
+            .top(0) 
+                //.right(250) 
+            .mount(self); 
+            */
+
+
+
+
+
 		}
 
 		self.scaleTo(scale,scale,1);
@@ -174,7 +226,7 @@ var Player = IgeEntityBox2d.extend({
 		/* CEXCLUDE */
 
 		if (!ige.isServer) {
-
+        /*
             ige.input.on('mouseDown', function(event, mouseX, mouseY, which) {
                 if (which == 1 && mouseY<-200) {
                     //the left mouse button was clicked or a touch happened
@@ -219,7 +271,7 @@ var Player = IgeEntityBox2d.extend({
                     ige.network.send('playerControlThrustUp');
                 }
             });
-
+            */
 
 
 
@@ -275,7 +327,13 @@ var Player = IgeEntityBox2d.extend({
 					// Tell the server about our control change
 					ige.network.send('playerControlThrustUp');
 				}
+
 			}
+
+            if(this.controls.thrust) { 
+                //console.log(thrustSound);
+                thrustSound.play();
+                 }
 			
 			if (ige.input.actionState('shoot')) {
 				ige.network.send('playerShoot');

@@ -8,8 +8,12 @@ var FixedOrb = IgeEntityBox2d.extend({
 		
 		var self = this;
 
+        //self.touched = false;
+
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         this._rectColor = '#ffc600';
+
+
 		
 		if(arguments.length < 1) {
 			scale = 2;
@@ -126,10 +130,11 @@ var FixedOrb = IgeEntityBox2d.extend({
 		//var count = 2;
 		//if(this.scale / 2 > 0.3) {
 			//for(var i = 0; i < count; i++) {
+
 				new FixedOrbz(this.scale)
 					.streamMode(1)
 					//.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
-                    .translateTo(this._translate.x+100, this._translate.y+100, 0);
+                    .translateTo(this._translate.x+200, this._translate.y+200, 0);
 					//.rotateTo(0,0,Math.radians((i+1)/count*360));
 					//.mount(ige.$('scene1'));
 				//var thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
@@ -147,6 +152,9 @@ var FixedOrb = IgeEntityBox2d.extend({
 		ige.server.score += this.pointWorth;
 		ige.network.send('updateScore', ige.server.score);
 		this.destroy();
+        delete ige.server.fixedorbs[ige.server.fixedorbs.indexOf(this)];
+        //console.log(ige.server.fixedorbs.length);
+        //console.log(fixedorbs);
 	}
 	
 });

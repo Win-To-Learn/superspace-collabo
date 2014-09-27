@@ -37,18 +37,18 @@ var ServerNetworkEvents = {
 	},
 
     _onOrbEntity: function (data, clientId) {
-        if (!ige.server.orbs[clientId]) {
+        /*if (!ige.server.orbs[clientId]) {
             ige.server.orbs[clientId] = new Orb(clientId)
                 .streamMode(1)
                 .mount(ige.server.scene1);
 
              //Tell the client to track their player entity
             ige.network.send('orbEntity', ige.server.orbs[clientId].id(), clientId);
-        }
+        }*/
     },
 
     _onFixedOrbEntity: function (data, clientId) {
-        if (!ige.server.fixedorbs[clientId]) {
+        /*if (!ige.server.fixedorbs[clientId]) {
             ige.server.fixedorbs[clientId] = new FixedOrb(clientId)
                 .streamMode(1)
                 .mount(ige.server.scene1);
@@ -56,7 +56,7 @@ var ServerNetworkEvents = {
             //Tell the client to track their player entity
             ige.network.send('fixedorbEntity', ige.server.fixedorbs[clientId].id(), clientId);
             console.log("fixedorb callback fired");
-        }
+        }*/
     },
 
     _onBulletEntity: function (data, clientId) {

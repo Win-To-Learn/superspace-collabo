@@ -29,8 +29,8 @@ var Client = IgeClass.extend({
             stars: new IgeTexture('./assets/stars2.png'),
             boundary: new IgeTexture('./assets/BoundaryTexture.js'),
             font: new IgeFontSheet('./assets/agency_fb_20pt.png', 3),
-            fontChat: new IgeFontSheet('./assets/verdana_10px.png', 3)
-
+            fontChat: new IgeFontSheet('./assets/verdana_10px.png', 3),
+            fontid: new IgeFontSheet('./assets/arial_narrow_60pt.png', 3)
     };
 
         // Apply a colour overlay filter to the ninth fairy texture
@@ -61,6 +61,8 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
+                    //("canvas#igeFrontBuffer").focus();
+                    $("#igeFrontBuffer").focus();
                     ige.viewportDepth(true);
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
@@ -83,7 +85,9 @@ var Client = IgeClass.extend({
 						ige.network.define('chatJoin', self._onChatJoin); // Defined in ./gameClasses/ClientNetworkEvents.js
 						ige.network.define('chatMessage', self._onChatMessage); // Defined in ./gameClasses/ClientNetworkEvents.js
 						ige.network.define('scored', self._onScored); // Defined in ./gameClasses/ClientNetworkEvents.js
-						ige.network.define('updateScore', self._onUpdateScore); // Defined in ./gameClasses/ClientNetworkEvents.js
+                        ige.network.define('updateTouchScore', self._onUpdateTouchScore); // Defined in ./gameClasses/ClientNetworkEvents.js
+
+                        ige.network.define('updateScore', self._onUpdateScore); // Defined in ./gameClasses/ClientNetworkEvents.js
                         //ige.network.define('orbEntity', self._onOrbEntity); // Defined in ./gameClasses/ClientNetworkEvents.js
 
 						// Setup the network stream handler
@@ -193,6 +197,7 @@ var Client = IgeClass.extend({
                             .camera.scaleTo(.05,.05,.05)
                             .depth(1)
                             .scene(self.mainScene)
+                            //.scene(self.scene1)
                             //.minimumVisibleArea(1000,1000)
                             .mount(ige);
 
@@ -267,6 +272,19 @@ var Client = IgeClass.extend({
                             .mount(self.uiScene);
 
 
+                        self.playerscore = new IgeFontEntity()
+                            .texture(ige.client.textures.font)
+                            .width(100)
+                            .text('Score')
+                            .top(10)
+                            .right(10)
+                            .height(200)
+                            .mount(self.uiScene)
+
+
+
+
+
 
                         self.scoreText = new IgeFontEntity()
                             .id('scoreText')
@@ -294,6 +312,26 @@ var Client = IgeClass.extend({
                             .top(35)
                             .right(200)
                             .mount(self.uiScene);
+
+
+                        self.rules = new IgeFontEntity()
+                            .texture(ige.client.textures.font)
+                            .width(600)
+                            .height(200)
+                            .text('left, right, and up = thrust, b = fire \n when all players are ready ' +
+                                'be the first to touch all yellow planetoids')
+                            .colorOverlay('#ff6000')
+                            .top(-25)
+                            .right(300)
+                            .textAlignX(1)
+                            .textAlignY(0)
+                            .mount(self.uiScene);
+
+                        setTimeout(function() { 
+                            self.rules.destroy(); 
+                        }, 10000);
+
+
 
                         //ige.client.timerText.text("23423");
 

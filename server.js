@@ -38,6 +38,7 @@ var Server = IgeClass.extend({
                         ige.network.define('chatMessage', self._onChatMessage);
                         ige.network.define('scored');
                         ige.network.define('updateScore');
+                        ige.network.define('updateTouchScore');
                         ige.network.define('code', self._onCode);
                         ige.network.define('orbEntity', self._onOrbEntity);
                         ige.network.define('fixedorbEntity', self._onFixedOrbEntity);
@@ -89,37 +90,43 @@ var Server = IgeClass.extend({
 						
 						self.score = 0;
 						
-						for(var i = 0; i < 25; i++) {
+						for(var i = 0; i < 10; i++) {
 							scale = 1 + Math.random();
 							var orb3 = new Orb(scale)
 								.translateTo((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, 0)
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
 
-                        var fixedorb1 = new FixedOrb(2.5)
-                            .rotateTo(0,0,Math.radians(Math.random()*360))
-                            .translateTo(100, 100, 0);
+                        self.spawnOrbs = function() {
+                            new FixedOrb(2.5)
+                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                .translateTo(100, 100, 0);
 
-                        var fixedorb2 = new FixedOrb(2.5)
-                        .rotateTo(0,0,Math.radians(Math.random()*360))
-                        .translateTo(500, -500, 0)
 
-                        var fixedorb3 = new FixedOrb(2.5)
-                            .rotateTo(0,0,Math.radians(Math.random()*360))
-                            .translateTo(1000, -1000, 0)
+                            new FixedOrb(2.5)
+                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                .translateTo(500, -500, 0);
 
-                        var fixedorb4 = new FixedOrb(2.5)
-                            .rotateTo(0,0,Math.radians(Math.random()*360))
-                            .translateTo(-300, -1200, 0)
+                            new FixedOrb(2.5)
+                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                .translateTo(1000, -1000, 0);
 
-                        var fixedorb5 = new FixedOrb(2.5)
-                            .rotateTo(0,0,Math.radians(Math.random()*360))
-                            .translateTo(-700, -500, 0)
+                            new FixedOrb(2.5)
+                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                .translateTo(-300, -1200, 0);
 
-                        var fixedorb6 = new FixedOrb(2.5)
-                            .rotateTo(0,0,Math.radians(Math.random()*360))
-                            .translateTo(-700, 1100, 0)
+                            new FixedOrb(2.5)
+                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                .translateTo(-700, -500, 0);
 
+                            new FixedOrb(2.5)
+                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                .translateTo(-700, 1100, 0);
+
+                        }
+
+                        self.spawnOrbs();
+                        
 						ige.box2d.contactListener(
 							// Listen for when contact's begin
 							function (contact) {
@@ -129,9 +136,23 @@ var Server = IgeClass.extend({
 								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 								if(A.category() == 'fixedorb' && B.category() == 'ship') {
 
+                                    B.score++;
+                                    //console.log(B.score);
 									A.exploding = true;
 									//B.destroy();
-									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                    var tempScores = [];
+                                    for (var i in self.players){
+                                            tempScores.push(
+                                                {'id' : self.players[i].id(), 'score' : self.players[i].score}
+                                            );
+
+                                    }
+
+                                    ige.network.send('updateTouchScore', tempScores);
+
+                                    //if (self.fixedorbs[] = 0){
+                                        //console.log(self.fixedorbs.length);
+                                    //}
                                     //console.log('contact with bullet');
                                     console.log('contact with fixed orb and ship');
                                     //var fixedorb7 = new Orb(5.5);
@@ -156,6 +177,22 @@ var Server = IgeClass.extend({
                                     B.destroy();
                                     ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                     console.log('contact with orb and ship');
+                                    //console.log(B);
+
+
+                                setTimeout(function(){
+
+                                    ige.server.players[B.clientID] = new Player(B.clientID)
+                                     .streamMode(1)
+                                     .translateTo(0,0,0)
+                                     //.scaleTo(1,1,1)
+                                     .rotateTo(0,0,Math.radians(90))
+                                     .mount(ige.server.scene1);
+                                     ige.network.send('playerEntity', ige.server.players[B.clientID].id(), B.clientID);
+                                     //ige.network.send('updateScore', ige.server.score, clientId);
+
+                                },2000);
+
                                 }
 
 

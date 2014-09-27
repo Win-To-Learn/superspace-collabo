@@ -11,6 +11,7 @@ var Server = IgeClass.extend({
 		this.players = {};
         this.orbs = [];
         this.fixedorbs = [];
+        this.fixedorbzs = [];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -39,6 +40,7 @@ var Server = IgeClass.extend({
                         ige.network.define('updateScore');
                         ige.network.define('code', self._onCode);
                         ige.network.define('orbEntity', self._onOrbEntity);
+                        ige.network.define('fixedorbEntity', self._onFixedOrbEntity);
                         ige.network.define('bulletEntity', self._onBulletEntity);
                         ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
                         ige.network.define('playerControlRightDown', self._onPlayerRightDown);
@@ -94,27 +96,27 @@ var Server = IgeClass.extend({
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
 
-                        var fixedorb1 = new FixedOrb(1)
+                        var fixedorb1 = new FixedOrb(2.5)
                             .rotateTo(0,0,Math.radians(Math.random()*360))
                             .translateTo(100, 100, 0);
 
-                        var fixedorb2 = new FixedOrb(1)
+                        var fixedorb2 = new FixedOrb(2.5)
                         .rotateTo(0,0,Math.radians(Math.random()*360))
                         .translateTo(500, -500, 0)
 
-                        var fixedorb3 = new FixedOrb(1)
+                        var fixedorb3 = new FixedOrb(2.5)
                             .rotateTo(0,0,Math.radians(Math.random()*360))
                             .translateTo(1000, -1000, 0)
 
-                        var fixedorb4 = new FixedOrb(1)
+                        var fixedorb4 = new FixedOrb(2.5)
                             .rotateTo(0,0,Math.radians(Math.random()*360))
                             .translateTo(-300, -1200, 0)
 
-                        var fixedorb5 = new FixedOrb(1)
+                        var fixedorb5 = new FixedOrb(2.5)
                             .rotateTo(0,0,Math.radians(Math.random()*360))
                             .translateTo(-700, -500, 0)
 
-                        var fixedorb6 = new FixedOrb(1)
+                        var fixedorb6 = new FixedOrb(2.5)
                             .rotateTo(0,0,Math.radians(Math.random()*360))
                             .translateTo(-700, 1100, 0)
 
@@ -125,18 +127,37 @@ var Server = IgeClass.extend({
 								var B = contact.igeEntityB();
                                 //var C = contact.igeEntityC();
 								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-								if(A.category() == 'orb' && B.category() == 'bullet') {
+								if(A.category() == 'fixedorb' && B.category() == 'ship') {
+
 									A.exploding = true;
-									B.destroy();
+									//B.destroy();
 									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-                                    console.log('contact with bullet');
+                                    //console.log('contact with bullet');
+                                    console.log('contact with fixed orb and ship');
+                                    //var fixedorb7 = new Orb(5.5);
+                                        //.rotateTo(0,0,Math.radians(Math.random()*360))
+                                        //.translateTo(-700, 1100, 0);
 								}
+                                else if (A.category() == 'orb' && B.category() == 'bullet') {
+                                    //console.log('contact with fixedorb');
+                                    //var fixedorb_checkin = new FixedOrbz(1)
+                                    //    .rotateTo(0,0,Math.radians(Math.random()*360))
+                                    //    .translateTo(0, 0, 0);
+
+                                    //oldpoint = new IgePoint3d();
+
+                                    A.exploding = true;
+                                    B.destroy();
+                                    ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                    //console.log('contact with ship');
+                                }
                                 else if(A.category() == 'orb' && B.category() == 'ship') {
                                     A.exploding = true;
                                     B.destroy();
                                     ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-                                    console.log('contact with ship');
+                                    console.log('contact with orb and ship');
                                 }
+
 
 
 							},

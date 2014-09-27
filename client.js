@@ -24,6 +24,7 @@ var Client = IgeClass.extend({
 			ship: new IgeTexture('./assets/PlayerTexture2.js'),
             orb: new IgeTexture('./assets/OrbTexture.js'),
             fixedorb: new IgeTexture('./assets/FixedOrbTexture2.js'),
+            fixedorbz: new IgeTexture('./assets/FixedOrbTexture3.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
             boundary: new IgeTexture('./assets/BoundaryTexture.js'),
@@ -68,7 +69,7 @@ var Client = IgeClass.extend({
 					// got a username or something?
 					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
-                    //var serverUrl = 'http://localhost:7610';
+                    var serverUrl = 'http://localhost:7610';
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					console.log(location);
 					if(location.origin == "file://" || location.origin == "http://localhost") {
@@ -300,13 +301,27 @@ var Client = IgeClass.extend({
 
                         //var milliSec = 300;
                         var intTimer1 = 0;
+
+
+                        //var seconds = d.getSeconds().toString();
+
                         //var timingInterval1 = setInterval(function(){
                         //    ige.client.timerText.text(intTimer1.toString);
                         //}, milliSec);
 
                         var a = new IgeInterval(function () {
-                            console.log(intTimer1);
-                            var strTimerText = intTimer1.toString();
+                            var d = new Date();
+                            //console.log(intTimer1);
+                            //var strTimerText = intTimer1.toString();
+                            var hours = d.getHours().toString();
+                            var minutes = d.getMinutes().toString();
+                            var seconds = d.getSeconds().toString();
+                            strTimerText = hours.concat(":");
+                            strTimerText = strTimerText.concat(minutes);
+                            strTimerText = strTimerText.concat(":");
+                            strTimerText = strTimerText.concat(seconds);
+                            //= hours.concat(":");
+                            //d.getSeconds().toString();
                             //ige.client.timerText._text(strTimerText);
                             ige.client.timerText.text(strTimerText);
                             intTimer1 = intTimer1 +1;

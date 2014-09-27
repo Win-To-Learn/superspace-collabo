@@ -168,6 +168,7 @@ var Player = IgeEntityBox2d.extend({
 				thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 				this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
 				this._box2dBody.SetAwake(true);
+                //createjs.Sound.play("thrust", createjs.Sound.INTERUPT_LATE);
 			}
 		}
 		/* CEXCLUDE */

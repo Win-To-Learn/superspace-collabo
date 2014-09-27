@@ -1,7 +1,7 @@
 //var Orb = IgeEntityBox2d.extend({
-var FixedOrb = IgeEntityBox2d.extend({
+var FixedOrbz = IgeEntityBox2d.extend({
 
-    classId: 'FixedOrb',
+    classId: 'FixedOrbz',
 	
     init: function (scale) {
 		IgeEntityBox2d.prototype.init.call(this);
@@ -61,10 +61,10 @@ var FixedOrb = IgeEntityBox2d.extend({
 			// collision definition END
 			
 		
-			self._thrustPower = 0.01*scale;
+			self._thrustPower = 8*scale;
 
 			self.box2dBody({
-				type: 'dynamic',
+				type: 'kinematic',
 				linearDamping: 2,
 				angularDamping: 2,
 				allowSleep: true,
@@ -75,16 +75,16 @@ var FixedOrb = IgeEntityBox2d.extend({
 			
 			
 			self.addComponent(IgeVelocityComponent)
-				.category('fixedorb')
+				.category('fixedorbz')
 				.streamMode(1)
 				.mount(ige.$('scene1'));
 				
-			ige.server.fixedorbs.push(this);
+			ige.server.fixedorbzs.push(this);
 			
 		}
 
         if (!ige.isServer) {
-            this.texture(ige.client.textures.fixedorb);
+            this.texture(ige.client.textures.fixedorbz);
         }
 
         this.scaleTo(scale,scale,1);
@@ -123,27 +123,26 @@ var FixedOrb = IgeEntityBox2d.extend({
     },
 	
 	explode: function() {
-		//var count = 2;
-		//if(this.scale / 2 > 0.3) {
-			//for(var i = 0; i < count; i++) {
-				new FixedOrbz(this.scale)
+		var count = 2;
+		if(this.scale / 2 > 0.3) {
+			for(var i = 0; i < count; i++) {
+				new Orb(this.scale/2)
 					.streamMode(1)
-					//.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
-                    .translateTo(this._translate.x+100, this._translate.y+100, 0);
-					//.rotateTo(0,0,Math.radians((i+1)/count*360));
+					.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * i * this.scale, this._translate.y, 0)
+					.rotateTo(0,0,Math.radians((i+1)/count*360));
 					//.mount(ige.$('scene1'));
 				//var thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 				//this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
-			//}
-		//}
-		/*else {
+			}
+		}
+		else {
 			if(Math.random() > 0.9) {
 				new Orb(3)
 					.streamMode(1)
 					.translateTo(this._translate.x, this._translate.y, 0)
 					.mount(ige.$('scene1'));
 			}
-		}*/
+		}
 		ige.server.score += this.pointWorth;
 		ige.network.send('updateScore', ige.server.score);
 		this.destroy();
@@ -151,4 +150,4 @@ var FixedOrb = IgeEntityBox2d.extend({
 	
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = FixedOrb; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = FixedOrbz; }

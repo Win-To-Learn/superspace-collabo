@@ -1,8 +1,25 @@
 var image = {
 	render: function (ctx, entity) {
 		// Draw the player entity
-		ctx.fillStyle = 'rgba(0,0,0,0.8)';
-		ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
+		//var id1 = ige.client.id;
+        //var red1 = Math.floor((Math.random() * 255) + 1);
+        //var red1 = (Math.random() * 255);
+
+        //red1 = String(red1);
+        //var colorstring = "'rgba(255, 255, 0";
+        //colorstring.concat(red1);
+        //str2 = ", 1)'";
+        //var str2 = ", 1";
+        //colorstring.concat(str2);
+
+        //console.log(red1);
+        //console.log(colorstring);
+
+        ctx.fillStyle = 'rgba(0,0,0,0.8)';
+        //ctx.strokeStyle = colorstring;
+
+
+        ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
 		ctx.lineWidth = 10;
 
 

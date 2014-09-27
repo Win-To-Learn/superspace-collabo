@@ -4,6 +4,7 @@ var igeClientConfig = {
 		'./gameClasses/ClientNetworkEvents.js',
         './gameClasses/Orb.js',
         './gameClasses/FixedOrb.js',
+        './gameClasses/FixedOrb3.js',
 		'./gameClasses/Bullet.js',
 		'./gameClasses/Player.js',
         './gameClasses/Score.js',

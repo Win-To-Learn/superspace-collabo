@@ -15,7 +15,16 @@
 	<!-- Isogenic Loader -->
 	<script type="text/javascript">var igeRoot = 'engine/';</script>
 	<script type="text/javascript" src="engine/loader.js"></script>
-	<!-- <script src="https://togetherjs.com/togetherjs-min.js"></script> -->
+
+    <script type="text/javascript" src="SoundJS-release_v0.5.2/src/createjs/utils/Proxy.js"></script>
+    <script type="text/javascript" src="SoundJS-release_v0.5.2/src/createjs/utils/IndexOf.js"></script>
+    <script type="text/javascript" src="SoundJS-release_v0.5.2/src/createjs/events/Event.js"></script>
+    <script type="text/javascript" src="SoundJS-release_v0.5.2/src/createjs/events/EventDispatcher.js"></script>
+    <script type="text/javascript" src="SoundJS-release_v0.5.2/src/soundjs/Sound.js"></script>
+    <script type="text/javascript" src="SoundJS-release_v0.5.2/src/soundjs/WebAudioPlugin.js"></script>
+    <script type="text/javascript" src="SoundJS-release_v0.5.2/src/soundjs/HTMLAudioPlugin.js"></script>
+
+    <!-- <script src="https://togetherjs.com/togetherjs-min.js"></script> -->
 </head>
 
 <style type="text/css">
@@ -39,6 +48,49 @@
 
 myAud=document.getElementById("Audio1");
 myAud.volume=0.4;
+
+function init() {
+    if (window.top != window) {
+        document.getElementById("header").style.display = "none";
+    }
+
+    if (!createjs.Sound.initializeDefaultPlugins()) {
+        document.getElementById("error").style.display = "block";
+        document.getElementById("content").style.display = "none";
+        return;
+    }
+
+    if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid) {  // || createjs.Sound.BrowserDetect.isBlackberry  OJR blackberry has not been tested yet
+        document.getElementById("mobile").style.display = "block";
+        document.getElementById("content").style.display = "none";
+        return;
+    }
+
+    canvas = document.getElementById("gameCanvas");
+    stage = new createjs.Stage(canvas);
+    messageField = new createjs.Text("Loading", "bold 24px Arial", "#FFFFFF");
+    messageField.maxWidth = 1000;
+    messageField.textAlign = "center";
+    messageField.x = canvas.width / 2;
+    messageField.y = canvas.height / 2;
+    stage.addChild(messageField);
+    stage.update(); 	//update the stage to show text
+
+    // begin loading content (only sounds to load)
+    var assetsPath = "assets/";
+    manifest = [
+        {id:"thrust", src:"thrust.mp3"}
+
+    ];
+
+    createjs.Sound.alternateExtensions = ["mp3"];
+    preload = new createjs.LoadQueue(true, assetsPath);
+    preload.installPlugin(createjs.Sound);
+    preload.addEventListener("complete", doneLoading);
+    preload.addEventListener("progress", updateLoading);
+    preload.loadManifest(manifest);
+}
+
 
 </script>
 

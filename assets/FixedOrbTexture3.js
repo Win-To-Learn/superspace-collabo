@@ -1,8 +1,8 @@
 var image = {
 	render: function (ctx, entity) {
 		// Draw the orb entity
-		ctx.fillStyle = 'rgba(255,255,0,0.25)';
-		ctx.strokeStyle = '#ffff00';
+		ctx.fillStyle = 'rgba(0,255,255,0.35)';
+		ctx.strokeStyle = '#00ffff';
 		ctx.lineWidth = 2.5/entity._scale.x;
         //ctx.lineWidth = 5;
 		ctx.beginPath();

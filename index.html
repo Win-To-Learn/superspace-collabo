@@ -17,7 +17,30 @@
 	<script type="text/javascript" src="engine/loader.js"></script>
 	<!-- <script src="https://togetherjs.com/togetherjs-min.js"></script> -->
 </head>
+
+<style type="text/css">
+#Audio1
+{
+    position:absolute;
+    top: 150px;
+    left:0px;
+    width:260px;
+    height:40px;
+}
+</style>
+
+
+
 <body>
+<audio id="Audio1" controls="controls" autoplay="autoplay" src="http://listen.ai-radio.org:8000/radio.ogg?cc=US&now=1411446531.126">
+</audio>
+
+<script type="text/javascript">
+
+myAud=document.getElementById("Audio1");
+myAud.volume=0.4;
+
+</script>
 
 <!--<button onclick="TogetherJS(this); return false;" style="position:absolute;">Start TogetherJS</button>-->
 

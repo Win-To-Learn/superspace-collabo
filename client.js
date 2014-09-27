@@ -21,8 +21,9 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture.js'),
+			ship: new IgeTexture('./assets/PlayerTexture2.js'),
             orb: new IgeTexture('./assets/OrbTexture.js'),
+            fixedorb: new IgeTexture('./assets/FixedOrbTexture2.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
             boundary: new IgeTexture('./assets/BoundaryTexture.js'),
@@ -30,6 +31,10 @@ var Client = IgeClass.extend({
             fontChat: new IgeFontSheet('./assets/verdana_10px.png', 3)
 
     };
+
+        // Apply a colour overlay filter to the ninth fairy texture
+
+
 
 
 
@@ -51,15 +56,17 @@ var Client = IgeClass.extend({
 
 		ige.on('texturesLoaded', function () {
 			// Ask the engine to start
+            //this.client.textures.ship.applyFilter(IgeFilters.colorOverlay, {color: 'rgba(0, 255, 255, 1)'});
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
+                    ige.viewportDepth(true);
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
                     //var serverUrl = 'http://localhost:7610';
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
@@ -130,6 +137,16 @@ var Client = IgeClass.extend({
 							return 'rgba('+colors[0]+','+colors[1]+','+colors[2]+',1)';
 						}
 
+                        /*ige.viewports.create(
+                            {
+                                'id':'vp2',
+                                'autoSize':'none',
+                                .scene(self.mainScene)
+                                .drawBounds(false)
+                                .mount(ige);
+
+                        }
+                        )*/
                         //ige.addComponent(IgeAudioComponent);
                         //self.thrust = new IgeAudioComponent()
                         //.load("assets/thrust.mp3");
@@ -159,8 +176,34 @@ var Client = IgeClass.extend({
 							.autoSize(true)
 							.scene(self.mainScene)
 							.drawBounds(false)
+                            .depth(0)
 							.mount(ige);
+
                             //.minimumVisibleArea(7800,5600);
+
+                        new IgeViewport()
+                            .id('top-left')
+                            .left(0)
+                            .top(0)
+                            .width(260)
+                            .height(150)
+                            .autoSize(false)
+                            .borderColor('#ffffff')
+                            .camera.scaleTo(.05,.05,.05)
+                            .depth(1)
+                            .scene(self.mainScene)
+                            //.minimumVisibleArea(1000,1000)
+                            .mount(ige);
+
+                        /*self.vp2 = new IgeViewport()
+                            .id('vp2')
+                            .autoSize(false)
+                            //.scene(self.mainScene)
+                            .drawBounds(true)
+                            .width(200)
+                            .height(200)
+                            .mount(ige);*/
+
 
                         //console.log(self.vp1.viewArea());
 						new IgeEntity()
@@ -222,6 +265,8 @@ var Client = IgeClass.extend({
                             .right(10)
                             .mount(self.uiScene);
 
+
+
                         self.scoreText = new IgeFontEntity()
                             .id('scoreText')
                             .texture(ige.client.textures.font)
@@ -231,6 +276,41 @@ var Client = IgeClass.extend({
                             .top(35)
                             .right(10)
                             .mount(self.uiScene);
+
+                        self.timer = new IgeFontEntity()
+                            .texture(ige.client.textures.font)
+                            .width(100)
+                            .text('Timer')
+                            .top(5)
+                            .right(200)
+                            .mount(self.uiScene);
+
+                        self.timerText = new IgeFontEntity()
+                            .texture(ige.client.textures.font)
+                            .width(100)
+                            .text('0.00')
+                            .colorOverlay('#ff6000')
+                            .top(35)
+                            .right(200)
+                            .mount(self.uiScene);
+
+                        //ige.client.timerText.text("23423");
+
+                        //totalSeconds = Time;
+
+                        //var milliSec = 300;
+                        var intTimer1 = 0;
+                        //var timingInterval1 = setInterval(function(){
+                        //    ige.client.timerText.text(intTimer1.toString);
+                        //}, milliSec);
+
+                        var a = new IgeInterval(function () {
+                            console.log(intTimer1);
+                            var strTimerText = intTimer1.toString();
+                            //ige.client.timerText._text(strTimerText);
+                            ige.client.timerText.text(strTimerText);
+                            intTimer1 = intTimer1 +1;
+                        }, 1000);
 
 
 

@@ -3,7 +3,7 @@ var image = {
 		// Draw the player entity
 		ctx.fillStyle = 'rgba(0,0,0,0.8)';
 		ctx.strokeStyle = this.color;
-		ctx.lineWidth = 2;
+		ctx.lineWidth = 20;
 		ctx.beginPath();
 		ctx.moveTo(0, -entity._geometry.y);
 		ctx.lineTo(entity._geometry.x, entity._geometry.y);

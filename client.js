@@ -64,7 +64,7 @@ var Client = IgeClass.extend({
                     //var serverUrl = 'http://localhost:7610';
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					console.log(location);
-					if(location.origin == "file://" || location.origin == "http://localhost:8888") {
+					if(location.origin == "file://" || location.origin == "http://localhost") {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
 					}
                     //var port = process.env.PORT || 5000;
@@ -105,8 +105,32 @@ var Client = IgeClass.extend({
 							var date = new Date(data['time']);
 							return "["+(date.getHours()<10 ? '0'+date.getHours() : date.getHours())+":"+(date.getMinutes()<10 ? '0'+date.getMinutes() : date.getMinutes())+":"+(date.getSeconds()<10 ? '0'+date.getSeconds() : date.getSeconds())+"] "+data['client']+": "+data['message'];
 						}
+						
+						
 
-                        ige.addComponent(IgeAudioComponent);
+						
+
+						self.floatToRgb = function(val) {
+							self.colorStops = [
+								[255,0,0],
+								[255,255,0],
+								[0,255,0]
+							];
+							if(val > 1) { val = val % 1; }
+							var fromStop = Math.floor(val*(self.colorStops.length-1));
+							var toStop = Math.ceil(val*(self.colorStops.length-1));
+							var stopPercentage = (val - 1 / (self.colorStops.length-1) * fromStop) * (self.colorStops.length-1);
+							var colors = [0,0,0];
+							if(fromStop == toStop) { colors[0] = self.colorStops[fromStop][0]; colors[1] = self.colorStops[fromStop][1]; colors[2] = self.colorStops[fromStop][2]; }
+							else {
+								colors[0] = Math.round((self.colorStops[toStop][0]-self.colorStops[fromStop][0])*stopPercentage)+self.colorStops[fromStop][0];
+								colors[1] = Math.round((self.colorStops[toStop][1]-self.colorStops[fromStop][1])*stopPercentage)+self.colorStops[fromStop][1];
+								colors[2] = Math.round((self.colorStops[toStop][2]-self.colorStops[fromStop][2])*stopPercentage)+self.colorStops[fromStop][2];
+							}
+							return 'rgba('+colors[0]+','+colors[1]+','+colors[2]+',1)';
+						}
+
+                        //ige.addComponent(IgeAudioComponent);
                         //self.thrust = new IgeAudioComponent()
                         //.load("assets/thrust.mp3");
 

@@ -75,8 +75,8 @@ var Player = IgeEntityBox2d.extend({
 		}
 
 		if (!ige.isServer) {
-			self.texture(ige.client.textures.ship)
-
+			self.texture(ige.client.textures.ship);
+			this._texture.script.color = "yellow";
 		}
 
 		self.scaleTo(scale,scale,1);
@@ -122,6 +122,16 @@ var Player = IgeEntityBox2d.extend({
 				// Return current data
 				return this._score;
 			}
+		} else if (sectionId === 'color') {
+			// Check if the server sent us data, if not we are supposed
+			// to return the data instead of set it
+			if (data) {
+				// We have been given new data!
+				this._texture.script.color = data;
+			} else {
+				// Return current data
+				return this._texture.script.color;
+			}
 		} else {
 			// The section was not one that we handle here, so pass this
 			// to the super-class streamSectionData() method - it handles
@@ -140,6 +150,7 @@ var Player = IgeEntityBox2d.extend({
 	tick: function (ctx) {
         myx1 = this._translate.x;
         myy1 = this._translate.y;
+		//this._texture.script.color = ige.client.floatToRgb(Math.random());
         //myrot1 = this.worldRotationZ();
         myrot1 = this._rotate.z;
 		/* CEXCLUDE */

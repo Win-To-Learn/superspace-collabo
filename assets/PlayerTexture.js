@@ -2,7 +2,7 @@ var image = {
 	render: function (ctx, entity) {
 		// Draw the player entity
 		ctx.fillStyle = 'rgba(0,0,0,0.8)';
-		ctx.strokeStyle = this.color;
+		ctx.strokeStyle = ige.data('player').color;
 		ctx.lineWidth = 20;
 		ctx.beginPath();
 		ctx.moveTo(0, -entity._geometry.y);
@@ -13,6 +13,5 @@ var image = {
 		ctx.closePath();
 		ctx.fill();
 		ctx.stroke();
-	},
-	color : "green"
+	}
 };

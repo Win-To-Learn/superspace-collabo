@@ -80,6 +80,8 @@ var Player = IgeEntityBox2d.extend({
 			
 			self.addComponent(IgeVelocityComponent)
 				.category('ship');
+				
+				
 		}
 
 		if (!ige.isServer) {
@@ -130,12 +132,16 @@ var Player = IgeEntityBox2d.extend({
 
 
 		}
-
+		
+		self.streamSections(['transform', 'color']);
+		self.color = "white";
 		self.scaleTo(scale,scale,1);
 
 	},
 	
 	shoot: function(clientId) {
+		console.log(this.color);
+		this.color = "red";
 		if(ige.isServer) {
 			if(ige._timeScaleLastTimestamp - this._lastShoot > this._shootInterval) {
 				var b2vel = this._box2dBody.GetLinearVelocity();
@@ -179,11 +185,14 @@ var Player = IgeEntityBox2d.extend({
 			// to return the data instead of set it
 			if (data) {
 				// We have been given new data!
-				this._texture.script.color = data;
+				this.color = data;
 			} else {
 				// Return current data
-				return this._texture.script.color;
+				return this.color;
 			}
+		}
+		else if (sectionId === "custom1") {
+			console.log(data);
 		} else {
 			// The section was not one that we handle here, so pass this
 			// to the super-class streamSectionData() method - it handles

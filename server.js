@@ -142,8 +142,10 @@ var Server = IgeClass.extend({
 									//B.destroy();
                                     var tempScores = [];
                                     for (var i in self.players){
+										console.log(i);
+										console.log(self.players[i]);
                                             tempScores.push(
-                                                {'id' : self.players[i].id(), 'score' : self.players[i].score}
+                                                {'id' : i, 'score' : self.players[i].score}
                                             );
 
                                     }
@@ -179,18 +181,19 @@ var Server = IgeClass.extend({
                                     console.log('contact with orb and ship');
                                     //console.log(B);
 
-
                                 setTimeout(function(){
-
-                                    ige.server.players[B.clientID] = new Player(B.clientID)
-                                     .streamMode(1)
-                                     .translateTo(0,0,0)
-                                     //.scaleTo(1,1,1)
-                                     .rotateTo(0,0,Math.radians(90))
-                                     .mount(ige.server.scene1);
+									var oldColor = B.color;
+									ige.server.players[B.clientID] = new Player(B.clientID)
+										.streamMode(1)
+										.translateTo(0,0,0)
+										//.scaleTo(1,1,1)
+										.rotateTo(0,0,Math.radians(90))
+										.mount(ige.server.scene1);
+									
+									ige.server.players[B.clientID].color = oldColor;
+									
                                      ige.network.send('playerEntity', ige.server.players[B.clientID].id(), B.clientID);
                                      //ige.network.send('updateScore', ige.server.score, clientId);
-
                                 },2000);
 
                                 }
@@ -203,7 +206,30 @@ var Server = IgeClass.extend({
 								//console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 							}
 						);
-
+						
+						self.floatToRgb = function(val) {
+							self.colorStops = [
+								[255,0,0],
+								[255,255,0],
+								[0,255,0],
+								[0,255,255],
+								[0,0,255],
+								[255,0,255]
+							];
+							if(val > 1) { val = val % 1; }
+							var fromStop = Math.floor(val*(self.colorStops.length-1));
+							var toStop = Math.ceil(val*(self.colorStops.length-1));
+							var stopPercentage = (val - 1 / (self.colorStops.length-1) * fromStop) * (self.colorStops.length-1);
+							var colors = [0,0,0];
+							if(fromStop == toStop) { colors[0] = self.colorStops[fromStop][0]; colors[1] = self.colorStops[fromStop][1]; colors[2] = self.colorStops[fromStop][2]; }
+							else {
+								colors[0] = Math.round((self.colorStops[toStop][0]-self.colorStops[fromStop][0])*stopPercentage)+self.colorStops[fromStop][0];
+								colors[1] = Math.round((self.colorStops[toStop][1]-self.colorStops[fromStop][1])*stopPercentage)+self.colorStops[fromStop][1];
+								colors[2] = Math.round((self.colorStops[toStop][2]-self.colorStops[fromStop][2])*stopPercentage)+self.colorStops[fromStop][2];
+							}
+							return 'rgba('+colors[0]+','+colors[1]+','+colors[2]+',1)';
+						}
+						
 					}
 				});
 			});

@@ -59,8 +59,8 @@ var Player = IgeEntityBox2d.extend({
 					//	data: self.triangles[i]
 					//}
                     shape: {
-                     	type: 'circle', 
-                        data: { 		radius: 10 	} 
+                    	type: 'circle',
+                        data: {	radius: 10	}
                     }
 				});
 			//}
@@ -86,7 +86,6 @@ var Player = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			self.texture(ige.client.textures.ship);
-			this._texture.script.color = "yellow";
 
             //self.nametag =  ige.data('player')._id;
             self.nametag = self.id().substr(0,3);
@@ -99,32 +98,31 @@ var Player = IgeEntityBox2d.extend({
 
 
 
-            self.nametagfont = new IgeFontEntity() 
+            self.nametagfont = new IgeFontEntity()
+				.texture(ige.client.textures.fontid)
+				.width(500)
+				.colorOverlay('#ff6000')
+				.height(500)
+				.text(self.nametag)
+				//.left(250)
+				.textAlignX(1)
+				.top(-100)
+				//.right(250)
+				.mount(self);
 
-            .texture(ige.client.textures.fontid) 
-            .width(500)
-            .colorOverlay('#ff6000')
-            .height(500)
-            .text(self.nametag) 
-            //.left(250)
-            .textAlignX(1)
-            .top(-100) 
-            //.right(250) 
-            .mount(self); 
 
+            /*self.scoretagfont = new IgeFontEntity()
 
-            /*self.scoretagfont = new IgeFontEntity() 
-
-            .texture(ige.client.textures.fontid) 
-            .width(500)
-                .colorOverlay('#ff6000')
-                .height(500)
-                .text(self.nametag) 
-            //.left(250)
-            .textAlignX(1)
-            .top(0) 
-                //.right(250) 
-            .mount(self); 
+				.texture(ige.client.textures.fontid)
+				.width(500)
+				.colorOverlay('#ff6000')
+				.height(500)
+				.text(self.nametag)
+				//.left(250)
+				.textAlignX(1)
+				.top(0)
+				//.right(250)
+				.mount(self);
             */
 
 
@@ -134,14 +132,12 @@ var Player = IgeEntityBox2d.extend({
 		}
 		
 		self.streamSections(['transform', 'color']);
-		self.color = "white";
 		self.scaleTo(scale,scale,1);
+		self.color = "white";
 
 	},
 	
 	shoot: function(clientId) {
-		console.log(this.color);
-		this.color = "red";
 		if(ige.isServer) {
 			if(ige._timeScaleLastTimestamp - this._lastShoot > this._shootInterval) {
 				var b2vel = this._box2dBody.GetLinearVelocity();
@@ -339,10 +335,10 @@ var Player = IgeEntityBox2d.extend({
 
 			}
 
-            if(this.controls.thrust) { 
+            if(this.controls.thrust) {
                 //console.log(thrustSound);
                 thrustSound.play();
-                 }
+            }
 			
 			if (ige.input.actionState('shoot')) {
 				ige.network.send('playerShoot');

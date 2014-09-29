@@ -134,8 +134,8 @@ var FixedOrb = IgeEntityBox2d.extend({
 				new FixedOrbz(this.scale)
 					.streamMode(1)
 					//.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
-                    .translateTo(this._translate.x+200, this._translate.y+200, 0);
-					//.rotateTo(0,0,Math.radians((i+1)/count*360));
+                    .translateTo(this._translate.x, this._translate.y, 0)
+					.rotateTo(0,0,this._rotate.z);
 					//.mount(ige.$('scene1'));
 				//var thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 				//this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());

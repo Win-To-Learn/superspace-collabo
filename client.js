@@ -126,7 +126,10 @@ var Client = IgeClass.extend({
 							self.colorStops = [
 								[255,0,0],
 								[255,255,0],
-								[0,255,0]
+								[0,255,0],
+								[0,255,255],
+								[0,0,255],
+								[255,0,255]
 							];
 							if(val > 1) { val = val % 1; }
 							var fromStop = Math.floor(val*(self.colorStops.length-1));

@@ -29,7 +29,8 @@ var ServerNetworkEvents = {
 				.streamMode(1)
 				.translateTo(0,-200,0)
 				.mount(ige.server.scene1);
-
+			
+			ige.server.players[clientId].color = ige.server.floatToRgb(Math.random());
 			// Tell the client to track their player entity
 			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 			ige.network.send('updateScore', ige.server.score, clientId);

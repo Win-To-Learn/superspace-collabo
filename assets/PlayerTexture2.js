@@ -19,7 +19,7 @@ var image = {
         //ctx.strokeStyle = colorstring;
 
 
-        ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
+        ctx.strokeStyle = ige.data('player').color;
 		ctx.lineWidth = 10;
 
 

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="game-engine-origin" content="http://www.isogenicengine.com">
+	<meta http-equiv="X-UA-Compatible" content="IE=9" >
+	<title>SuperSpace</title>
+
+	<!-- STYLES -->
+	<link href="css/default.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="lib/editor/style.css">
+	<!-- Isogenic Loader -->
+	<script type="text/javascript">var igeRoot = 'engine/';</script>
+	<script type="text/javascript" src="engine/loader.js"></script>
+    <script type="text/javascript" src="howler.min.js"></script>
+    <!-- <script src="https://togetherjs.com/togetherjs-min.js"></script> -->
+</head>
+
+<style type="text/css">
+#Audio1
+{
+    position:absolute;
+    top: 150px;
+    left:0px;
+    width:260px;
+    height:40px;
+}
+</style>
+
+
+
+<body>
+<audio id="Audio1" controls="controls" autoplay="autoplay" src="http://listen.ai-radio.org:8000/radio.ogg?cc=US&now=1411446531.126">
+</audio>
+
+<script type="text/javascript">
+
+myAud=document.getElementById("Audio1");
+myAud.volume=0.4;
+
+function init() {
+    if (window.top != window) {
+        document.getElementById("header").style.display = "none";
+    }
+
+    if (!createjs.Sound.initializeDefaultPlugins()) {
+        document.getElementById("error").style.display = "block";
+        document.getElementById("content").style.display = "none";
+        return;
+    }
+
+    if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid) {  // || createjs.Sound.BrowserDetect.isBlackberry  OJR blackberry has not been tested yet
+        document.getElementById("mobile").style.display = "block";
+        document.getElementById("content").style.display = "none";
+        return;
+    }
+
+    canvas = document.getElementById("gameCanvas");
+    stage = new createjs.Stage(canvas);
+    messageField = new createjs.Text("Loading", "bold 24px Arial", "#FFFFFF");
+    messageField.maxWidth = 1000;
+    messageField.textAlign = "center";
+    messageField.x = canvas.width / 2;
+    messageField.y = canvas.height / 2;
+    stage.addChild(messageField);
+    stage.update(); 	//update the stage to show text
+
+    // begin loading content (only sounds to load)
+    var assetsPath = "assets/";
+    manifest = [
+        {id:"thrust", src:"thrust.mp3"}
+
+    ];
+
+    createjs.Sound.alternateExtensions = ["mp3"];
+    preload = new createjs.LoadQueue(true, assetsPath);
+    preload.installPlugin(createjs.Sound);
+    preload.addEventListener("complete", doneLoading);
+    preload.addEventListener("progress", updateLoading);
+    preload.loadManifest(manifest);
+}
+
+
+</script>
+
+<!--<button onclick="TogetherJS(this); return false;" style="position:absolute;">Start TogetherJS</button>-->
+
+<div id="chatBox">
+	<div id="chatHistory"></div>
+	<div id="chatInput">
+		<input id="chatInputField" name="chatInputField" type="text">
+		<input id="chatInputSubmit" name="chatInputSubmit" type="button" value="Send">
+	</div>
+</div>
+
+<div id="codeArea">
+<div id="editorTab" class="editorTab">code <span class='arrow'></span></div>
+<div id="editor">
+    ////// THESE LESSONS ARE MORE FUN WITH A FRIEND   //////
+    //////   EMAIL SOMEONE THE LINK TO THIS GAME      //////
+    //////        SO YOU CAN PLAY TOGETHER!           //////
+
+//------------------------------------------------------------//
+
+    ////// LESSON #1: CHANGING THE SCALE OF YOUR SHIP //////
+
+    //Delete the 2 forward slashes below and click Submit Code
+    //player.scaleTo(1,2,1);
+
+    //When you delete the back slashes, the code should
+    //light up with different colors.
+    //Two forward slashes in front of code stops it from
+    //running.
+    //If your ship got bigger when you hit Submit Code,
+    //Good job!
+
+    //Go ahead and put the two slashes back in front of the
+    //code again.
+
+    //The code you just entered changed the scale of the
+    //X, Y, and Z proportions of the ship.
+    //Try changing the first variable to 1.5.  This is
+    //the scale of the ship along the X axis which
+    //is left to right.
+
+    //Now try changing the second coordinate.
+
+    //Experiment a bit with changing both the X and Y
+    //coordinates. (You can't see changes to the Z
+    //coordinate because it stretched between you and
+    //computer screen)
+
+    //Now click the middle of the screen and try
+    //moving your ship with your left, right, and up
+    //arrow keys.
+
+    //You can fire by pressing the b key
+
+//------------------------------------------------------------//
+
+    ////// LESSON #2: CHANGING THE SCALE OF YOUR SHIP //////
+    //////             USING VARIABLES                //////
+
+    //Delete the forward slashes on the lines below & click Submit.
+
+    //var xScale = yScale = zScale = 2;
+    //player.scaleTo(xScale,yScale,zScale);
+
+    //var means that you are creating a variable for the value
+    //of the xScale, yScale, and zScale.
+    //Change the value of all of these variables by just
+    //changing the 2 to a 1.  Click Submit.
+
+    //If you were using numbers for the scale instead of using
+    //variables you would have to change each of the scale numbers
+    //individually.
+
+//------------------------------------------------------------//
+
+    ////// LESSON #3: ANIMATING YOUR SHIP USING LOOPS //////
+    //////             AND CONDITIONALS               //////
+
+    //Delete the slash and asterisk /* on the lines
+    //below & click Submit.
+
+    /*var Scale = 0.5;
+    var milliSec = 300;
+    var i = 0;
+    var timingInterval = setInterval(function(){
+    if(i < 20) {
+    Scale = Scale + 0.01*i;
+    player.scaleTo(Scale,Scale,Scale);
+    i++;
+    }
+    }, milliSec);*/
+
+    //Ignore the timing interval for now, and let's just
+    //focus on the "loop" on lines 74 to 78
+    //Experiment changing the value of the Scale variable
+    //and the milliSec variable.
+
+    //This is an advanced coding loop but it basically
+    //creates a timer that runs a function every 300
+    //milliseconds.  It fires the function on this timing
+    //interval 20 times.
+    //The if statement is called a conditional.  It
+    //basically means that while a certain condition
+    //is true, do something.  In this case if a counter
+    //named "i" is less than 20, do something and then
+    //increase the the counter by 1 and see if it is
+    //still less than 20.
+
+//------------------------------------------------------------//
+
+    //////    LESSON #4: CREATING A NEW ORB OBJECT    //////
+    //////                                            //////
+
+    //new Orb(1.5);
+
+    //The code above creates a new "Orb" object.  Orbs are defined
+    //to simulate asteroids that float around in space and have
+    //density and are affected by gravity.  They bounce off each
+    //other but can destroy your ship when then collide with you.
+    //If you happened to collide with one and were destroyed,
+    //check out the next lesson to recreate your ship.
+
+//------------------------------------------------------------//
+
+    //////    LESSON #5: CREATING A NEW ORB OBJECT    //////
+    //////         WITH VELOCITY AND DIRECTION        //////
+
+    //new Orb(1.5)
+    //.velocity.byAngleAndPower(Math.radians(45),0.2);
+
+    //This code creates an Orb with a velocity of 0.2, at a 45
+    //degree angle.
+
+
+//------------------------------------------------------------//
+
+    //////  LESSON #6: CREATING A NEW PLAYER OBJECT   //////
+    //////                                            //////
+
+    /*ige.server.players[clientId] = new Player(clientId)
+    .streamMode(1)
+    .translateTo(0,-200,0)
+    .scaleTo(1,1,1)
+    .rotateTo(0,0,Math.radians(90))
+    .mount(ige.server.scene1);
+    ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+    ige.network.send('updateScore', ige.server.score, clientId);
+    */
+
+    //The code above creates a new "Player" object.
+    //The code is a little more complicated because when you
+    //first access this website, you are assigned a special
+    //"clientId".  This id lets the server know who you are
+    //as distinct from other players that log on.
+    //Since you have a unique id, when you do something,
+    //the server can tell the other players what you did
+    //and make your actions or movements show up on their screen
+    //The rotation code makes the ship show up at a 90 degree
+    //angle.
+
+//------------------------------------------------------------//
+
+    //////           LESSON #7: HYPERSPACE            //////
+    //////                                            //////
+
+
+    //player.translateBy(150,-150,0);
+
+
+    //The code above makes your player hyperspace to a new location
+
+//------------------------------------------------------------//
+
+    //////  LESSON #8: CREATING ASTEROIDS ON A TIMER  //////
+    //////                DIAGONAL                    //////
+
+    /*var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 5) {
+    new Orb(1.0)
+    .translateTo(100*i,100*i,0)
+    i++;
+    }
+    }, 500);*/
+
+    //The code above creates asteroids on a timer in a diagonal pattern
+
+
+//------------------------------------------------------------//
+
+    //////  LESSON #9: CREATING ASTEROIDS ON A TIMER  //////
+    //////                 SPIRAL                     //////
+
+    /*var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 360) {
+    new Orb(0.3)
+    .translateTo(Math.cos(-Math.radians(i))*100,Math.sin(-Math.radians(i))*100,0);
+    i=i+18;
+    }
+    }, 50);*/
+
+    //The code above creates asteroids on a timer in a spiral pattern
+
+    //Try zooming out in your browser to see all of the asteroids you created
+
+//------------------------------------------------------------//
+
+    //////       LESSON #10: DELETING ASTEROIDS       //////
+    //////                                            //////
+
+    //for(var i in ige.server.orbs) {
+    //ige.server.orbs[i].destroy();
+    //}
+
+    //You probably have a lot of asteroids at this point.
+    //The code above allows you to destroy all of them to
+    //start over with no asteroids in space.
+
+//------------------------------------------------------------//
+
+    //////           MISC. CODE SNIPPETS             //////
+    //////          HAVE FUN TESTING THESE           //////
+
+    //player.velocity.byAngleAndPower(0,5);
+
+    //player.lifeSpan(1000);
+
+    //ige.server.players[clientId].controls.thrust = true;
+
+    /*var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 20) {
+    player.shoot();
+    i++;
+    }
+    }, 100);*/
+
+    /*
+    var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 20) {
+    player.translateBy(15,-15,0);
+    i++;
+    }
+    else {
+    clearInterval(moveInterval);
+    }
+    }, 100);
+    */
+
+    /*
+    var image = {
+    render: function (ctx, entity) {
+    // Draw the orb entity
+    ctx.fillStyle = 'rgba(0,0,0,0.8)';
+    ctx.strokeStyle = '#e371ff';
+    ctx.lineWidth = 1/entity._scale.x;
+    ctx.beginPath();
+    ctx.lineTo(entity._geometry.x + 200, entity._geometry.y + 250);
+    ctx.lineTo(entity._geometry.x + 400, entity._geometry.y);
+    ctx.lineTo(entity._geometry.x + 400, entity._geometry.y-50);
+    ctx.lineTo(entity._geometry.x + 333, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x + 266, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x + 200, entity._geometry.y-30);
+    ctx.lineTo(entity._geometry.x + 133, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x + 66, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x, entity._geometry.y-50);
+    ctx.lineTo(entity._geometry.x, entity._geometry.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    }
+    };*/
+
+    /*
+
+    var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 360) {
+    Scale = 0.005*i;
+    ige.server.players[clientId] = new Player(clientId)
+    .streamMode(1)
+    .translateTo(0,-200,0)
+    .scaleTo(Scale,Scale,Scale)
+    .rotateTo(0,0,Math.radians(i))
+    .mount(ige.server.scene1)
+    .translateTo(Math.cos(-Math.radians(i))*150,Math.sin(-Math.radians(i))*150,0)
+    .velocity.byAngleAndPower(Math.radians(i),0.01);
+
+    new Orb(0.5)
+    .translateTo(Math.cos(-Math.radians(i))*100,Math.sin(-Math.radians(i))*100,0);
+    //._box2dBody.GetMassData(massdata);
+    ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+
+    i=i+18;
+    }
+    }, 100);
+    */
+</div>
+  <div id="bottomBar">
+    <button id="submitCode" class="submit">Submit Code</button>
+  </div>
+</div>
+
+    <div class="igeLoading loadingFloat">
+        <div class="loadingLogo"></div>
+        <div class="loadingCircle"></div>
+        <div class="loadingCircleInner"></div>
+        <div class="loadingText" id="loadingText">
+            Loading
+        </div>
+        <div id="loadingProgress">
+            <div id="loadingProgressBar"></div>
+        </div>
+    </div>
+    <div class="igeLoading loadingLink">
+
+        <a href="http://www.wintolearn.com/contact.php" target="_blank">http://www.wintolearn.com</a>
+    </div>
+    <script src="lib/vendor/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="lib/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/editor/index.js" type="text/javascript" charset="utf-8"></script>
+<!-- index.js and ace.js and jquery are loaded -->
+</body>
+</html>

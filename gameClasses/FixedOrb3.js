@@ -49,7 +49,7 @@ var FixedOrbz = IgeEntityBox2d.extend({
 					friction: 1.0,
 					restitution: 0.5,
 					filter: {
-						categoryBits: 0x00ff,
+						categoryBits: 0x0016,
 						maskBits: 0xffff & ~0x0008
 					},
 					shape: {
@@ -85,6 +85,7 @@ var FixedOrbz = IgeEntityBox2d.extend({
 
         if (!ige.isServer) {
             this.texture(ige.client.textures.fixedorbz);
+
 
                 chimeSound.play();
 

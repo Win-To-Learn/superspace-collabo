@@ -11,6 +11,7 @@ var Server = IgeClass.extend({
 		this.players = {};
         this.orbs = [];
         this.fixedorbs = [];
+        this.fixedorbreds = [];
         this.fixedorbzs = [];
 
 		// Add the server-side game methods / event handlers
@@ -89,43 +90,66 @@ var Server = IgeClass.extend({
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
 						
 						self.score = 0;
-						
-						for(var i = 0; i < 25; i++) {
+
+						for(var i = 0; i < 10; i++) {
 							scale = 1 + Math.random();
 							var orb3 = new Orb(scale)
 								.translateTo((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, 0)
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
 
+                        var fixedorbrad = 1.0;
+
                         self.spawnOrbs = function() {
-                            new FixedOrb(2.5)
+                            new FixedOrb(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(100, 100, 0);
 
 
-                            new FixedOrb(2.5)
+                            new FixedOrb(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(500, -500, 0);
 
-                            new FixedOrb(2.5)
+                            new FixedOrb(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(1000, -1000, 0);
 
-                            new FixedOrb(2.5)
+                            new FixedOrb(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-300, -1200, 0);
 
-                            new FixedOrb(2.5)
+                            new FixedOrb(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, -500, 0);
 
-                            new FixedOrb(2.5)
+                            new FixedOrb(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, 1100, 0);
 
                         }
 
+
+
                         self.spawnOrbs();
+
+                        new FixedOrbz(2)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(0, 0, 0);
+
+                        new FixedOrbRed(2)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(500, 500, 0);
+
+                        new FixedOrbRed(2)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(-500, -500, 0);
+
                         
 						ige.box2d.contactListener(
 							// Listen for when contact's begin
@@ -135,20 +159,42 @@ var Server = IgeClass.extend({
                                 //var C = contact.igeEntityC();
 								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 								if(A.category() == 'fixedorb' && B.category() == 'ship') {
+                                //if(contact.igeEitherCategory('fixedorb') &&  contact.igeEitherCategory('ship')){
+
+
 
                                     B.score++;
                                     //console.log(B.score);
-									A.exploding = true;
+									//A.exploding = true; turned off exploding for now
 									//B.destroy();
                                     var tempScores = [];
-                                    for (var i in self.players){
+                                    /*for (var i in self.players){
 										console.log(i);
 										console.log(self.players[i]);
                                             tempScores.push(
                                                 {'id' : i, 'score' : self.players[i].score}
                                             );
 
-                                    }
+                                    }*/
+
+                                    console.log(contact);
+                                    // Check if it is our sensor
+                                    //if (contact.m_fixtureA.IsSensor() || contact.m_fixtureB.IsSensor()) {
+                                    //if (A.IsSensor() || B.IsSensor()) {
+
+                                        console.log("sensor contact")
+                                        // Sensor has collided, attach orb to ship!
+                                        // Set carrying orb
+                                        //self.player.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
+                                        B.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
+
+
+                                    //}
+
+
+
+
+
 
                                     ige.network.send('updateTouchScore', tempScores);
 
@@ -161,6 +207,8 @@ var Server = IgeClass.extend({
                                         //.rotateTo(0,0,Math.radians(Math.random()*360))
                                         //.translateTo(-700, 1100, 0);
 								}
+                                //else if (!self.player._carryingOrb && contact.igeEitherCategory('fixedorb') && contact.igeEitherCategory('ship')) {
+
                                 else if (A.category() == 'orb' && B.category() == 'bullet') {
                                     //console.log('contact with fixedorb');
                                     //var fixedorb_checkin = new FixedOrbz(1)
@@ -171,6 +219,45 @@ var Server = IgeClass.extend({
 
                                     A.exploding = true;
                                     B.destroy();
+                                    ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                    //console.log('contact with ship');
+                                }
+                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorb') {
+                                    //console.log('contact with fixedorb');
+                                    //var fixedorb_checkin = new FixedOrbz(1)
+                                    //    .rotateTo(0,0,Math.radians(Math.random()*360))
+                                    //    .translateTo(0, 0, 0);
+
+                                    //oldpoint = new IgePoint3d();
+                                    A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
+                                    //A.exploding = true;
+                                    //B.destroy();
+                                    //ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                    //console.log('contact with ship');
+                                }
+                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorbred') {
+                                    //console.log('contact with fixedorb');
+                                    //var fixedorb_checkin = new FixedOrbz(1)
+                                    //    .rotateTo(0,0,Math.radians(Math.random()*360))
+                                    //    .translateTo(0, 0, 0);
+
+                                    //oldpoint = new IgePoint3d();
+                                    A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
+                                    //A.exploding = true;
+                                    //B.destroy();
+                                    //ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                    //console.log('contact with ship');
+                                }
+                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorbz') {
+                                    //console.log('contact with fixedorb');
+                                    //var fixedorb_checkin = new FixedOrbz(1)
+                                    //    .rotateTo(0,0,Math.radians(Math.random()*360))
+                                    //    .translateTo(0, 0, 0);
+
+                                    //oldpoint = new IgePoint3d();
+
+                                    //A.exploding = true;
+                                    A.destroy();
                                     ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                     //console.log('contact with ship');
                                 }

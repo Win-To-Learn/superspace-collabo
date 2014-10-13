@@ -25,5 +25,3 @@ var thrustSound = new Howl({   urls: ['assets/thrust6.mp3'], 
             autoplay: false,   loop: false,   volume: 0.05});
 
 
-
-

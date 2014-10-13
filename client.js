@@ -21,9 +21,11 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture2.js'),
+			ship: new IgeTexture('./assets/PlayerTexture.js'),
+            ship2: new IgeTexture('./assets/PlayerTexture2.js'),
             orb: new IgeTexture('./assets/OrbTexture.js'),
             fixedorb: new IgeTexture('./assets/FixedOrbTexture2.js'),
+            fixedorbred: new IgeTexture('./assets/FixedOrbTexture4.js'),
             fixedorbz: new IgeTexture('./assets/FixedOrbTexture3.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
@@ -63,22 +65,20 @@ var Client = IgeClass.extend({
 				if (success) {
                     //("canvas#igeFrontBuffer").focus();
                     $("#igeFrontBuffer").focus();
-
-                    console.log(document.activeElement);
                     ige.viewportDepth(true);
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
-                    //var serverUrl = 'http://localhost:7610';
+                    var serverUrl = 'http://localhost:7610';
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
-					//console.log(location);
-					//if(location.origin == "file://" || location.origin == "http://localhost") {
-					//	serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
-					//}
+					console.log(location);
+					if(location.origin == "file://" || location.origin == "http://localhost") {
+						//serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
+					}
                     //var port = process.env.PORT || 5000;
 					//ige.network.start(port, function () {
                     ige.network.start(serverUrl, function () {
@@ -353,16 +353,16 @@ var Client = IgeClass.extend({
                         //}, milliSec);
 
                         var a = new IgeInterval(function () {
-                            var d = new Date();
+                            //var d = new Date();
                             //console.log(intTimer1);
-                            //var strTimerText = intTimer1.toString();
-                            var hours = d.getHours().toString();
-                            var minutes = d.getMinutes().toString();
-                            var seconds = d.getSeconds().toString();
-                            strTimerText = hours.concat(":");
-                            strTimerText = strTimerText.concat(minutes);
-                            strTimerText = strTimerText.concat(":");
-                            strTimerText = strTimerText.concat(seconds);
+                            var strTimerText = intTimer1.toString();
+                            //var hours = d.getHours().toString();
+                            //var minutes = d.getMinutes().toString();
+                            //var seconds = d.getSeconds().toString();
+                            //strTimerText = hours.concat(":");
+                            //strTimerText = strTimerText.concat(minutes);
+                            //strTimerText = strTimerText.concat(":");
+                            //strTimerText = strTimerText.concat(seconds);
                             //= hours.concat(":");
                             //d.getSeconds().toString();
                             //ige.client.timerText._text(strTimerText);

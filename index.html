@@ -391,6 +391,120 @@ myAud.volume=0.1;
 
     */
 
+    //Create a shield
+
+    /*
+    var astSize = 5;
+
+    new FixedOrb(astSize)
+    .translateTo(player._translate.x-30,player._translate.y-30,0);
+    new FixedOrb(astSize)
+    .translateTo(player._translate.x+30,player._translate.y+30,0);
+    new FixedOrb(astSize)
+    .translateTo(player._translate.x+0,player._translate.y+30,0);
+    new FixedOrb(astSize)
+    .translateTo(player._translate.x+30,player._translate.y+0,0);
+    new FixedOrb(astSize)
+    .translateTo(player._translate.x-30,player._translate.y+0,0);
+    new FixedOrb(astSize)
+    .translateTo(player._translate.x+0,player._translate.y-30,0);
+    new FixedOrb(astSize)
+    .translateTo(player._translate.x+0,player._translate.y-30,0);
+
+    */
+
+
+    // Create large bullet
+
+    /*
+    var b2vel = player._box2dBody.GetLinearVelocity();
+    //var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
+    var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y))// / 2 / 3 / this._thrustPower;
+
+    var bullet = new Bullet()
+    .scaleTo(4,4,0)
+    .streamMode(1)
+    .addComponent(IgeVelocityComponent)
+    .velocity.byAngleAndPower(player._rotate.z-Math.radians(90), 0.5+velocity*0.012)
+    .translateTo(player._translate.x, player._translate.y, 0)
+    .mount(ige.server.scene1);
+    bullet.sourceClient = clientId;
+    */
+
+    // Create large bullet firing at different angles
+
+    /*
+    var b2vel = player._box2dBody.GetLinearVelocity();
+    //var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
+    var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y))// / 2 / 3 / this._thrustPower;
+
+    var bullet = new Bullet()
+    .scaleTo(4,4,0)
+    .streamMode(1)
+    .addComponent(IgeVelocityComponent)
+    .velocity.byAngleAndPower(player._rotate.z-Math.radians(0), 0.5+velocity*0.012)
+    .translateTo(player._translate.x, player._translate.y, 0)
+    .mount(ige.server.scene1);
+    bullet.sourceClient = clientId;
+
+    var bullet = new Bullet()
+    .scaleTo(4,4,0)
+    .streamMode(1)
+    .addComponent(IgeVelocityComponent)
+    .velocity.byAngleAndPower(player._rotate.z-Math.radians(90), 0.5+velocity*0.012)
+    .translateTo(player._translate.x, player._translate.y, 0)
+    .mount(ige.server.scene1);
+    bullet.sourceClient = clientId;
+
+    var bullet = new Bullet()
+    .scaleTo(4,4,0)
+    .streamMode(1)
+    .addComponent(IgeVelocityComponent)
+    .velocity.byAngleAndPower(player._rotate.z-Math.radians(180), 0.5+velocity*0.012)
+    .translateTo(player._translate.x, player._translate.y, 0)
+    .mount(ige.server.scene1);
+    bullet.sourceClient = clientId;
+
+    var bullet = new Bullet()
+    .scaleTo(4,4,0)
+    .streamMode(1)
+    .addComponent(IgeVelocityComponent)
+    .velocity.byAngleAndPower(player._rotate.z-Math.radians(270), 0.5+velocity*0.012)
+    .translateTo(player._translate.x, player._translate.y, 0)
+    .mount(ige.server.scene1);
+    bullet.sourceClient = clientId;
+
+
+    */
+
+
+
+    //Fire in spiral on a timer
+    /*
+
+    var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 3600) {
+    var b2vel = player._box2dBody.GetLinearVelocity();
+    //var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
+    var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y))// / 2 / 3 / this._thrustPower;
+
+    var bullet = new Bullet()
+    .scaleTo(4,4,0)
+    .streamMode(1)
+    .addComponent(IgeVelocityComponent)
+    .velocity.byAngleAndPower(player._rotate.z-Math.radians(i), 0.5+velocity*0.012)
+    .translateTo(player._translate.x, player._translate.y, 0)
+    .mount(ige.server.scene1);
+    bullet.sourceClient = clientId;
+    i=i+18;
+    }
+    }, 10);
+
+    */
+
+
+
 </div>
   <div id="bottomBar">
     <button id="submitCode" class="submit">Submit Code</button>

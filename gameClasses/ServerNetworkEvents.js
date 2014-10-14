@@ -1,3 +1,4 @@
+var util = require('util');
 var ServerNetworkEvents = {
 	/**
 	 * Is called when the network tells us a new client has connected
@@ -22,12 +23,16 @@ var ServerNetworkEvents = {
 			delete ige.server.players[clientId];
 		}
 	},
+	
+	_onLogin: function(data, clientId) {
+		console.log("Login attempt");
+	},
 
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.streamMode(1)
-				.translateTo(0,-200,0)
+				.translateTo(0,0,0)
 				.mount(ige.server.scene1);
 			
 			ige.server.players[clientId].color = ige.server.floatToRgb(Math.random());
@@ -36,51 +41,24 @@ var ServerNetworkEvents = {
 			ige.network.send('updateScore', ige.server.score, clientId);
 		}
 	},
-
-    _onOrbEntity: function (data, clientId) {
-        /*if (!ige.server.orbs[clientId]) {
-            ige.server.orbs[clientId] = new Orb(clientId)
-                .streamMode(1)
-                .mount(ige.server.scene1);
-
-             //Tell the client to track their player entity
-            ige.network.send('orbEntity', ige.server.orbs[clientId].id(), clientId);
-        }*/
-    },
-
-    _onFixedOrbEntity: function (data, clientId) {
-        /*if (!ige.server.fixedorbs[clientId]) {
-            ige.server.fixedorbs[clientId] = new FixedOrb(clientId)
-                .streamMode(1)
-                .mount(ige.server.scene1);
-
-            //Tell the client to track their player entity
-            ige.network.send('fixedorbEntity', ige.server.fixedorbs[clientId].id(), clientId);
-            console.log("fixedorb callback fired");
-        }*/
-    },
-
-    _onBulletEntity: function (data, clientId) {
-        if (!ige.server.bullets[clientId]) {
-            ige.server.bullets[clientId] = new Bullet(clientId)
-                .streamMode(1)
-                .mount(ige.server.scene1);
-
-            //Tell the client to track their player entity
-            ige.network.send('bulletEntity', ige.server.bullets[clientId].id(), clientId);
-        }
-    },
-
 	
 	_onCode: function(data, clientId) {
-		var player = ige.server.players[clientId];
-		//console.log(player);
+		var me = ige.server.players[clientId];
+		var msgs = [];
+		var oldLog = console.log;
+		console.log = function (message) {
+			msgs.push(util.inspect(message, {showHidden: true, depth: 1}));
+			//msgs.push(util.inspect(message));
+			//oldLog.apply(console, arguments);
+		};
+		log = console.log;
 		try {
 			eval(data);
 		}
 		catch(e) {
 			console.log(e);
 		}
+		ige.network.send('code', msgs, clientId);
 	},
 
 	_onChatJoin: function(data, clientId) {
@@ -117,8 +95,12 @@ var ServerNetworkEvents = {
 		ige.server.players[clientId].controls.thrust = false;
 	},
 	
-	_onPlayerShoot: function (data, clientId) {
-		ige.server.players[clientId].shoot(clientId);
+	_onPlayerShootDown: function (data, clientId) {
+		ige.server.players[clientId].controls.shoot = true;
+	},
+	
+	_onPlayerShootUp: function (data, clientId) {
+		ige.server.players[clientId].controls.shoot = false;
 	}
 };
 

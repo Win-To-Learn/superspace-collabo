@@ -1,19 +1,17 @@
 //var Orb = IgeEntityBox2d.extend({
-var FixedOrb = IgeEntityBox2d.extend({
+var Planetoid = IgeEntityBox2d.extend({
 
-    classId: 'FixedOrb',
+    classId: 'Planetoid',
 	
     init: function (scale) {
 		IgeEntityBox2d.prototype.init.call(this);
 		
 		var self = this;
 
-        //self.touched = false;
-
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
-        this._rectColor = '#ffc600';
-
-
+        self.color = 'rgb(255,255,0)';
+		self.fillColor = 'rgba(255,255,0,0.25)';
+		self.touched = false;
 		
 		if(arguments.length < 1) {
 			scale = 2;
@@ -63,9 +61,6 @@ var FixedOrb = IgeEntityBox2d.extend({
 				});
 			}
 			// collision definition END
-			
-		
-			self._thrustPower = 0.01*scale;
 
 			self.box2dBody({
 				type: 'dynamic',
@@ -79,84 +74,62 @@ var FixedOrb = IgeEntityBox2d.extend({
 			
 			
 			self.addComponent(IgeVelocityComponent)
-				.category('fixedorb')
+				.category('planetoid')
 				.streamMode(1)
-				.mount(ige.$('scene1'));
+				.mount(ige.server.scene1);
 				
-			ige.server.fixedorbs.push(this);
+			ige.server.planetoids.push(this);
 			
 		}
 
         if (!ige.isServer) {
-            this.texture(ige.client.textures.fixedorb);
+            this.texture(ige.client.textures.planetoid);
         }
 
         this.scaleTo(scale,scale,1);
-		
+		self.streamSections(['transform', 'color']);
     },
-
+	
+	streamSectionData: function (sectionId, data) {
+		// Check if the section is one that we are handling
+		switch(sectionId) {
+			case 'color':
+				if (data) {
+					var s = JSON.parse(data);
+					this.color = s[0];
+					this.fillColor = s[1];
+				}
+				else {
+					return JSON.stringify([this.color,this.fillColor]);
+				}
+				break;
+			default:
+				return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
+				break;
+		}
+	},
 
     tick: function (ctx) {
 		if (ige.isServer) {
-
 			if(this.exploding) {
 				this.explode();
 			}
-			else {
-/*				if(this._translate.x < -250) {
-					this.translateTo(250,0,0);
-				}
-				else if(this._translate.x > 250) {
-					this.translateTo(-250,0,0);
-				}
-				if(this._translate.y < -250) {
-					this.translateTo(0,250,0);
-				}
-				else if(this._translate.y > 250) {
-					this.translateTo(0,-250,0);
-				}*/
-				var radians = this._rotate.z,
-				thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
-				this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
-				
+			else if(!this.touched) {
 				this._box2dBody.SetAngularVelocity(-0.4);
 			}
-			
 		}
 		IgeEntity.prototype.tick.call(this, ctx);
     },
 	
 	explode: function() {
-		//var count = 2;
-		//if(this.scale / 2 > 0.3) {
-			//for(var i = 0; i < count; i++) {
-
-				new FixedOrbz(this.scale)
-					.streamMode(1)
-					//.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
-                    .translateTo(this._translate.x, this._translate.y, 0)
-					.rotateTo(0,0,this._rotate.z);
-					//.mount(ige.$('scene1'));
-				//var thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
-				//this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
-			//}
-		//}
-		/*else {
-			if(Math.random() > 0.9) {
-				new Orb(3)
-					.streamMode(1)
-					.translateTo(this._translate.x, this._translate.y, 0)
-					.mount(ige.$('scene1'));
-			}
-		}*/
+		this.exploding = false;
+		this.touched = true;
+		this.fillColor = 'rgba(0,255,255,0.35)';
+		this.color = 'rgb(0,255,255)';
 		ige.server.score += this.pointWorth;
 		ige.network.send('updateScore', ige.server.score);
-		this.destroy();
-        delete ige.server.fixedorbs[ige.server.fixedorbs.indexOf(this)];
-        //console.log(ige.server.fixedorbs.length);
-        //console.log(fixedorbs);
 	}
 	
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = FixedOrb; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Planetoid; }

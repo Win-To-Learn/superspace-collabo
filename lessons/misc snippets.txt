@@ -1,0 +1,78 @@
+Misc snippets
+    //////           MISC. CODE SNIPPETS             //////
+    //////          HAVE FUN TESTING THESE           //////
+
+    //player.velocity.byAngleAndPower(0,5);
+
+    //player.lifeSpan(1000);
+
+    //ige.server.players[clientId].controls.thrust = true;
+
+    /*var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 20) {
+    player.shoot();
+    i++;
+    }
+    }, 100);*/
+
+    /*
+    var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 20) {
+    player.translateBy(15,-15,0);
+    i++;
+    }
+    else {
+    clearInterval(moveInterval);
+    }
+    }, 100);
+    */
+
+    /*
+    var image = {
+    render: function (ctx, entity) {
+    // Draw the orb entity
+    ctx.fillStyle = 'rgba(0,0,0,0.8)';
+    ctx.strokeStyle = '#e371ff';
+    ctx.lineWidth = 1/entity._scale.x;
+    ctx.beginPath();
+    ctx.lineTo(entity._geometry.x + 200, entity._geometry.y + 250);
+    ctx.lineTo(entity._geometry.x + 400, entity._geometry.y);
+    ctx.lineTo(entity._geometry.x + 400, entity._geometry.y-50);
+    ctx.lineTo(entity._geometry.x + 333, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x + 266, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x + 200, entity._geometry.y-30);
+    ctx.lineTo(entity._geometry.x + 133, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x + 66, entity._geometry.y-100);
+    ctx.lineTo(entity._geometry.x, entity._geometry.y-50);
+    ctx.lineTo(entity._geometry.x, entity._geometry.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    }
+    };*/
+
+    /*
+
+    var i = 0;
+    var moveInterval = setInterval(function(){
+    if(i < 360) {
+    Scale = 0.005*i;
+    ige.server.players[clientId] = new Player(clientId)
+    .streamMode(1)
+    .translateTo(0,-200,0)
+    .scaleTo(Scale,Scale,Scale)
+    .rotateTo(0,0,Math.radians(i))
+    .mount(ige.server.scene1)
+    .translateTo(Math.cos(-Math.radians(i))*150,Math.sin(-Math.radians(i))*150,0)
+    .velocity.byAngleAndPower(Math.radians(i),0.01);
+
+    new Orb(0.5)
+    .translateTo(Math.cos(-Math.radians(i))*100,Math.sin(-Math.radians(i))*100,0);
+    //._box2dBody.GetMassData(massdata);
+    ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+
+    i=i+18;
+    }
+    }, 100);

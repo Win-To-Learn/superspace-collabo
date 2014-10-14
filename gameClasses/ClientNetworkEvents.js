@@ -8,13 +8,12 @@ var ClientNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function (data) {
+		console.log("Got new player, entityId "+data);
 		if (ige.$(data)) {
+			console.log("It already existed");
 			ige.client.vp1.camera.trackTranslate(ige.$(data), 30);
-
-			// Set the time stream UI entity to monitor our player entity
-			// time stream data
-			ige.client.tsVis.monitor(ige.$(data));
 		} else {
+			console.log("It's new");
 			// The client has not yet received the entity via the network
 			// stream so lets ask the stream to tell us when it creates a
 			// new entity and then check if that entity is the one we
@@ -22,15 +21,13 @@ var ClientNetworkEvents = {
 			var self = this;
 			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
 				if (entity.id() === data) {
-
                     // Store reference to player
                     ige.data('player', ige.$(data));
+					ige.$(data).nametagfont.text(data.substr(0,3));
 
-
-                    //ige.data('player').nametagfont.text(entity.id().substr(0,3)); 
 					// Tell the camera to track out player entity
 					ige.client.vp1.camera.trackTranslate(ige.$(data), 30);
-					//ige.$(data)._texture.script.color = ige.client.floatToRgb();
+					ige.client.minimap.camera.trackTranslate(ige.$(data), 30);
 					// Turn off the listener for this event now that we
 					// have found and started tracking our player entity
 					ige.network.stream.off('entityCreated', self._eventListener, function (result) {
@@ -48,6 +45,15 @@ var ClientNetworkEvents = {
 			.translateTo(0, 0, 0)
 			.mount(ige.client.uiScene)
 			.start();
+	},
+	
+	_onCode: function (data) {
+		console.log(data);
+		if(data.length > 0) {
+			debug.setValue(data.join("\n\n"));
+			debug.clearSelection();
+			debugContainer.fadeIn(200);
+		}
 	},
 	
 	_onChatJoin: function(data) {
@@ -71,84 +77,13 @@ var ClientNetworkEvents = {
 
     _onUpdateTouchScore: function(data) {
 
-        var scores = []; 
+        var scores = [];
         for(var i in data)
-        { scores.push(data[i]['id'].substring(0,3)+" "+data[i]['score']); } 
+        {scores.push(data[i]['id'].substring(0,3)+" "+data[i]['score']);}
         ige.client.playerscore.text(scores.join("\n"));
         //console.log(data);
 
-    },
-
-    _onOrbEntity: function (data) {
-        if (ige.$(data)) {
-            //ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-            // Set the time stream UI entity to monitor our player entity
-            // time stream data
-            //ige.client.tsVis.monitor(ige.$(data));
-        } else {
-            // The client has not yet received the entity via the network
-            // stream so lets ask the stream to tell us when it creates a
-            // new entity and then check if that entity is the one we
-            // should be tracking!
-            var self = this;
-            self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-                if (entity.id() === data) {
-                    // Tell the camera to track out player entity
-                    //ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-                    // Set the time stream UI entity to monitor our player entity
-                    // time stream data
-                    //ige.client.tsVis.monitor(ige.$(data));
-
-                    // Turn off the listener for this event now that we
-                    // have found and started tracking our player entity
-                    ige.network.stream.off('entityCreated', self._eventListener, function (result) {
-                        if (!result) {
-                            this.log('Could not disable event listener!', 'warning');
-                        }
-                    });
-                }
-            });
-        }
-    },
-
-
-    _onFixedOrbEntity: function (data) {
-        if (ige.$(data)) {
-            //ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-            // Set the time stream UI entity to monitor our player entity
-            // time stream data
-            //ige.client.tsVis.monitor(ige.$(data));
-        } else {
-            // The client has not yet received the entity via the network
-            // stream so lets ask the stream to tell us when it creates a
-            // new entity and then check if that entity is the one we
-            // should be tracking!
-            var self = this;
-            self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-                if (entity.id() === data) {
-                    // Tell the camera to track out player entity
-                    //ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
-
-                    // Set the time stream UI entity to monitor our player entity
-                    // time stream data
-                    //ige.client.tsVis.monitor(ige.$(data));
-
-                    // Turn off the listener for this event now that we
-                    // have found and started tracking our player entity
-                    ige.network.stream.off('entityCreated', self._eventListener, function (result) {
-                        if (!result) {
-                            this.log('Could not disable event listener!', 'warning');
-                        }
-                    });
-                }
-            });
-        }
     }
-
-
 
 };
 

@@ -26,8 +26,8 @@ if (!args['-deploy']) {
 			itemJs = arrItem[1] + ' = ' + 'require("../engine/' + arrItem[2] + '")';
 			// Check if there is a specific object we want to use from the
 			// module we are loading
-			if (arrItem[3]) {
-				itemJs += '.' + arrItem[3] + ';';
+			if (arrItem[4]) {
+				itemJs += '.' + arrItem[4] + ';';
 			} else {
 				itemJs += ';';
 			}
@@ -39,7 +39,7 @@ if (!args['-deploy']) {
 	IgeBase = require('../engine/core/IgeBase');
 	IgeClass = require('../engine/core/IgeClass');
 }
-
+delete require.cache;
 // Include the control class
 IgeNode = require('./IgeNode');
 

@@ -1,0 +1,9 @@
+Lesson 7
+    //////           LESSON #7: HYPERSPACE            //////
+    //////                                            //////
+
+
+    player.translateBy(150,-150,0);
+
+
+    //The code above makes your player hyperspace to a new location

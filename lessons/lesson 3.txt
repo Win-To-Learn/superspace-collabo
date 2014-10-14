@@ -1,0 +1,36 @@
+Lesson 3
+    ////// LESSON #3: ANIMATING YOUR SHIP USING LOOPS //////
+    //////             AND CONDITIONALS               //////
+
+    //Delete the slash and asterisk /* on the lines
+    //below & click Submit.
+
+    var scale = 0.5;
+    var delayMs = 300;
+    var i = 0;
+    var timingInterval = setInterval(function(){
+		if(i < 20) {
+			scale = scale + 0.01*i;
+			player.scaleTo(scale,scale,scale);
+			i++;
+		}
+		else {
+			clearInterval(timingInterval);
+		}
+    }, delayMs);
+
+    //Ignore the timing interval for now, and let's just
+    //focus on the "loop" on lines 74 to 78
+    //Experiment changing the value of the scale variable
+    //and the delayMs variable.
+
+    //This is an advanced coding loop but it basically
+    //creates a timer that runs a function every 300
+    //milliseconds.  It fires the function on this timing
+    //interval 20 times.
+    //The if statement is called a conditional.  It
+    //basically means that while a certain condition
+    //is true, do something.  In this case if a counter
+    //named "i" is less than 20, do something and then
+    //increase the the counter by 1 and see if it is
+    //still less than 20.

@@ -1,0 +1,39 @@
+Create a new .txt file here and it will
+be loaded into the lesson list.
+
+The first row of this lesson file should
+contain label of the lesson, and optionally
+the priority it should gain in the list,
+separated by ';'. If priority is omitted, it
+will be given a priority of 1000.
+
+For example:
+Lesson 1;20
+
+Would give the lesson a label "Lesson 1",
+and a priority of 20. That means that all
+lessons that have priority <20 will appear
+before this one in the list.
+
+If there were 8 files, which began with
+
+Practise;1
+Advanced techniques;20
+Last advice
+Practise 2;1
+Hello world;0
+Extra;21
+Practise 1;1
+Next practise;2
+
+the resulting lesson list in the browser
+would read:
+
+Hello world
+Practise
+Practise 1
+Practise 2
+Next practise
+Advanced techniques
+Extra
+Last advice

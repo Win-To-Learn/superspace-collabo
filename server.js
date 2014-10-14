@@ -10,19 +10,52 @@ var Server = IgeClass.extend({
 		// Define an object to hold references to our player entities
 		this.players = {};
         this.orbs = [];
-        this.fixedorbs = [];
-        this.fixedorbzs = [];
+        this.planetoids = [];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
         ige.addComponent(IgeBox2dComponent)
             .box2d.sleep(true)
-            //.box2d.gravity(0, 1)
             .box2d.createWorld()
             .box2d.mode(0)
             .box2d.start();
 
+		/* ------------------------------------------- *\
+						Database
+							
+			Please create a mysql database called
+			'superspace' to get this working
+		\* ------------------------------------------- */
+		ige.addComponent(IgeMySqlComponent, options.db).mysql.connect(function (err, db) {
+			if (!err) {
+				ige.mysql.query('SELECT * FROM users', function (err, rows, fields) {
+					if (!err) { // users table found and successfully accessed
+						var count = rows.length;
+						console.log('*                      Database connection sucessful                         *');
+						console.log('*'+Array(29-count.toString().length).join(" ")+''+count+' users have registered                          *');
+						console.log('------------------------------------------------------------------------------');
+					} else if(err.code == "ER_TABLEACCESS_DENIED_ERROR") { // user table found but permissions error
+						console.log("Error while accessing users table, permission denied");
+					} else if(err.code == "ER_NO_SUCH_TABLE") { // user table not found
+						console.log("User table not found, creating it now");
+						ige.mysql.query("CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT, `username` INT NULL, `password` TEXT NULL, `color` TEXT NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='utf8_bin' ENGINE=InnoDB;", function(err, rows, fields) {
+							if(!err) {
+								console.log("Users table created successfully!");
+							}
+							else {
+								console.log('Error creating users table', err);
+							}
+						});
+					}
+					else {
+						console.log('Error', err);
+					}
+				});
+			} else {
+				console.log(err);
+			}
+		});
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
@@ -33,6 +66,7 @@ var Server = IgeClass.extend({
 					// Check if the engine started successfully
 					if (success) {
                         // Create some network commands we will need
+                        ige.network.define('login', self._onLogin);
                         ige.network.define('playerEntity', self._onPlayerEntity);
                         ige.network.define('chatJoin', self._onChatJoin);
                         ige.network.define('chatMessage', self._onChatMessage);
@@ -40,18 +74,16 @@ var Server = IgeClass.extend({
                         ige.network.define('updateScore');
                         ige.network.define('updateTouchScore');
                         ige.network.define('code', self._onCode);
-                        ige.network.define('orbEntity', self._onOrbEntity);
-                        ige.network.define('fixedorbEntity', self._onFixedOrbEntity);
                         ige.network.define('bulletEntity', self._onBulletEntity);
                         ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
                         ige.network.define('playerControlRightDown', self._onPlayerRightDown);
                         ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
+                        ige.network.define('playerControlShootDown', self._onPlayerShootDown);
 
                         ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
                         ige.network.define('playerControlRightUp', self._onPlayerRightUp);
                         ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
-						
-						ige.network.define('playerShoot', self._onPlayerShoot);
+                        ige.network.define('playerControlShootUp', self._onPlayerShootUp);
 
                         ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
                         ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
@@ -67,7 +99,10 @@ var Server = IgeClass.extend({
 						// Create chat buffer
 						self.chatBuffer = [];
 						
-                        // Create the scene
+						/* ------------------------------------------- *\
+											Create the scene
+						\* ------------------------------------------- */
+						
                         self.mainScene = new IgeScene2d()
                             .id('mainScene');
 
@@ -90,42 +125,52 @@ var Server = IgeClass.extend({
 						
 						self.score = 0;
 						
+						/* ------------------------------------------- *\
+										Spawn asteroids
+						\* ------------------------------------------- */
+						
 						for(var i = 0; i < 10; i++) {
 							scale = 1 + Math.random();
 							var orb3 = new Orb(scale)
 								.translateTo((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, 0)
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
-
+						
+						/* ------------------------------------------- *\
+										Spawn planetoids
+						\* ------------------------------------------- */
+						
                         self.spawnOrbs = function() {
-                            new FixedOrb(2.5)
+                            new Planetoid(2.5)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(100, 100, 0);
+                                .translateTo(200, 100, 0);
 
-
-                            new FixedOrb(2.5)
+                            new Planetoid(2.5)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(500, -500, 0);
 
-                            new FixedOrb(2.5)
+                            new Planetoid(2.5)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(1000, -1000, 0);
 
-                            new FixedOrb(2.5)
+                            new Planetoid(2.5)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-300, -1200, 0);
 
-                            new FixedOrb(2.5)
+                            new Planetoid(2.5)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, -500, 0);
 
-                            new FixedOrb(2.5)
+                            new Planetoid(2.5)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, 1100, 0);
 
                         }
-
                         self.spawnOrbs();
+						
+						/* ------------------------------------------- *\
+										Contact listeners
+						\* ------------------------------------------- */
                         
 						ige.box2d.contactListener(
 							// Listen for when contact's begin
@@ -134,78 +179,42 @@ var Server = IgeClass.extend({
 								var B = contact.igeEntityB();
                                 //var C = contact.igeEntityC();
 								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-								if(A.category() == 'fixedorb' && B.category() == 'ship') {
-
-                                    B.score++;
-                                    //console.log(B.score);
-									A.exploding = true;
-									//B.destroy();
-                                    var tempScores = [];
-                                    for (var i in self.players){
-										console.log(i);
-										console.log(self.players[i]);
-                                            tempScores.push(
-                                                {'id' : i, 'score' : self.players[i].score}
-                                            );
-
-                                    }
-
-                                    ige.network.send('updateTouchScore', tempScores);
-
-                                    //if (self.fixedorbs[] = 0){
-                                        //console.log(self.fixedorbs.length);
-                                    //}
-                                    //console.log('contact with bullet');
-                                    console.log('contact with fixed orb and ship');
-                                    //var fixedorb7 = new Orb(5.5);
-                                        //.rotateTo(0,0,Math.radians(Math.random()*360))
-                                        //.translateTo(-700, 1100, 0);
+								if(A.category() == 'planetoid' && B.category() == 'ship') {
+									if(!A.touched) {
+										B.score++;
+										A.exploding = true;
+										var tempScores = [];
+										for (var i in self.players){
+											tempScores.push(
+												{'id' : self.players[i].id(), 'score' : self.players[i].score}
+											);
+										}
+										ige.network.send('updateTouchScore', tempScores);
+										console.log('contact with planetoid and ship');
+									}
 								}
                                 else if (A.category() == 'orb' && B.category() == 'bullet') {
-                                    //console.log('contact with fixedorb');
-                                    //var fixedorb_checkin = new FixedOrbz(1)
-                                    //    .rotateTo(0,0,Math.radians(Math.random()*360))
-                                    //    .translateTo(0, 0, 0);
-
-                                    //oldpoint = new IgePoint3d();
-
                                     A.exploding = true;
                                     B.destroy();
-                                    ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-                                    //console.log('contact with ship');
+									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                 }
                                 else if(A.category() == 'orb' && B.category() == 'ship') {
                                     A.exploding = true;
-                                    B.destroy();
+									B.exploding = true;
+									//console.log(contact.igeEntityA.id());
+									//console.log(contact.igeEntityB.id());
                                     ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-                                    console.log('contact with orb and ship');
-                                    //console.log(B);
-
-                                setTimeout(function(){
-									var oldColor = B.color;
-									ige.server.players[B.clientID] = new Player(B.clientID)
-										.streamMode(1)
-										.translateTo(0,0,0)
-										//.scaleTo(1,1,1)
-										.rotateTo(0,0,Math.radians(90))
-										.mount(ige.server.scene1);
-									
-									ige.server.players[B.clientID].color = oldColor;
-									
-                                     ige.network.send('playerEntity', ige.server.players[B.clientID].id(), B.clientID);
-                                     //ige.network.send('updateScore', ige.server.score, clientId);
-                                },2000);
-
-                                }
-
-
-
+									console.log("contact with asteroid and ship");
+								}
 							},
 							// Listen for when contact's end
 							function (contact) {
-								//console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 							}
 						);
+						
+						/* ------------------------------------------- *\
+											Color randomiser
+						\* ------------------------------------------- */
 						
 						self.floatToRgb = function(val) {
 							self.colorStops = [

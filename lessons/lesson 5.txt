@@ -1,0 +1,9 @@
+Lesson 5
+    //////    LESSON #5: CREATING A NEW ORB OBJECT    //////
+    //////         WITH VELOCITY AND DIRECTION        //////
+
+    new Orb(1.5)
+		.velocity.byAngleAndPower(Math.radians(45),0.2);
+
+    //This code creates an Orb with a velocity of 0.2, at a 45
+    //degree angle.

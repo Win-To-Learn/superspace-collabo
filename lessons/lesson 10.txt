@@ -1,0 +1,11 @@
+Lesson 10
+    //////       LESSON #10: DELETING ASTEROIDS       //////
+    //////                                            //////
+
+    for(var i in ige.server.orbs) {
+		ige.server.orbs[i].destroy();
+    }
+
+    //You probably have a lot of asteroids at this point.
+    //The code above allows you to destroy all of them to
+    //start over with no asteroids in space.

@@ -1,0 +1,12 @@
+Lesson 4
+    //////    LESSON #4: CREATING A NEW ORB OBJECT    //////
+    //////                                            //////
+
+    new Orb(1.5);
+
+    //The code above creates a new "Orb" object.  Orbs are defined
+    //to simulate asteroids that float around in space and have
+    //density and are affected by gravity.  They bounce off each
+    //other but can destroy your ship when then collide with you.
+    //If you happened to collide with one and were destroyed,
+    //check out the next lesson to recreate your ship.

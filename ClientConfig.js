@@ -1,12 +1,12 @@
 var igeClientConfig = {
 	include: [
         './gameClasses/sound.js',
+        './gameClasses/login.js',
 		/* Your custom game JS scripts */
 		'./gameClasses/ClientNetworkEvents.js',
 
         './gameClasses/Orb.js',
-        './gameClasses/FixedOrb.js',
-        './gameClasses/FixedOrb3.js',
+        './gameClasses/Planetoid.js',
 		'./gameClasses/Bullet.js',
 		'./gameClasses/Player.js',
         './gameClasses/Score.js',

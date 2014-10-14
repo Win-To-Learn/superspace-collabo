@@ -1,5 +1,5 @@
 //var Orb = IgeEntityBox2d.extend({
-var Orb = IgeEntityBox2d.extend({
+var Bullet = IgeEntityBox2d.extend({
 
     classId: 'Bullet',
 	
@@ -11,6 +11,7 @@ var Orb = IgeEntityBox2d.extend({
 		
 		self.liveFor = 1500;
 		self.sourceClient; // the clientId that fired this bullet
+		self.createTime = ige._timeScaleLastTimestamp;
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         this._rectColor = '#ffc600';
@@ -54,7 +55,6 @@ var Orb = IgeEntityBox2d.extend({
 				fixedRotation: true
 			});
 			
-			self.createTime = ige._timeScaleLastTimestamp;
 			//console.log(ige);
 		}
 
@@ -64,7 +64,7 @@ var Orb = IgeEntityBox2d.extend({
     },
 
     tick: function (ctx) {
-		if (ige.isServer) {
+		if(ige.isServer) {
 			if(ige._timeScaleLastTimestamp - this.createTime > this.liveFor) {
 				this.destroy();
 			}
@@ -74,4 +74,4 @@ var Orb = IgeEntityBox2d.extend({
 	
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Orb; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Bullet; }

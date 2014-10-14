@@ -1,0 +1,24 @@
+Lesson 6
+    //////  LESSON #6: CREATING A NEW PLAYER OBJECT   //////
+    //////                                            //////
+
+    ige.server.players[clientId] = new Player(clientId)
+		.streamMode(1)
+		.translateTo(0,-200,0)
+		.scaleTo(1,1,1)
+		.rotateTo(0,0,Math.radians(90))
+		.mount(ige.server.scene1);
+		ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+		ige.network.send('updateScore', ige.server.score, clientId);
+    
+
+    //The code above creates a new "Player" object.
+    //The code is a little more complicated because when you
+    //first access this website, you are assigned a special
+    //"clientId".  This id lets the server know who you are
+    //as distinct from other players that log on.
+    //Since you have a unique id, when you do something,
+    //the server can tell the other players what you did
+    //and make your actions or movements show up on their screen
+    //The rotation code makes the ship show up at a 90 degree
+    //angle.

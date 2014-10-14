@@ -15,6 +15,48 @@ body {
     overflow: hidden;
 }
 
+#Audio1 {
+    position:absolute;
+    top: 150px;
+    left:0px;
+    width:260px;
+    height:40px;
+}
+
+/* ------------------------------------------- *\
+					Login
+\* ------------------------------------------- */
+
+#login {
+	display: none;
+	font-family: Verdana, sans-serif;
+	color: white;
+	background: rgb(55,55,75);
+	width: 290px;
+	margin: auto;
+	margin-top: 10%;
+	padding: 20px;
+}
+
+	.loginTitle {
+		font-size: 20px;
+		text-align: center;
+		padding-bottom: 10px;
+	}
+	.loginStatus {
+		
+	}
+	.loginField {
+		overflow: hidden;
+		margin: 5px 0px;
+	}
+	.loginField .right {
+		float: right;
+	}
+	.loginField button {
+		height: 30px;
+	}
+
 /* ------------------------------------------- *\
 					Chat box
 \* ------------------------------------------- */
@@ -22,6 +64,7 @@ body {
 #chatBox {
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 12px;
+	display: none;
 }
 
 	#chatHistory {
@@ -33,6 +76,7 @@ body {
 		border: 1px solid white;
 		border-bottom: none;
 		color: white;
+		background: rgba(0,0,0,0.8);
 		overflow-y: auto;
 		word-break: break-word;
 	}
@@ -44,6 +88,7 @@ body {
 		height: 20px;
 		width: 40%;
 		border: 1px solid white;
+		background: rgba(0,0,0,0.8);
 	}
 
 		#chatInputField {

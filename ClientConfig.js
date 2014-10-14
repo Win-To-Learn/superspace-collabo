@@ -7,6 +7,8 @@ var igeClientConfig = {
 
         './gameClasses/Orb.js',
         './gameClasses/Planetoid.js',
+        './gameClasses/FixedOrb4.js',
+        './gameClasses/FixedOrb3.js',
 		'./gameClasses/Bullet.js',
 		'./gameClasses/Player.js',
         './gameClasses/Score.js',

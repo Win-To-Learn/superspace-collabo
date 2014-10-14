@@ -11,9 +11,11 @@ var Player = IgeEntityBox2d.extend({
         self.clientId = clientId;
         self.score = 0;
 
+        self.lastSoundTime = Date.now();
+
 		this.drawBounds(false);
 		
-		self._thrustPower = 8;
+		self._thrustPower = 60;
 		self._shootInterval = 100;
 		self._lastShoot = ige._timeScaleLastTimestamp;
 		self.exploding = false;
@@ -57,7 +59,7 @@ var Player = IgeEntityBox2d.extend({
 			self.fixDefs = [];
 			//for (var i = 0; i < self.triangles.length; i++) {
 				self.fixDefs.push({
-					density: 1,
+					density: 1.5,
 					friction: 1.0,
 					restitution: 0.2,
 					filter: {
@@ -70,7 +72,8 @@ var Player = IgeEntityBox2d.extend({
 					//}
                     shape: {
                     	type: 'circle',
-                        data: {	radius: 10	}
+                        //data: {	radius: 10	}
+                        data: {	radius: 30	}
                     }
 				});
 			//}
@@ -87,6 +90,30 @@ var Player = IgeEntityBox2d.extend({
 				fixtures: self.fixDefs,
 				fixedRotation: false
 			});
+
+            // Add a sensor to the fixtures so we can detect
+            // when the ship is near a fixedorb
+
+
+            self.fixDefs.push({
+                density: 0.0,
+                friction: 0.0,
+                restitution: 0.0,
+                isSensor: true,
+                filter: {
+                    categoryBits: 0x0100,
+                    maskBits: 0xffff
+                },
+                shape: {
+                    type: 'circle',
+                    data: {
+                        radius: 400
+                    }
+                }
+            });
+
+
+
 			
 			self.addComponent(IgeVelocityComponent)
 				.category('ship');
@@ -114,16 +141,41 @@ var Player = IgeEntityBox2d.extend({
 		self.scaleTo(scale,scale,1);
 
 	},
-	
+
+    carryOrb: function (fixedorb, contact) {
+        if (!this._oldOrb || (this._oldOrb !== fixedorb)) {
+            var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
+                bodyA = contact.m_fixtureA.m_body,
+                bodyB = contact.m_fixtureB.m_body;
+
+            distanceJointDef.Initialize(
+                bodyA,
+                bodyB,
+                bodyA.GetWorldCenter(),
+                bodyB.GetWorldCenter()
+            );
+
+            this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef);
+
+            this._carryingOrb = true;
+            this._fixedorb = fixedorb;
+
+            fixedorb.originalStart(fixedorb._translate);
+        }
+    },
+
+
 	shoot: function(clientId) {
 		if(ige.isServer) { // server
 			if(ige._timeScaleLastTimestamp - this._lastShoot > this._shootInterval) {
 				var b2vel = this._box2dBody.GetLinearVelocity();
-				var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
-				var bullet = new Bullet()
+				//var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
+                var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y))// / 2 / 3 / this._thrustPower;
+
+                var bullet = new Bullet()
 					.streamMode(1)
 					.addComponent(IgeVelocityComponent)
-					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.07 + velocity)
+					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1+velocity*0.012)
 					.translateTo(this._translate.x, this._translate.y, 0)
 					.mount(ige.server.scene1);
 				bullet.sourceClient = clientId;
@@ -207,7 +259,6 @@ var Player = IgeEntityBox2d.extend({
 			this.explode();
 		}
 		else if(this._alive) {
-			console.log("moving");
 			myx1 = this._translate.x;
 			myy1 = this._translate.y;
 			myrot1 = this._rotate.z;
@@ -235,6 +286,17 @@ var Player = IgeEntityBox2d.extend({
 			/* CEXCLUDE */
 
 			if (!ige.isServer) {
+
+				if (self._carryingOrb) {
+					ctx.save();
+					ctx.rotate(-self._rotate.z);
+					ctx.strokeStyle = '#a6fff6';
+					ctx.beginPath();
+					ctx.moveTo(0, 0);
+					ctx.lineTo(self._fixedorb._translate.x - self._translate.x, self._fixedorb._translate.y - self._translate.y);
+					ctx.stroke();
+					ctx.restore();
+				}
 			/*
 				ige.input.on('mouseDown', function(event, mouseX, mouseY, which) {
 					if (which == 1 && mouseY<-200) {
@@ -334,7 +396,6 @@ var Player = IgeEntityBox2d.extend({
 					}
 				}
 			} // !isServer
-			
 		} // !exploding
 
 		// Call the IgeEntity (super-class) tick() method

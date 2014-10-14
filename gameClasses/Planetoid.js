@@ -47,12 +47,12 @@ var Planetoid = IgeEntityBox2d.extend({
 
 			for (var i = 0; i < self.triangles.length; i++) {
 				fixDefs.push({
-					density: 0.1,
+					density: 0.4,
 					friction: 1.0,
 					restitution: 0.5,
 					filter: {
 						categoryBits: 0x00ff,
-						maskBits: 0xffff & ~0x0008
+						maskBits: 0xffff //& ~0x0008
 					},
 					shape: {
 						type: 'polygon',
@@ -61,15 +61,18 @@ var Planetoid = IgeEntityBox2d.extend({
 				});
 			}
 			// collision definition END
+		
+			self._thrustPower = 0.01*scale;
 
 			self.box2dBody({
+                isSensor: true,
 				type: 'dynamic',
 				linearDamping: 2,
 				angularDamping: 2,
 				allowSleep: true,
 				fixtures: fixDefs,
 				fixedRotation: false,
-                gravityScale: 0.0,
+                gravityScale: 0.0
 			});
 			
 			
@@ -119,6 +122,32 @@ var Planetoid = IgeEntityBox2d.extend({
 			}
 		}
 		IgeEntity.prototype.tick.call(this, ctx);
+    },
+
+    originalStart: function (translate) {
+        this._originalStart = translate.clone();
+    },
+
+    carryOrb: function (fixedorb, contact) {
+        if (!this._oldOrb || (this._oldOrb !== fixedorb)) {
+            var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
+                bodyA = contact.m_fixtureA.m_body,
+                bodyB = contact.m_fixtureB.m_body;
+
+            distanceJointDef.Initialize(
+                bodyA,
+                bodyB,
+                bodyA.GetWorldCenter(),
+                bodyB.GetWorldCenter()
+            );
+
+            this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef);
+
+            this._carryingOrb = true;
+            this._fixedorb = fixedorb;
+
+            fixedorb.originalStart(fixedorb._translate);
+        }
     },
 	
 	explode: function() {

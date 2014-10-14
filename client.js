@@ -24,6 +24,8 @@ var Client = IgeClass.extend({
 			ship: new IgeTexture('./assets/PlayerTexture.js'),
             orb: new IgeTexture('./assets/OrbTexture.js'),
             planetoid: new IgeTexture('./assets/PlanetoidTexture.js'),
+            fixedorbred: new IgeTexture('./assets/FixedOrbTexture4.js'),
+            fixedorbz: new IgeTexture('./assets/FixedOrbTexture3.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
             boundary: new IgeTexture('./assets/BoundaryTexture.js'),
@@ -78,9 +80,8 @@ var Client = IgeClass.extend({
 									self.log('Stream entity created with ID: ' + entity.id());
 								});
 							
-							//myAud=document.getElementById("Audio1");
-							//myAud.volume=0.4;
-								
+							myAud=document.getElementById("Audio1");
+							myAud.volume=0.4;								
 								
 							/* ------------------------------------------- *\
 												Chat system

@@ -10,8 +10,7 @@ var ClientNetworkEvents = {
 	_onPlayerEntity: function (data) {
 		console.log("Got new player, entityId "+data);
 		if (ige.$(data)) {
-			console.log("It already existed");
-			ige.client.vp1.camera.trackTranslate(ige.$(data), 30);
+			ige.client.vp1.camera.trackTranslate(ige.$(data), 18);
 		} else {
 			console.log("It's new");
 			// The client has not yet received the entity via the network
@@ -26,8 +25,7 @@ var ClientNetworkEvents = {
 					ige.$(data).nametagfont.text(data.substr(0,3));
 
 					// Tell the camera to track out player entity
-					ige.client.vp1.camera.trackTranslate(ige.$(data), 30);
-					ige.client.minimap.camera.trackTranslate(ige.$(data), 30);
+					ige.client.vp1.camera.trackTranslate(ige.$(data), 18);
 					// Turn off the listener for this event now that we
 					// have found and started tracking our player entity
 					ige.network.stream.off('entityCreated', self._eventListener, function (result) {
@@ -41,6 +39,7 @@ var ClientNetworkEvents = {
 	},
 	
 	_onScored: function (data) {
+        blastSound.play();
 		new ClientScore(data)
 			.translateTo(0, 0, 0)
 			.mount(ige.client.uiScene)
@@ -76,13 +75,10 @@ var ClientNetworkEvents = {
 	},
 
     _onUpdateTouchScore: function(data) {
-
         var scores = [];
         for(var i in data)
         {scores.push(data[i]['id'].substring(0,3)+" "+data[i]['score']);}
         ige.client.playerscore.text(scores.join("\n"));
-        //console.log(data);
-
     }
 
 };

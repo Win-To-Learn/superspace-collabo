@@ -11,6 +11,8 @@ var Server = IgeClass.extend({
 		this.players = {};
         this.orbs = [];
         this.planetoids = [];
+        this.fixedorbreds = [];
+        this.fixedorbzs = [];
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
@@ -27,6 +29,7 @@ var Server = IgeClass.extend({
 			Please create a mysql database called
 			'superspace' to get this working
 		\* ------------------------------------------- */
+		/*
 		ige.addComponent(IgeMySqlComponent, options.db).mysql.connect(function (err, db) {
 			if (!err) {
 				ige.mysql.query('SELECT * FROM users', function (err, rows, fields) {
@@ -56,6 +59,7 @@ var Server = IgeClass.extend({
 				console.log(err);
 			}
 		});
+		*/
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
@@ -140,33 +144,53 @@ var Server = IgeClass.extend({
 										Spawn planetoids
 						\* ------------------------------------------- */
 						
+                        var fixedorbrad = 1.0;
+
                         self.spawnOrbs = function() {
-                            new Planetoid(2.5)
+                            new Planetoid(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(200, 100, 0);
 
-                            new Planetoid(2.5)
+                            new Planetoid(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(500, -500, 0);
 
-                            new Planetoid(2.5)
+                            new Planetoid(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(1000, -1000, 0);
 
-                            new Planetoid(2.5)
+                            new Planetoid(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-300, -1200, 0);
 
-                            new Planetoid(2.5)
+                            new Planetoid(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, -500, 0);
 
-                            new Planetoid(2.5)
+                            new Planetoid(fixedorbrad)
                                 .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, 1100, 0);
 
                         }
                         self.spawnOrbs();
+
+                        new FixedOrbz(2)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(0, 0, 0);
+
+                        new FixedOrbRed(2)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(500, 500, 0);
+
+                        new FixedOrbRed(2)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(-500, -500, 0);
 						
 						/* ------------------------------------------- *\
 										Contact listeners
@@ -198,11 +222,19 @@ var Server = IgeClass.extend({
                                     B.destroy();
 									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                 }
+                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorb') {
+                                    A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
+                                }
+                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorbred') {
+                                    A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
+                                }
+                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorbz') {
+                                    A.destroy();
+                                    ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+                                }
                                 else if(A.category() == 'orb' && B.category() == 'ship') {
                                     A.exploding = true;
 									B.exploding = true;
-									//console.log(contact.igeEntityA.id());
-									//console.log(contact.igeEntityB.id());
                                     ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
 									console.log("contact with asteroid and ship");
 								}
@@ -236,6 +268,7 @@ var Server = IgeClass.extend({
 								colors[1] = Math.round((self.colorStops[toStop][1]-self.colorStops[fromStop][1])*stopPercentage)+self.colorStops[fromStop][1];
 								colors[2] = Math.round((self.colorStops[toStop][2]-self.colorStops[fromStop][2])*stopPercentage)+self.colorStops[fromStop][2];
 							}
+							console.log('rgba('+colors[0]+','+colors[1]+','+colors[2]+',1)');
 							return 'rgba('+colors[0]+','+colors[1]+','+colors[2]+',1)';
 						}
 						

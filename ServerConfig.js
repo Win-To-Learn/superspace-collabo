@@ -3,6 +3,8 @@ var config = {
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
         {name: 'Orb', path: './gameClasses/Orb'},
         {name: 'Planetoid', path: './gameClasses/Planetoid'},
+        {name: 'FixedOrbRed', path: './gameClasses/FixedOrb4'},
+        {name: 'FixedOrbz', path: './gameClasses/FixedOrb3'},
         {name: 'Bullet', path: './gameClasses/Bullet'},
 		{name: 'Player', path: './gameClasses/Player'}
 

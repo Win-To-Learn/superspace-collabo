@@ -44,6 +44,7 @@ var ServerNetworkEvents = {
 	
 	_onCode: function(data, clientId) {
 		var me = ige.server.players[clientId];
+		var player = ige.server.players[clientId];
 		var msgs = [];
 		var oldLog = console.log;
 		console.log = function (message) {

@@ -1,4 +1,5 @@
 //Start the server with node ./server/ige -g ../superspace-collabo
+//Start the server with node ./server/ige -g ./
 
 var Client = IgeClass.extend({
 	classId: 'Client',
@@ -12,6 +13,13 @@ var Client = IgeClass.extend({
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
+
+		// Enable console logging of network messages but only show 10 of them and
+		// then stop logging them. This is a demo of how to help you debug network
+		// data messages.
+		ige.network.debugMax(10);
+		ige.network.debug(true);
+		ige.debugEnabled(true);
 
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
@@ -54,8 +62,14 @@ var Client = IgeClass.extend({
 					if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0) {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
 					}
+
                     //var port = process.env.PORT || 5000;
 					//ige.network.start(port, function () {
+					ige.network._onError = function (data) {
+						if(data.reason == "Cannot establish connection, is server running?") {
+							$("body").html(data.reason);
+						}
+					} 
                     ige.network.start(serverUrl, function () {
 						
 						//login.init();
@@ -277,14 +291,6 @@ var Client = IgeClass.extend({
 
 							// Ask the server to create an entity for us
 							ige.network.send('playerEntity');
-
-							// Enable console logging of network messages but only show 10 of them and
-							// then stop logging them. This is a demo of how to help you debug network
-							// data messages.
-							ige.network.debugMax(10);
-							ige.network.debug(false);
-
-							ige.debug(false);
 
 						//}); // login
 					});

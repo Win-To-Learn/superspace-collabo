@@ -6,6 +6,7 @@ var Server = IgeClass.extend({
 		var self = this;
         serverScore = 0;
 		ige.timeScale(1);
+		ige.debugEnabled(false);
 
 		// Define an object to hold references to our player entities
 		this.players = {};
@@ -26,40 +27,68 @@ var Server = IgeClass.extend({
 		/* ------------------------------------------- *\
 						Database
 							
-			Please create a mysql database called
-			'superspace' to get this working
+			Please create a mysql user
+			'superspace'@'localhost' with
+			the password that's set in ServerConfig.js
+			and a database 'superspace' that
+			our user has permissions to use.
+			
+			Permissions for the user required
+			SELECT, INSERT, UPDATE, DELETE
+			CREATE, ALTER, INDEX
 		\* ------------------------------------------- */
-		/*
 		ige.addComponent(IgeMySqlComponent, options.db).mysql.connect(function (err, db) {
+			ige.mysql.userTableDef = "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT, `username` INT NULL, `password` TEXT NULL, `color` TEXT NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='utf8_bin' ENGINE=InnoDB;";
 			if (!err) {
+				console.log('*                      Database connection sucessful                         *');
 				ige.mysql.query('SELECT * FROM users', function (err, rows, fields) {
 					if (!err) { // users table found and successfully accessed
 						var count = rows.length;
-						console.log('*                      Database connection sucessful                         *');
 						console.log('*'+Array(29-count.toString().length).join(" ")+''+count+' users have registered                          *');
 						console.log('------------------------------------------------------------------------------');
+						ige.emit('mysqlReady');
 					} else if(err.code == "ER_TABLEACCESS_DENIED_ERROR") { // user table found but permissions error
 						console.log("Error while accessing users table, permission denied");
+						console.log('------------------------------------------------------------------------------');
 					} else if(err.code == "ER_NO_SUCH_TABLE") { // user table not found
-						console.log("User table not found, creating it now");
-						ige.mysql.query("CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT, `username` INT NULL, `password` TEXT NULL, `color` TEXT NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='utf8_bin' ENGINE=InnoDB;", function(err, rows, fields) {
+								console.log('*                 Users table not found, creating it now                     *');
+						ige.mysql.query(ige.mysql.userTableDef, function(err, rows, fields) {
 							if(!err) {
-								console.log("Users table created successfully!");
+								console.log('*                    Users table successfully created                        *');
+								ige.emit('mysqlReady');
 							}
 							else {
-								console.log('Error creating users table', err);
+								console.log('* Error creating users table', err);
 							}
+						console.log('------------------------------------------------------------------------------');
 						});
 					}
 					else {
-						console.log('Error', err);
+						console.log('* Error', err);
+						console.log('------------------------------------------------------------------------------');
 					}
 				});
 			} else {
-				console.log(err);
+				switch(err.code) {
+					case "ER_ACCESS_DENIED_ERROR":
+						console.log("User access denied!");
+						console.log("Have you created the mysql user? Config in ServerConfig.js");
+						console.log(err);
+						break;
+					case "ER_DBACCESS_DENIED_ERROR":
+						console.log("Database access denied!");
+						console.log("Have you created the database itself and granted permissions to it?");
+						break;
+					default:
+						console.log(err);
+				}
 			}
 		});
-		*/
+		
+		/* ------------------------------------------- *\
+						Game itself
+		\* ------------------------------------------- */
+		ige.on('mysqlReady', function() {
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
@@ -69,6 +98,7 @@ var Server = IgeClass.extend({
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
+						console.log("Server now accepting connections");
                         // Create some network commands we will need
                         ige.network.define('login', self._onLogin);
                         ige.network.define('playerEntity', self._onPlayerEntity);
@@ -275,6 +305,7 @@ var Server = IgeClass.extend({
 					}
 				});
 			});
+		}); // mysqlReady
 	}
 });
 

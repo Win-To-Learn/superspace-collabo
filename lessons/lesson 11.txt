@@ -1,0 +1,17 @@
+Lesson 11
+    //////       LESSON #11: CHANGING THE COLOR       //////
+    //////               OF YOUR SHIP                 //////
+
+    player.color = "blue"
+
+
+    //If you want to be fancy, you can look up how to
+    //change the color using levels or red, green and blue
+    //This is called an RGB color scheme.
+    //Each level is a number between 1 and 255
+    //Check this out
+    //http://www.rapidtables.com/web/color/RGB_Color.htm#color picker
+
+    //The code below is the rgb format for blue
+
+    //player.color = "rgb(0,0,255)”

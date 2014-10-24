@@ -50,8 +50,8 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 			for (var i = 0; i < self.triangles.length; i++) {
 				fixDefs.push({
 					density: 0.1,
-					friction: 1.0,
-					restitution: 0.5,
+					friction: 0.2,
+					restitution: 2.5,
 					filter: {
 						categoryBits: 0x00ff,
 						maskBits: 0xffff //& ~0x0008
@@ -68,13 +68,13 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 			self._thrustPower = 0.01*scale;
 
 			self.box2dBody({
-                isSensor: true,
+                //isSensor: true,
 				type: 'dynamic',
-				linearDamping: 2,
-				angularDamping: 2,
+				linearDamping: 0.5,
+				angularDamping: 200,
 				allowSleep: true,
 				fixtures: fixDefs,
-				fixedRotation: false,
+				fixedRotation: true,
                 gravityScale: 0.0
 			});
 			
@@ -152,6 +152,8 @@ var FixedOrbRed = IgeEntityBox2d.extend({
             fixedorbred.originalStart(fixedorbred._translate);
         }
     },
+
+
 	
 	explode: function() {
 		//var count = 2;

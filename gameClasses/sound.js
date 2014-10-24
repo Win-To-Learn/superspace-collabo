@@ -12,9 +12,4 @@ autoplay: false,  loop: false,  volume: 0.06});
 
 
 var laserSound = new Howl({
-	urls: ['assets/laser.mp3'],
-	volume: 0.1,
-	sprite: {
-		laser: [0, 200]
-	}
-});
+    autoplay: false,  loop: false,  volume: 1});

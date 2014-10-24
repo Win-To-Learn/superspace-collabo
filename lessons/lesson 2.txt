@@ -2,7 +2,7 @@ Lesson 2
     ////// LESSON #2: CHANGING THE SCALE OF YOUR SHIP //////
     //////             USING VARIABLES                //////
 
-    //Delete the forward slashes on the lines below & click Submit.
+
 
     var xScale = yScale = zScale = 2;
     player.scaleTo(xScale,yScale,zScale);

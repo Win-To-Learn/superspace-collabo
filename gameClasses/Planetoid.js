@@ -12,6 +12,8 @@ var Planetoid = IgeEntityBox2d.extend({
         self.color = 'rgb(255,255,0)';
 		self.fillColor = 'rgba(255,255,0,0.25)';
 		self.touched = false;
+        self.leftgoal = false;
+        self.isgoal = false;
 		
 		if(arguments.length < 1) {
 			scale = 2;
@@ -65,14 +67,25 @@ var Planetoid = IgeEntityBox2d.extend({
 			self._thrustPower = 0.01*scale;
 
 			self.box2dBody({
+                //isSensor: true,
+                //SetFixedRotation: true,
+				//type: 'dynamic',
+				//linearDamping: 2,
+				//angularDamping: 2,
+				//allowSleep: true,
+				//fixtures: fixDefs,
+
+                //active: false,
+                //gravityScale: 0.0
+                type: 'dynamic',
+                linearDamping: 2.5,
+                angularDamping: 200,
+                bullet: true,
                 isSensor: true,
-				type: 'dynamic',
-				linearDamping: 2,
-				angularDamping: 2,
-				allowSleep: true,
-				fixtures: fixDefs,
-				fixedRotation: false,
-                gravityScale: 0.0
+                allowSleep: true,
+                fixtures: fixDefs,
+                fixedRotation: true
+
 			});
 			
 			
@@ -128,8 +141,8 @@ var Planetoid = IgeEntityBox2d.extend({
         this._originalStart = translate.clone();
     },
 
-    carryOrb: function (fixedorb, contact) {
-        if (!this._oldOrb || (this._oldOrb !== fixedorb)) {
+    carryOrb: function (planetoid, contact) {
+        if (!this._oldplanetoid || (this._oldplanetoid !== planetoid)) {
             var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
                 bodyA = contact.m_fixtureA.m_body,
                 bodyB = contact.m_fixtureB.m_body;
@@ -143,20 +156,20 @@ var Planetoid = IgeEntityBox2d.extend({
 
             this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef);
 
-            this._carryingOrb = true;
-            this._fixedorb = fixedorb;
+            this._carryingPlanetoid = true;
+            this._planetoid = planetoid;
 
-            fixedorb.originalStart(fixedorb._translate);
+            planetoid.originalStart(planetoid._translate);
         }
     },
 	
 	explode: function() {
 		this.exploding = false;
 		this.touched = true;
-		this.fillColor = 'rgba(0,255,255,0.35)';
-		this.color = 'rgb(0,255,255)';
-		ige.server.score += this.pointWorth;
-		ige.network.send('updateScore', ige.server.score);
+		//this.fillColor = 'rgba(0,255,255,0.35)';
+		//this.color = 'rgb(0,255,255)';
+		//ige.server.score += this.pointWorth;
+		//ige.network.send('updateScore', ige.server.score);
 	}
 	
 });

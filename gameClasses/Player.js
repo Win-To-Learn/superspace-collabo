@@ -15,12 +15,12 @@ var Player = IgeEntityBox2d.extend({
 
 		this.drawBounds(false);
 		
-		self._thrustPower = 60;
+		self._thrustPower = 70;
 		self._shootInterval = 100;
 		self._lastShoot = ige._timeScaleLastTimestamp;
 		self.exploding = false;
 		self.color = "white";
-		var scale = 0.3;
+		var scale = 0.5;
 		
 		self.shape = [
 			[0,-1],
@@ -142,8 +142,8 @@ var Player = IgeEntityBox2d.extend({
 
 	},
 
-    carryOrb: function (fixedorb, contact) {
-        if (!this._oldOrb || (this._oldOrb !== fixedorb)) {
+    carryOrb: function (fixedorbred, contact) {
+        if (!this._oldfixedorbred || (this._oldfixedorbred !== fixedorbred)) {
             var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
                 bodyA = contact.m_fixtureA.m_body,
                 bodyB = contact.m_fixtureB.m_body;
@@ -157,21 +157,38 @@ var Player = IgeEntityBox2d.extend({
 
             this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef);
 
-            this._carryingOrb = true;
-            this._fixedorb = fixedorb;
+            this._carryingfixedorbred = true;
+            this._fixedorbred = fixedorbred;
 
-            fixedorb.originalStart(fixedorb._translate);
+            //fixedorbred.originalStart(fixedorbred._translate);
+        }
+    },
+
+    dropOrb: function () {
+        if (this._carryingfixedorbred) {
+            ige.box2d._world.DestroyJoint(this._orbRope);
+
+            //this._oldfixedorbred = this._fixedorbred;
+            this._dropTime = ige._currentTime;
+
+            delete this._orbRope;
+            //delete this._fixedorbred;
+
+            this._carryingfixedorbred = false;
         }
     },
 
 
 	shoot: function(clientId) {
 		if(ige.isServer) { // server
+            this.dropOrb();
 			if(ige._timeScaleLastTimestamp - this._lastShoot > this._shootInterval) {
 				var b2vel = this._box2dBody.GetLinearVelocity();
 				//var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
                 var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y))// / 2 / 3 / this._thrustPower;
-
+                if (this._fixedorbred) {
+                    this._fixedorbred.velocity.byAngleAndPower(this._rotate.z - Math.radians(90), 0.2 + velocity * 0.012)
+                }
                 var bullet = new Bullet()
 					.streamMode(1)
 					.addComponent(IgeVelocityComponent)
@@ -187,6 +204,16 @@ var Player = IgeEntityBox2d.extend({
 	explode: function() {
 		this.exploding = false;
 		if(ige.isServer) {
+            //console.log(this._orbRope)
+            //ige.box2d._world.DestroyJoint(this._orbRope);
+            //console.log(this);
+            //this._oldOrb = this._orb;
+            //this._dropTime = ige._currentTime;
+
+            //delete this._orbRope;
+            //delete this._orb;
+
+            //this._carryingplanetoid = false;
 			this.unMount();
 			this._box2dBody.SetAwake(false);
 			this._box2dBody.SetActive(false);
@@ -288,14 +315,14 @@ var Player = IgeEntityBox2d.extend({
 			if (!ige.isServer) {
 
 				if (self._carryingOrb) {
-					ctx.save();
-					ctx.rotate(-self._rotate.z);
-					ctx.strokeStyle = '#a6fff6';
-					ctx.beginPath();
-					ctx.moveTo(0, 0);
-					ctx.lineTo(self._fixedorb._translate.x - self._translate.x, self._fixedorb._translate.y - self._translate.y);
-					ctx.stroke();
-					ctx.restore();
+					//ctx.save();
+					//ctx.rotate(-self._rotate.z);
+					//ctx.strokeStyle = '#a6fff6';
+					//ctx.beginPath();
+					//ctx.moveTo(0, 0);
+					//ctx.lineTo(self._fixedorb._translate.x - self._translate.x, self._fixedorb._translate.y - self._translate.y);
+					//ctx.stroke();
+					//ctx.restore();
 				}
 			/*
 				ige.input.on('mouseDown', function(event, mouseX, mouseY, which) {
@@ -386,12 +413,23 @@ var Player = IgeEntityBox2d.extend({
 
 				if (ige.input.actionState('shoot')) {
 					if (!this.controls.shoot) {
+                        laserSound.stop('laser');
 						this.controls.shoot = true;
 						ige.network.send('playerControlShootDown');
+                        //var now = Date.now();
+                        //var elapsed = now - self.lastSoundTime;
+                        //console.log(elapsed);
+                        //if (elapsed < 50) {
+                        //    return;
+                        //}
+
+                        //self.lastSoundTime = now;
+
 					}
 				} else {
 					if (this.controls.shoot) {
-						this.controls.shoot = false;
+                        laserSound.play('laser');
+;						this.controls.shoot = false;
 						ige.network.send('playerControlShootUp');
 					}
 				}

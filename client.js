@@ -31,7 +31,8 @@ var Client = IgeClass.extend({
             boundary: new IgeTexture('./assets/BoundaryTexture.js'),
             font: new IgeFontSheet('./assets/agency_fb_20pt.png'),
             fontChat: new IgeFontSheet('./assets/verdana_10px.png'),
-            fontid: new IgeFontSheet('./assets/arial_narrow_60pt.png')
+            fontid: new IgeFontSheet('./assets/arial_narrow_60pt.png'),
+            coordinates: new IgeFontSheet('./assets/verdana_10px.png')
 		};
 
 		ige.on('texturesLoaded', function () {
@@ -48,12 +49,12 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
-
-					var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
-					if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0) {
-						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
-					}
+					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+                    //var serverUrl = 'http://localhost:7610';
+					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
+					//if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0) {
+					//	serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
+					//}
                     //var port = process.env.PORT || 5000;
 					//ige.network.start(port, function () {
                     ige.network.start(serverUrl, function () {
@@ -80,8 +81,8 @@ var Client = IgeClass.extend({
 									self.log('Stream entity created with ID: ' + entity.id());
 								});
 							
-							myAud=document.getElementById("Audio1");
-							myAud.volume=0.4;								
+							//myAud=document.getElementById("Audio1");
+							//myAud.volume=0.4;
 								
 							/* ------------------------------------------- *\
 												Chat system
@@ -152,6 +153,7 @@ var Client = IgeClass.extend({
 							
 							self.mainScene = new IgeScene2d()
 								//.backgroundPattern(self.textures.stars, 'repeat', true, false)
+                                //.color("#000000")
 								.id('mainScene');
 
 							// Create the scene
@@ -184,7 +186,7 @@ var Client = IgeClass.extend({
 								.height(150)
 								.autoSize(false)
 								.borderColor('#ffffff')
-								.camera.scaleTo(.05,.05,.05)
+								.camera.scaleTo(.04,.04,.04)
 								.depth(1)
 								.scene(self.mainScene)
 								.mount(ige);
@@ -196,19 +198,29 @@ var Client = IgeClass.extend({
 							self.score = new IgeFontEntity()
 								.texture(ige.client.textures.font)
 								.width(100)
-								.text('Score')
+								.text('Team B')
 								.top(5)
 								.right(10)
 								.mount(self.uiScene);
 
-							self.playerscore = new IgeFontEntity()
+                        self.score = new IgeFontEntity()
+                            .texture(ige.client.textures.font)
+                            .width(100)
+                            .text('Team A')
+                            .top(5)
+                            .right(100)
+                            .mount(self.uiScene);
+
+
+                            self.playerscore = new IgeFontEntity()
 								.texture(ige.client.textures.font)
 								.width(100)
 								.text('Score')
 								.top(10)
 								.right(10)
 								.height(200)
-								.mount(self.uiScene)
+                                .hide()
+								.mount(self.uiScene);
 
 							self.scoreText = new IgeFontEntity()
 								.id('scoreText')
@@ -220,10 +232,45 @@ var Client = IgeClass.extend({
 								.right(10)
 								.mount(self.uiScene);
 
+
+                        self.scoreText2 = new IgeFontEntity()
+                            .id('scoreText2')
+                            .texture(ige.client.textures.font)
+                            .width(100)
+                            .text('0 points')
+                            .colorOverlay('#ff6000')
+                            .top(35)
+                            .right(100)
+                            .mount(self.uiScene);
+
+
+                        self.coordinates1 = new IgeFontEntity()
+                            .id('coordinates1')
+                            .texture(ige.client.textures.coordinates)
+                            .width(100)
+                            .text('-3000,1500')
+                            .colorOverlay('#ff6000')
+                            .top(140)
+                            .left(-10)
+                            .mount(self.uiScene);
+
+                        self.coordinates2 = new IgeFontEntity()
+                            .id('coordinates2')
+                            .texture(ige.client.textures.coordinates)
+                            .width(100)
+                            .text('3000,-1500')
+                            .colorOverlay('#ff6000')
+                            .top(-10)
+                            .left(245)
+                            .mount(self.uiScene);
+
+
+
+
 							self.timerLabel = new IgeFontEntity()
 								.texture(ige.client.textures.font)
 								.width(100)
-								.text('Timer')
+								.text('Time')
 								.top(5)
 								.right(200)
 								.mount(self.uiScene);
@@ -241,9 +288,9 @@ var Client = IgeClass.extend({
 								.texture(ige.client.textures.font)
 								.width(600)
 								.height(200)
-								.text('left, right, and up = thrust, b = fire\nwhen all players are ready be the first to touch all yellow planetoids')
+								.text('left, right, and up = thrust, b = fire\nwhen all players are ready shoot the red planetoids into the green goals')
 								.colorOverlay('#ff6000')
-								.top(-25)
+								.top(50)
 								.left(270)
 								.textAlignX(0)
 								.textAlignY(0)

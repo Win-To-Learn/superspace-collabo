@@ -71,7 +71,18 @@ var ClientNetworkEvents = {
 	},
 	
 	_onUpdateScore: function(data) {
-		ige.client.scoreText.text(data+' points');
+        blastSound.play();
+        if (parseInt(data) > 0) {
+            console.log(data);
+            console.log(parseInt(data));
+            ige.client.scoreText.text(data + ' points');
+        }
+        else if (parseInt(data)<0){
+            console.log(data);
+            console.log(parseInt(data));
+            scoreb = parseInt(data)*-1;
+            ige.client.scoreText2.text(scoreb + ' points');
+        }
 	},
 
     _onUpdateTouchScore: function(data) {

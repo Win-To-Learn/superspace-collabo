@@ -3,7 +3,17 @@ Lesson 7
     //////                                            //////
 
 
-    player.translateBy(150,-150,0);
+    player.translateTo(-1200,0,0);
 
+    //“translate” is a math term for move
 
-    //The code above makes your player hyperspace to a new location
+    //This code moves you near the left goal
+
+    //The code below will move you near the right goal
+    //player.translateTo(1200,0,0);
+
+    //The code below will move you near the upper right hand
+    //corner of the field
+
+    //player.translateTo(1500,-600,0);
+

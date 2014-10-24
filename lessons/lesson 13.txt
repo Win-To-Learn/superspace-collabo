@@ -1,0 +1,5 @@
+Lesson 13
+
+player._thrustPower = 500;
+
+//increase the speed of your ship

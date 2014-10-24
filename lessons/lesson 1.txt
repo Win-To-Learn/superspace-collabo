@@ -1,7 +1,7 @@
 Lesson 1
     ////// LESSON #1: CHANGING THE SCALE OF YOUR SHIP //////
 
-    //Delete the 2 forward slashes below and click Submit Code
+
     player.scaleTo(1,2,1);
 
     //When you delete the back slashes, the code should

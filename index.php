@@ -48,10 +48,12 @@
 	<div class="loginField">Username: <input type="text" name="username" class="right"></div>
 	<div class="loginField">Password: <input type="password" name="password" class="right"></div>
 	<div class="loginField">Remember me <input type="checkbox" name="remember"><button name="submit" class="right">Login/register</button></div>
-	
+
 </div>
+<!--
 <audio id="Audio1" controls="controls" autoplay="autoplay" src="http://listen.ai-radio.org:8000/radio.ogg?cc=US&now=1411446531.126">
 </audio>
+-->
 
 <!--<button onclick="TogetherJS(this); return false;" style="position:absolute;">Start TogetherJS</button>-->
 

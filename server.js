@@ -128,18 +128,21 @@ var Server = IgeClass.extend({
                         //var tex = new IgeTexture('./assets/OrbTexture.js');
 						
 						self.score = 0;
+                        self.score2 = 0;
 						
 						/* ------------------------------------------- *\
 										Spawn asteroids
 						\* ------------------------------------------- */
-						
-						for(var i = 0; i < 10; i++) {
+
+
+						for(var i = 0; i < 3; i++) {
 							scale = 1 + Math.random();
 							var orb3 = new Orb(scale)
 								.translateTo((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, 0)
 								.rotateTo(0,0,Math.radians(Math.random()*360))
 						}
-						
+
+
 						/* ------------------------------------------- *\
 										Spawn planetoids
 						\* ------------------------------------------- */
@@ -148,31 +151,33 @@ var Server = IgeClass.extend({
 
                         self.spawnOrbs = function() {
                             new Planetoid(fixedorbrad)
-                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(200, 100, 0);
 
                             new Planetoid(fixedorbrad)
-                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(500, -500, 0);
 
                             new Planetoid(fixedorbrad)
-                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(1000, -1000, 0);
 
                             new Planetoid(fixedorbrad)
-                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-300, -1200, 0);
-
+                            /*
                             new Planetoid(fixedorbrad)
-                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, -500, 0);
 
                             new Planetoid(fixedorbrad)
-                                .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(-700, 1100, 0);
+                            */
 
                         }
-                        self.spawnOrbs();
+                        //self.spawnOrbs();
+
 
                         new FixedOrbz(2)
                             .streamMode(1)
@@ -180,18 +185,95 @@ var Server = IgeClass.extend({
                             .rotateTo(0, 0, Math.radians(Math.random() * 360))
                             .translateTo(0, 0, 0);
 
+                        var goal1  = new Planetoid(4)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(1700, 0, 0);
+
+                            goal1.color='rgb(0,255,0)';
+                            goal1.fillColor='rgba(0,255,0,0.35)';
+                            goal1.isgoal = true;
+                            goal1.leftgoal = false;
+                            //goal1.goalnum = 0;
+
+                        var goal2  = new Planetoid(4)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(-1700, 0, 0)
+
+                            goal2.color='rgb(0,255,0)';
+                            goal2.fillColor='rgba(0,255,0,0.35)';
+                            goal2.isgoal = true;
+                            goal2.leftgoal = true;
+                            //goal2.goalnum = -1;
+
+                        /*
+                        new FixedOrbz(4)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(1500, 300, 0);
+
+                        new FixedOrbz(4)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(1500, -300, 0);
+
+                        new FixedOrbz(4)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(-1500, 300, 0);
+
+                        new FixedOrbz(4)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(-1500, -300, 0);
+                        */
+
+                        self.spawnBalls = function() {
+                            for (int1 = 0; int1 < 4; int1++) {
+                                new FixedOrbRed(1.5)
+                                    .streamMode(1)
+                                    //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                                    .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                    .translateTo(-800 + Math.random() * 600, -1300 + Math.random() * 2600, 0);
+                            }
+                            for (int1 = 0; int1 < 3; int1++) {
+                                new FixedOrbRed(1.5)
+                                    .streamMode(1)
+                                    //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                                    .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                    .translateTo(200 + Math.random() * 600, -1300 + Math.random() * 2600, 0);
+                            }
+                        }
+                        self.spawnBalls();
+
+                        /*
                         new FixedOrbRed(2)
                             .streamMode(1)
                             //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
                             .rotateTo(0, 0, Math.radians(Math.random() * 360))
-                            .translateTo(500, 500, 0);
+                            .translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+                        */
+
+                        /*
+                        new FixedOrbRed(2)
+                            .streamMode(1)
+                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
+                            .translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
 
                         new FixedOrbRed(2)
                             .streamMode(1)
                             //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
                             .rotateTo(0, 0, Math.radians(Math.random() * 360))
-                            .translateTo(-500, -500, 0);
-						
+                            .translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+						*/
 						/* ------------------------------------------- *\
 										Contact listeners
 						\* ------------------------------------------- */
@@ -213,20 +295,72 @@ var Server = IgeClass.extend({
 												{'id' : self.players[i].id(), 'score' : self.players[i].score}
 											);
 										}
-										ige.network.send('updateTouchScore', tempScores);
+										//ige.network.send('updateTouchScore', tempScores);
 										console.log('contact with planetoid and ship');
+                                        //A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
 									}
 								}
+                                else if(A.category() == 'fixedorbred' && B.category() == 'ship') {
+
+                                        //ige.network.send('updateTouchScore', tempScores);
+                                        console.log('contact with fixedorb and ship');
+                                        B.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
+
+                                }
                                 else if (A.category() == 'orb' && B.category() == 'bullet') {
                                     A.exploding = true;
                                     B.destroy();
-									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+									//ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                 }
                                 else if (A.category() == 'fixedorb' && B.category() == 'fixedorb') {
                                     A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
                                 }
-                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorbred') {
-                                    A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
+                                else if (A.category() == 'fixedorbred' && B.category() == 'planetoid') {
+                                    console.log("red orb and planetoid");
+                                    //ige.server.spawnOrbs();
+                                    //var newball = new FixedOrbRed(2);
+                                        //newball.streamMode(1)
+                                        //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+                                        //newball.rotateTo(0, 0, Math.radians(Math.random() * 360))
+                                        //newball.translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+                                    if (B.isgoal == true) {
+
+                                        if (B.leftgoal == true) {
+
+                                            console.log("goal should be left");
+                                            //A.exploding = true;
+                                            //console.log("hey");
+
+                                            //the A. code below crashes the server when you are too close
+                                            //to the goals
+                                            A.unMount();
+                                            A._box2dBody.SetAwake(false);
+                                            A._box2dBody.SetActive(false);
+                                            A.destroy();
+                                            //A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+                                            ige.server.score += 1;
+                                            ige.network.send('updateScore', ige.server.score);
+                                            //this.respawn();
+                                        }
+                                        else if (B.leftgoal == false) {
+                                            console.log("goal should be right");
+                                            //A.exploding = true;
+                                            //console.log("hey");
+                                            A.unMount();
+                                            A._box2dBody.SetAwake(false);
+                                            A._box2dBody.SetActive(false);
+                                            A.destroy();
+                                            //A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+                                            ige.server.score2 -= 1;
+                                            ige.network.send('updateScore', ige.server.score2);
+                                            //this.respawn();
+
+
+                                        }
+                                    }
+                                    else{
+                                    //A.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
+                                    }
                                 }
                                 else if (A.category() == 'fixedorb' && B.category() == 'fixedorbz') {
                                     A.destroy();
@@ -235,6 +369,7 @@ var Server = IgeClass.extend({
                                 else if(A.category() == 'orb' && B.category() == 'ship') {
                                     A.exploding = true;
 									B.exploding = true;
+                                    //ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                     ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
 									console.log("contact with asteroid and ship");
 								}

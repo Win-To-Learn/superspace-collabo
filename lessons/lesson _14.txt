@@ -1,0 +1,5 @@
+Lesson _14
+
+//restart game
+
+ige.server.spawnBalls();

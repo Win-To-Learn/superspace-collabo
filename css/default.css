@@ -45,8 +45,10 @@ body {
 		padding-bottom: 10px;
 	}
 	.loginStatus {
-		
+		display: none;
 	}
+	.loginStatus[data-status=denied] { color: red; }
+	.loginStatus[data-status=successful] { color: green; }
 	.loginField {
 		overflow: hidden;
 		margin: 5px 0px;

@@ -55,6 +55,14 @@ var ClientNetworkEvents = {
 		}
 	},
 	
+	_onLoginSuccessful: function (data) {
+		login.loginSuccessful();
+	},
+	
+	_onLoginDenied: function (data) {
+		login.loginDenied();
+	},
+	
 	_onChatJoin: function(data) {
 		var msgs = "";
 		for(var i in data) {

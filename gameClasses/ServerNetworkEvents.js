@@ -1,4 +1,31 @@
 var util = require('util');
+var crypto = require('crypto');
+var mres = function (val) {
+  val.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function (s) {
+    switch (s) {
+      case "\0":
+        return "\\0";
+      case "\n":
+        return "\\n";
+      case "\r":
+        return "\\r";
+      case "\b":
+        return "\\b";
+      case "\t":
+        return "\\t";
+      case "\x1a":
+        return "\\Z";
+      default:
+        return "\\" + s;
+    }
+  });
+  return val;
+};
+var pwHash = function (val) {
+	var shasum = crypto.createHash('sha1');
+	shasum.update(val);
+	return shasum.digest('hex');
+}
 var ServerNetworkEvents = {
 	/**
 	 * Is called when the network tells us a new client has connected
@@ -25,7 +52,42 @@ var ServerNetworkEvents = {
 	},
 	
 	_onLogin: function(data, clientId) {
-		console.log("Login attempt");
+		var username = data[0].toLowerCase();
+		var pw = pwHash(username[0]+data[1]);
+		ige.mysql.query("SELECT * FROM users WHERE username_safe = '"+mres(username)+"'", function(err, rows, fields) {
+			if(!err) {
+				if(rows.length === 0) { // username not found, register it
+					console.log("User '"+data[0]+"' registering");
+					ige.mysql.query("INSERT INTO users (clientId, username, username_safe, password, color) VALUES ('"+clientId+"','"+mres(data[0])+"','"+mres(username)+"','"+mres(pw)+"',null)", function(err, rows, fields) {
+						if(!err) {
+							console.log("User '"+data[0]+"' logged in");
+							ige.network.send('loginSuccessful', '', clientId);
+						}
+						else {
+							console.log('* Error in register query', err);
+						}
+					});
+				}
+				else if(rows[0].password === pw) {
+					ige.mysql.query("UPDATE users SET clientId = '"+clientId+"' WHERE id = "+rows[0].id+"", function(err, rows, fields) {
+						if(!err) {
+							console.log("User '"+data[0]+"' logged in");
+							ige.network.send('loginSuccessful', '', clientId);
+						}
+						else {
+							console.log('* Error in register query', err);
+						}
+					});
+				}
+				else {
+					console.log("User '"+data[0]+"' tried to login with an invalid password");
+					ige.network.send('loginDenied', '', clientId);
+				}
+			}
+			else {
+				console.log('* Error in login query', err);
+			}
+		});
 	},
 
 	_onPlayerEntity: function (data, clientId) {
@@ -96,6 +158,14 @@ var ServerNetworkEvents = {
 
 	_onPlayerThrustUp: function (data, clientId) {
 		ige.server.players[clientId].controls.thrust = false;
+	},
+
+	_onPlayerDownDown: function (data, clientId) {
+		ige.server.players[clientId].controls.down = true;
+	},
+
+	_onPlayerDownUp: function (data, clientId) {
+		ige.server.players[clientId].controls.down = false;
 	},
 	
 	_onPlayerShootDown: function (data, clientId) {

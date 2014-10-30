@@ -2,38 +2,47 @@ var login = {
 	
 	init: function() {
 		var self = this;
-		self.loginDiv = $("#login")
+		self.loginDiv = $("#login");
 		
-		var elems = {
+		self.elems = {
 			'remember' : self.loginDiv.find("input[name=remember]"),
 			'username' : self.loginDiv.find("input[name=username]"),
 			'password' : self.loginDiv.find("input[name=password]"),
+			'status' : self.loginDiv.find("div.loginStatus"),
 		};
 		if(typeof(Storage) !== "undefined") {
 			var r = localStorage.getItem('remember');
-			elems['remember'].prop('checked', r);
+			self.elems['remember'].prop('checked', r);
 			if(r) {
 				if(localStorage.getItem('username') !== null) {
-					elems['username'].val(localStorage.getItem('username'));
+					self.elems['username'].val(localStorage.getItem('username'));
 				}
 				if(localStorage.getItem('password') !== null) {
-					elems['password'].val(localStorage.getItem('password'));
+					self.elems['password'].val(localStorage.getItem('password'));
 				}
 			}
 		}
 		
-		elems['remember'].on("change", function() {
+		self.elems['remember'].on("change", function() {
 			if(typeof(Storage) !== "undefined") {
 				localStorage.setItem('remember', this.checked);
+				if(this.checked) {
+					localStorage.setItem('username', self.elems['username'].val());
+					localStorage.setItem('password', self.elems['password'].val());
+				}
+				else {
+					localStorage.removeItem('username');
+					localStorage.removeItem('password');
+				}
 			}
 		});
 		
 		self.loginDiv.on("click", "button", function() {
 			switch($(this).attr("name")) {
 				case "submit":
-					var remember = elems['remember'].is(':checked');
-					var username = elems['username'].val();
-					var password = elems['password'].val();
+					var remember = self.elems['remember'].is(':checked');
+					var username = self.elems['username'].val();
+					var password = self.elems['password'].val();
 					if(typeof(Storage) !== "undefined") {
 						localStorage.setItem('remember', remember);
 						if(remember) {
@@ -58,6 +67,17 @@ var login = {
 	
 	login: function(username, password) {
 		console.log("Logging in");
-		ige.network.send("login");
+		ige.network.send("login", [username,password]);
+	},
+	
+	loginDenied: function() {
+		this.elems['status'].attr("data-status", "denied").html("Login denied, invalid password").fadeIn();
+	},
+	
+	loginSuccessful: function() {
+		this.elems['status'].attr("data-status", "successful").html("Login successful").fadeIn();
+		this.loginDiv.fadeOut(600, function() {
+			ige.emit('login');
+		});
 	}
-}
+};

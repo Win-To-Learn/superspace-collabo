@@ -6,7 +6,7 @@ var Server = IgeClass.extend({
 		var self = this;
         serverScore = 0;
 		ige.timeScale(1);
-		ige.debugEnabled(false);
+		ige.debugEnabled(true);
 
 		// Define an object to hold references to our player entities
 		this.players = {};
@@ -37,36 +37,96 @@ var Server = IgeClass.extend({
 			SELECT, INSERT, UPDATE, DELETE
 			CREATE, ALTER, INDEX
 		\* ------------------------------------------- */
+		self.tables = { // type, null, key, default, extra
+			'users' : {
+				'id' : ['int(11)', 'NO', 'PRI', null, 'auto_increment'],
+				'clientId' : ['text', 'YES', '', null, ''],
+				'username' : ['text', 'YES', '', null, ''],
+				'username_safe' : ['text', 'YES', '', null, ''],
+				'password' : ['text', 'YES', '', null, ''],
+				'color' : ['text', 'YES', '', null, '']
+			}
+		}
 		ige.addComponent(IgeMySqlComponent, options.db).mysql.connect(function (err, db) {
-			ige.mysql.userTableDef = "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT, `username` INT NULL, `password` TEXT NULL, `color` TEXT NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='utf8_bin' ENGINE=InnoDB;";
+			ige.mysql.userTableDef = "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT, `username` TEXT NULL, `password` TEXT NULL, `username_safe` TEXT NULL, `password` TEXT NULL, `color` TEXT NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='utf8_bin' ENGINE=InnoDB;";
 			if (!err) {
 				console.log('*                      Database connection sucessful                         *');
-				ige.mysql.query('SELECT * FROM users', function (err, rows, fields) {
-					if (!err) { // users table found and successfully accessed
-						var count = rows.length;
-						console.log('*'+Array(29-count.toString().length).join(" ")+''+count+' users have registered                          *');
-						console.log('------------------------------------------------------------------------------');
-						ige.emit('mysqlReady');
-					} else if(err.code == "ER_TABLEACCESS_DENIED_ERROR") { // user table found but permissions error
-						console.log("Error while accessing users table, permission denied");
-						console.log('------------------------------------------------------------------------------');
-					} else if(err.code == "ER_NO_SUCH_TABLE") { // user table not found
-								console.log('*                 Users table not found, creating it now                     *');
-						ige.mysql.query(ige.mysql.userTableDef, function(err, rows, fields) {
+				// Check table structures
+				ige.mysql.tablesOk = true;
+				for(var i in self.tables) {
+					self.tables[i].tableOk = true;
+					if(self.tables[i] !== undefined) {
+						var def = self.tables[i];
+						ige.mysql.query("DESCRIBE "+i, function(err, rows, fields) {
 							if(!err) {
-								console.log('*                    Users table successfully created                        *');
-								ige.emit('mysqlReady');
+								for(var k in rows) {
+									var fieldData = rows[k];
+									if(def[rows[k].Field] !== undefined) {
+										def[fieldData.Field][5] = true;
+										if(def[fieldData.Field][0] == fieldData.Type) {  } else { console.log("* Error: Table '"+i+"', Column '"+rows[k].Field+"', [type] attribute mismatch, expected '"+def[fieldData.Field][0]+"', database has '"+fieldData.Type+"'"); tableOk = false; }
+										if(def[fieldData.Field][1] == fieldData.Null) {  } else { console.log("* Error: Table '"+i+"', Column '"+rows[k].Field+"', [null] attribute mismatch, expected '"+def[fieldData.Field][1]+"', database has '"+fieldData.Null+"'"); tableOk = false; }
+										if(def[fieldData.Field][2] == fieldData.Key) {  } else { console.log("* Error: Table '"+i+"', Column '"+rows[k].Field+"', [key] attribute mismatch, expected '"+def[fieldData.Field][2]+"', database has '"+fieldData.Key+"'"); tableOk = false; }
+										if(def[fieldData.Field][3] == fieldData.Default) {  } else { console.log("* Error: Table '"+i+"', Column '"+rows[k].Field+"', [default] attribute mismatch, expected '"+def[fieldData.Field][3]+"', database has '"+fieldData.Default+"'"); tableOk = false; }
+										if(def[fieldData.Field][4] == fieldData.Extra) {  } else { console.log("* Error: Table '"+i+"', Column '"+rows[k].Field+"', [extra] attribute mismatch, expected '"+def[fieldData.Field][4]+"', database has '"+fieldData.Extra+"'"); tableOk = false; }
+									}
+									else {
+										self.tables[i].tableOk = false;
+										console.log("* Error: Table '"+i+"', Column '"+rows[k].Field+"' not defined in table definition");
+									}
+								}
 							}
 							else {
-								console.log('* Error creating users table', err);
+								self.tables[i].tableOk = false;
+								console.log("* Error: failed to get table definition for "+i, err);
 							}
-						console.log('------------------------------------------------------------------------------');
+							for(var k in def) {
+								if(typeof(def[k]) !== "boolean" && def[k][5] === undefined) {
+									self.tables[i].tableOk = false;
+									console.log("* Error: Table '"+i+"', Column '"+k+"' not found in database");
+								}
+							}
+							if(!self.tables[i].tableOk) { ige.mysql.tablesOk = false; }
+							var allOk = true;
+							for(var l in self.tables) {
+								if(!self.tables[l].tableOk) { allOk = false; }
+							}
+							if(allOk) { ige.emit('tablesOk'); }
 						});
 					}
 					else {
-						console.log('* Error', err);
-						console.log('------------------------------------------------------------------------------');
+						self.tables[i].tableOk = false;
+						console.log("* Error: Table definition to check against not found for table '"+i+"'");
 					}
+					if(!self.tables[i].tableOk) { ige.mysql.tablesOk = false; }
+				}
+				ige.on('tablesOk', function() {
+					ige.mysql.query('SELECT * FROM users', function (err, rows, fields) {
+						if (!err) { // users table found and successfully accessed
+							var count = rows.length;
+							console.log('*'+Array(29-count.toString().length).join(" ")+''+count+' users have registered                          *');
+							console.log('------------------------------------------------------------------------------');
+							ige.emit('mysqlReady');
+						} else if(err.code == "ER_TABLEACCESS_DENIED_ERROR") { // user table found but permissions error
+							console.log("Error while accessing users table, permission denied");
+							console.log('------------------------------------------------------------------------------');
+						} else if(err.code == "ER_NO_SUCH_TABLE") { // user table not found
+									console.log('*                 Users table not found, creating it now                     *');
+							ige.mysql.query(ige.mysql.userTableDef, function(err, rows, fields) {
+								if(!err) {
+									console.log('*                    Users table successfully created                        *');
+									ige.emit('mysqlReady');
+								}
+								else {
+									console.log('* Error creating users table', err);
+								}
+							console.log('------------------------------------------------------------------------------');
+							});
+						}
+						else {
+							console.log('* Error', err);
+							console.log('------------------------------------------------------------------------------');
+						}
+					});
 				});
 			} else {
 				switch(err.code) {
@@ -101,6 +161,8 @@ var Server = IgeClass.extend({
 						console.log("Server now accepting connections");
                         // Create some network commands we will need
                         ige.network.define('login', self._onLogin);
+                        ige.network.define('loginSuccessful');
+                        ige.network.define('loginDenied');
                         ige.network.define('playerEntity', self._onPlayerEntity);
                         ige.network.define('chatJoin', self._onChatJoin);
                         ige.network.define('chatMessage', self._onChatMessage);
@@ -112,11 +174,13 @@ var Server = IgeClass.extend({
                         ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
                         ige.network.define('playerControlRightDown', self._onPlayerRightDown);
                         ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
+                        ige.network.define('playerControlDownDown', self._onPlayerDownDown);
                         ige.network.define('playerControlShootDown', self._onPlayerShootDown);
 
                         ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
                         ige.network.define('playerControlRightUp', self._onPlayerRightUp);
                         ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
+                        ige.network.define('playerControlDownUp', self._onPlayerDownUp);
                         ige.network.define('playerControlShootUp', self._onPlayerShootUp);
 
                         ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
@@ -209,11 +273,11 @@ var Server = IgeClass.extend({
                         //self.spawnOrbs();
 
 
-                        new FixedOrbz(2)
+                        /*new FixedOrbz(2)
                             .streamMode(1)
                             //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
                             .rotateTo(0, 0, Math.radians(Math.random() * 360))
-                            .translateTo(0, 0, 0);
+                            .translateTo(0, 0, 0);*/
 
                         var goal1  = new Planetoid(4)
                             .streamMode(1)

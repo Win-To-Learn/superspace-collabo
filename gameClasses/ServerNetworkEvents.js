@@ -94,7 +94,7 @@ var ServerNetworkEvents = {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.streamMode(1)
-				.translateTo(0,0,0)
+				.translateTo(-2100+Math.random()*4200,-1200+Math.random()*2400,0)
 				.mount(ige.server.scene1);
 			
 			ige.server.players[clientId].color = ige.server.floatToRgb(Math.random());

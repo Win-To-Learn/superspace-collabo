@@ -1,5 +1,5 @@
-Lesson _14
+CODE 14;14
 
-//restart game
+ige.server.spawnRedSpheres();
 
-ige.server.spawnBalls();
+//create some red planetoids to make things interesting

@@ -1,17 +1,12 @@
-Lesson 2
-    ////// LESSON #2: CHANGING THE SCALE OF YOUR SHIP //////
-    //////             USING VARIABLES                //////
+CODE 2;1
+    ////// CODE #2: CHANGING THE SCALE OF YOUR SHIP //////
+    //////             USING VARIABLES              //////
 
 
 
-    var xScale = yScale = zScale = 2;
+    var xScale = yScale = zScale = 0.5;
     player.scaleTo(xScale,yScale,zScale);
 
-    //var means that you are creating a variable for the value
-    //of the xScale, yScale, and zScale.
-    //Change the value of all of these variables by just
-    //changing the 2 to a 1.  Click Submit.
-
-    //If you were using numbers for the scale instead of using
-    //variables you would have to change each of the scale numbers
-    //individually.
+    //this is just a faster way to change your scale
+    //variables save you from typing the same thing
+    //twice!

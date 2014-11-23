@@ -1,17 +1,18 @@
-Lesson 8
-    //////  LESSON #8: CREATING ASTEROIDS ON A TIMER  //////
-    //////                DIAGONAL                    //////
+CODE 8;8
+    //////  CODE #8: CREATING ASTEROIDS ON A TIMER  //////
+    //////                DIAGONAL                  //////
 
     var i = 0;
     var moveInterval = setInterval(function(){
 		if(i < 5) {
 			new Orb(1.0)
-				.translateTo(100*i,100*i,0)
+				.translateTo(200*i,200*i,0)
 			i++;
 		}
 		else {
 			clearInterval(moveInterval);
 		}
-    }, 500);
+    }, 1000);
 
-    //The code above creates asteroids on a timer in a diagonal pattern
+    //This code creates asteroids on a timer.
+    //How can you use this to your advantage?

@@ -1,34 +1,18 @@
-Lesson 3
-    ////// LESSON #3: ANIMATING YOUR SHIP USING LOOPS //////
-    //////             AND CONDITIONALS               //////
+CODE 3;3
+    //////           CODE #3: HYPERSPACE            //////
+    //////                                          //////
 
 
-    var scale = 0.5;
-    var delayMs = 300;
-    var i = 0;
-    var timingInterval = setInterval(function(){
-		if(i < 20) {
-			scale = scale + 0.01*i;
-			player.scaleTo(scale,scale,scale);
-			i++;
-		}
-		else {
-			clearInterval(timingInterval);
-		}
-    }, delayMs);
+    player.translateTo(4000,2200,0);
 
-    //Ignore the timing interval for now, and let's just
-    //focus on the "loop" on lines 74 to 78
-    //Experiment changing the value of the scale variable
-    //and the delayMs variable.
+    //“translate” is a math term for move
+    //the code about moves you to the lower right corner
 
-    //This is an advanced coding loop but it basically
-    //creates a timer that runs a function every 300
-    //milliseconds.  It fires the function on this timing
-    //interval 20 times.
-    //The if statement is called a conditional.  It
-    //basically means that while a certain condition
-    //is true, do something.  In this case if a counter
-    //named "i" is less than 20, do something and then
-    //increase the the counter by 1 and see if it is
-    //still less than 20.
+    //the first number is the x coordinate
+    //the second number is the y coordinate
+
+    //(the y is reverse from what you are used to)
+    //(negative y is down, and positive y is up)
+
+    //look at the coordinates on the minimap and change
+    //the x, and y to help zip around!

@@ -1,19 +1,21 @@
-Lesson 9
-    //////  LESSON #9: CREATING ASTEROIDS ON A TIMER  //////
+CODE 9;9
+    //////  CODE #9: CREATING ASTEROIDS ON A TIMER  //////
     //////                 SPIRAL                     //////
 
     var i = 0;
     var moveInterval = setInterval(function(){
 		if(i < 360) {
 			new Orb(0.3)
-				.translateTo(Math.cos(-Math.radians(i))*100,Math.sin(-Math.radians(i))*100,0);
+				.translateTo(Math.cos(-Math.radians(i))*300,Math.sin(-Math.radians(i))*300,0);
 			i=i+18;
 		}
 		else {
 			clearInterval(moveInterval);
 		}
-    }, 50);
+    }, 500);
 
-    //The code above creates asteroids on a timer in a spiral pattern
+    //The code above creates asteroids on a timer in a spiral pattern.
+    //How can you use the trigonometry strategically?
+    //Are you safe in they eye of a hurricane?
 
-    //Try zooming out in your browser to see all of the asteroids you created
+    //Try zooming out in your browser to see all of the asteroids you created.

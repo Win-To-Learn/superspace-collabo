@@ -1,4 +1,4 @@
-Lesson _12
+CODE 12;12
 
 //The coordinates below define the corners of different shapes.
 //Test them out to see how they change the shape of your ship.

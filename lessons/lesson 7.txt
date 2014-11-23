@@ -1,19 +1,22 @@
-Lesson 7
-    //////           LESSON #7: HYPERSPACE            //////
-    //////                                            //////
+CODE 7;7
+    //////    CODE #7: CREATING A NEW ORB OBJECT    //////
+    //////         WITH VELOCITY AND DIRECTION      //////
 
 
-    player.translateTo(-1200,0,0);
+    new Orb(1.5)
+		.translateTo(3800,2000,0)
+        .velocity.byAngleAndPower(Math.radians(225),0.2);
 
-    //“translate” is a math term for move
+    //Can you change the code above to fire asteroids at
+    //your pursuers or those you are pursuing?
 
-    //This code moves you near the left goal
+    //This code creates an Orb with a velocity of 0.2, at a
+    //225 degree angle.
 
-    //The code below will move you near the right goal
-    //player.translateTo(1200,0,0);
+    //0 degrees   = 3  o'clock
+    //90 degrees  = 6  o'clock
+    //180 degrees = 9  o'clock
+    //270 degrees = 12 o'clock
 
-    //The code below will move you near the upper right hand
-    //corner of the field
 
-    //player.translateTo(1500,-600,0);
 

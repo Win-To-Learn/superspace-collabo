@@ -1,34 +1,9 @@
-Lesson 1
-    ////// LESSON #1: CHANGING THE SCALE OF YOUR SHIP //////
+CODE 1;1
+    ////// CODE #1: CHANGING THE SCALE OF YOUR SHIP //////
 
 
     player.scaleTo(1,2,1);
 
-    //When you delete the back slashes, the code should
-    //light up with different colors.
-    //Two forward slashes in front of code stops it from
-    //running.
-    //If your ship got bigger when you hit Submit Code,
-    //Good job!
-
-    //Go ahead and put the two slashes back in front of the
-    //code again.
-
-    //The code you just entered changed the scale of the
-    //X, Y, and Z proportions of the ship.
-    //Try changing the first variable to 1.5.  This is
-    //the scale of the ship along the X axis which
-    //is left to right.
-
-    //Now try changing the second coordinate.
-
-    //Experiment a bit with changing both the X and Y
-    //coordinates. (You can't see changes to the Z
-    //coordinate because it stretched between you and
-    //computer screen)
-
-    //Now click the middle of the screen and try
-    //moving your ship with your left, right, and up
-    //arrow keys.
-
-    //You can fire by pressing the b key
+    //don't be afraid to change the numbers above
+    //changing them one way might give you an
+    //advantage when escaping pursuers

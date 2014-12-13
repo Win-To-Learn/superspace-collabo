@@ -351,28 +351,28 @@ var Player = IgeEntityBox2d.extend({
 			/* CEXCLUDE */
 			if (ige.isServer) {
 				if (this.controls.left) {
-					this.rotateBy(0, 0, Math.radians(-0.15 * ige._tickDelta));
-					//var radians = Math.radians(180);
-					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					//this.rotateBy(0, 0, Math.radians(-0.15 * ige._tickDelta));
+					var radians = Math.radians(180);
+					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 				if (this.controls.right) {
-					this.rotateBy(0, 0, Math.radians(0.15 * ige._tickDelta));
-					//var radians = Math.radians(0);
-					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					//this.rotateBy(0, 0, Math.radians(0.15 * ige._tickDelta));
+					var radians = Math.radians(0);
+					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 				if (this.controls.thrust) {
-					var radians = this._rotate.z + Math.radians(-90),
-					thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
-					this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
-					//var radians = Math.radians(270);
-					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					//var radians = this._rotate.z + Math.radians(-90),
+					//thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
+					//this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
+					var radians = Math.radians(270);
+					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 				if (this.controls.down) {
-					//var radians = Math.radians(90);
-					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					var radians = Math.radians(90);
+					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 				
 				if (this.controls.turn) {

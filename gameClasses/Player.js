@@ -30,7 +30,7 @@ var Player = IgeEntityBox2d.extend({
 			[0,-1]
 		];
 		
-		self.shape = [
+		/*self.shape = [
 			[-1,-1],
 			[-0.5,0],
 			[-1,1],
@@ -39,14 +39,16 @@ var Player = IgeEntityBox2d.extend({
 			[0.5,0],
 			[1,-1],
 			[0,-0.5]
-		];
+		];*/
 
 		this.controls = {
 			left: false,
 			right: false,
 			thrust: false,
 			down: false,
-			shoot: false
+			shoot: false,
+			turn: false,
+			turnData: [0,0]
 		};
 
 		if (ige.isServer) {
@@ -305,28 +307,35 @@ var Player = IgeEntityBox2d.extend({
 			/* CEXCLUDE */
 			if (ige.isServer) {
 				if (this.controls.left) {
-					//this.rotateBy(0, 0, Math.radians(-0.15 * ige._tickDelta));
-					var radians = Math.radians(180);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					this.rotateBy(0, 0, Math.radians(-0.15 * ige._tickDelta));
+					//var radians = Math.radians(180);
+					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 				if (this.controls.right) {
-					//this.rotateBy(0, 0, Math.radians(0.15 * ige._tickDelta));
-					var radians = Math.radians(0);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					this.rotateBy(0, 0, Math.radians(0.15 * ige._tickDelta));
+					//var radians = Math.radians(0);
+					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
-				if (this.controls.thrust) {/*
+				if (this.controls.thrust) {
 					var radians = this._rotate.z + Math.radians(-90),
 					thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
-					this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());*/
-					var radians = Math.radians(270);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
+					//var radians = Math.radians(270);
+					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 				if (this.controls.down) {
-					var radians = Math.radians(90);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					//var radians = Math.radians(90);
+					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+				}
+				
+				if (this.controls.turn) {
+					var thisRot = this._rotate.z % Math.PI;
+					var rad = Math.atan2(this.controls.turnData[0], this.controls.turnData[1]);
+					this.rotateTo(0, 0, rad);
+					//this.rotateToPoint(ige._currentViewport.mousePos());
 				}
 				
 				if (this.controls.shoot) {

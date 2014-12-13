@@ -6,7 +6,6 @@ var Client = IgeClass.extend({
 	init: function () {
 		//ige.timeScale(0.1);
 		//ige.showStats(1);
-
 		// Load our textures
 		var self = this;
 
@@ -59,7 +58,10 @@ var Client = IgeClass.extend({
 					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
 					var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
-					if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0) {
+					if(location.origin.indexOf("http://192") == 0) {
+						serverUrl = 'http://192.168.1.107:7610'; // This is the url for running the server on LAN
+					}
+					else if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0 || location.origin.indexOf("http://127.0.0.1") == 0) {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
 					}
 
@@ -68,6 +70,7 @@ var Client = IgeClass.extend({
 					ige.network._onError = function (data) {
 						if(data.reason == "Cannot establish connection, is server running?") {
 							$("body").html(data.reason);
+							$("body").html("<br><br><br>"+location.origin+"<br>"+serverUrl);
 						}
 					}
                     ige.network.start(serverUrl, function () {
@@ -87,6 +90,7 @@ var Client = IgeClass.extend({
 							ige.network.define('code', self._onCode); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('updateTouchScore', self._onUpdateTouchScore); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('updateScore', self._onUpdateScore); // Defined in ./gameClasses/ClientNetworkEvents.js
+							
 
 							// Setup the network stream handler
 							ige.network.addComponent(IgeStreamComponent)
@@ -338,6 +342,31 @@ var Client = IgeClass.extend({
 							ige.input.mapAction('thrust', ige.input.key.up);
 							ige.input.mapAction('down', ige.input.key.down);
 							ige.input.mapAction('shoot', ige.input.key.b);
+							
+							//if($.browser.mobile) {
+								//$(document).on("mobileinit", function() {
+									$("canvas#igeFrontBuffer").on("touchstart, touchmove", function(e) {
+										var playerPosition = ige.data('player').worldPosition();
+										var screenPosition = self.vp1.viewArea();
+										console.log(playerPosition.x - screenPosition.x);
+										var relativePosition = {
+											x : playerPosition.x - screenPosition.x,
+											y : playerPosition.y - screenPosition.y
+										};
+										console.log(relativePosition);
+										var touchX = e.originalEvent.igePageX - relativePosition.x;
+										//var touchX = e.originalEvent.igePageX - e.currentTarget.clientWidth / 2;
+										//var touchX = e.originalEvent.igeBaseX;
+										var touchY = relativePosition.y - e.originalEvent.igePageY;
+										//var touchY = e.currentTarget.clientHeight / 2 - e.originalEvent.igePageY;
+										//var touchY = -e.originalEvent.igeBaseY;
+										ige.network.send('playerControlTurnDown', [touchX,touchY]);
+									});
+									$("canvas#igeFrontBuffer").on("touchend", function(e) {
+										ige.network.send('playerControlTurnUp');
+									});
+								//});
+							//}
 
 							// Ask the server to create an entity for us
 							ige.network.send('playerEntity');

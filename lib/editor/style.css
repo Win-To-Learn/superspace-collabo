@@ -77,9 +77,20 @@
 
 #editor {
 	z-index: 99;
+	position: relative;
 	left: 100px;
 	width: 500px;
 	height: 400px;
+}
+#editor > textarea {
+	background: #2F3129;
+	width: 100%;
+	height: 100%;
+	color: white;
+	resize: none;
+	border: none;
+	padding: 0px;
+	opacity: 0.95;
 }
 
 #debugContainer {
@@ -93,6 +104,17 @@
 	height: 400px;
 	left: 600px;
 	top: 24px;
+}
+
+#debug > textarea {
+	background: #2F3129;
+	width: 100%;
+	height: 100%;
+	color: white;
+	resize: none;
+	border: none;
+	padding: 0px;
+	opacity: 0.95;
 }
 
 #bottomBar {

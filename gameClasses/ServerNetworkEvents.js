@@ -168,6 +168,17 @@ var ServerNetworkEvents = {
 		ige.server.players[clientId].controls.down = false;
 	},
 	
+	_onPlayerTurnDown: function (data, clientId) {
+		ige.server.players[clientId].controls.thrust = true;
+		ige.server.players[clientId].controls.turn = true;
+		ige.server.players[clientId].controls.turnData = data;
+	},
+	
+	_onPlayerTurnUp: function (data, clientId) {
+		ige.server.players[clientId].controls.thrust = false;
+		ige.server.players[clientId].controls.turn = false;
+	},
+	
 	_onPlayerShootDown: function (data, clientId) {
 		ige.server.players[clientId].controls.shoot = true;
 	},

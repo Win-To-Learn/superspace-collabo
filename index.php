@@ -109,6 +109,8 @@
         <a href="http://www.wintolearn.com/contact.php" target="_blank">http://www.wintolearn.com</a>
     </div>
     <script src="lib/vendor/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="lib/vendor/jquery.mobile.custom.min.js" type="text/javascript"></script>
+    <script src="lib/vendor/detectmobilebrowser.js" type="text/javascript"></script>
     <script src="lib/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="lib/editor/index.js" type="text/javascript" charset="utf-8"></script>
 <!-- index.js and ace.js and jquery are loaded -->

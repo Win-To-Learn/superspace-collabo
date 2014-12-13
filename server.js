@@ -176,12 +176,14 @@ var Server = IgeClass.extend({
                         ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
                         ige.network.define('playerControlDownDown', self._onPlayerDownDown);
                         ige.network.define('playerControlShootDown', self._onPlayerShootDown);
+                        ige.network.define('playerControlTurnDown', self._onPlayerTurnDown);
 
                         ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
                         ige.network.define('playerControlRightUp', self._onPlayerRightUp);
                         ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
                         ige.network.define('playerControlDownUp', self._onPlayerDownUp);
                         ige.network.define('playerControlShootUp', self._onPlayerShootUp);
+                        ige.network.define('playerControlTurnUp', self._onPlayerTurnUp);
 
                         ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
                         ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js

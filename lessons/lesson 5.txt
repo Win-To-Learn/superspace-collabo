@@ -1,9 +1,9 @@
-Lesson 5
-    //////    LESSON #5: CREATING A NEW ORB OBJECT    //////
-    //////         WITH VELOCITY AND DIRECTION        //////
+CODE 5;5
+    //////    CODE #5: CREATING A NEW ORB OBJECT    //////
 
     new Orb(1.5)
-		.velocity.byAngleAndPower(Math.radians(45),0.2);
 
-    //This code creates an Orb with a velocity of 0.2, at a 45
-    //degree angle.
+    //This code creates an asteroid or "Orb" with a radius
+    //of 1.5
+    //By default, the asteroid is created in the center
+    //at a coordinate of 0,0

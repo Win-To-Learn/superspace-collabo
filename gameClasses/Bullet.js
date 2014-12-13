@@ -9,7 +9,7 @@ var Bullet = IgeEntityBox2d.extend({
 		
 		var self = this;
 		
-		self.liveFor = 1500;
+		self.liveFor = 2000;
 		self.sourceClient; // the clientId that fired this bullet
 		self.createTime = ige._timeScaleLastTimestamp;
 

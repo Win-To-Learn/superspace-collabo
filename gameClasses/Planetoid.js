@@ -78,8 +78,8 @@ var Planetoid = IgeEntityBox2d.extend({
                 //active: false,
                 //gravityScale: 0.0
                 type: 'dynamic',
-                linearDamping: 2.5,
-                angularDamping: 200,
+                linearDamping: 0.1,
+                angularDamping: 0.1,
                 bullet: true,
                 isSensor: true,
                 allowSleep: true,

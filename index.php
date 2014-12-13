@@ -7,7 +7,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="game-engine-origin" content="http://www.isogenicengine.com">
 	<meta http-equiv="X-UA-Compatible" content="IE=9" >
-	<title>SuperSpace</title>
+	<title>STARCODER</title>
 
 	<!-- STYLES -->
 	<link href="css/default.css" rel="stylesheet" type="text/css" />
@@ -65,7 +65,7 @@
 </div>
 
 <div id="codeArea">
-	<div id="editorTab">code <span class='arrow'></span></div>
+	<div id="editorTab">_POWER_CODES<span class='arrow'></span></div>
 	<div id="lessonList">
 <?php
 	ksort($lessonArray, SORT_NATURAL);
@@ -104,9 +104,9 @@
             <div id="loadingProgressBar"></div>
         </div>
     </div>
-    <div class="igeLoading loadingLink">
+    <div class="loadingLink2">
 
-        <a href="http://www.wintolearn.com/contact.php" target="_blank">http://www.wintolearn.com</a>
+        <a href="http://goo.gl/forms/8CpeDFfAp4" target="_blank">click here to leave feedback</a>
     </div>
     <script src="lib/vendor/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="lib/vendor/jquery.mobile.custom.min.js" type="text/javascript"></script>

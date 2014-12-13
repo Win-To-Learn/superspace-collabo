@@ -11,5 +11,5 @@ var blastSound = new Howl({  urls: ['assets/blast.mp3'],
 autoplay: false,  loop: false,  volume: 0.06});
 
 
-var laserSound = new Howl({
-    autoplay: false,  loop: false,  volume: 1});
+var laserSound = new Howl({  urls: ['assets/laser.mp3'],
+	autoplay: false,  loop: true,  volume: 1});

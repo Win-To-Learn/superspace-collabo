@@ -15,12 +15,12 @@ var Player = IgeEntityBox2d.extend({
 
 		this.drawBounds(false);
 		
-		self._thrustPower = 70;
+		self._thrustPower = 550;
 		self._shootInterval = 100;
 		self._lastShoot = ige._timeScaleLastTimestamp;
 		self.exploding = false;
 		self.color = "white";
-		var scale = 0.5;
+		var scale = 1.0;
 		
 		self.shape = [
 			[0,-1],
@@ -78,7 +78,8 @@ var Player = IgeEntityBox2d.extend({
 					restitution: 0.2,
 					filter: {
 						categoryBits: 0x0004,
-						maskBits: 0x0001
+						//maskBits: 0x0001
+						maskBits: 0xffff
 					},
 					//shape: {
 					//	type: 'polygon',
@@ -87,7 +88,7 @@ var Player = IgeEntityBox2d.extend({
                     shape: {
                     	type: 'circle',
                         //data: {	radius: 10	}
-                        data: {	radius: 30	}
+                        data: {	radius: 70	}
                     }
 				});
 			//}
@@ -98,7 +99,7 @@ var Player = IgeEntityBox2d.extend({
 				linearDamping: 1,
 				isSensor: true,
 				//restitution: 0.0,
-				angularDamping: 1,
+				angularDamping: 10,
 				allowSleep: true,
 				bullet: true,
 				fixtures: self.fixDefs,
@@ -199,14 +200,35 @@ var Player = IgeEntityBox2d.extend({
 			if(ige._timeScaleLastTimestamp - this._lastShoot > this._shootInterval) {
 				var b2vel = this._box2dBody.GetLinearVelocity();
 				//var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y)) / 2 / 3 / this._thrustPower;
-                var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y))// / 2 / 3 / this._thrustPower;
+                //var velocity = (Math.abs(b2vel.x) + Math.abs(b2vel.y))// / 2 / 3 / this._thrustPower;
+				var shipVelX = b2vel.x;
+				var shipVelY = b2vel.y;
+				var shipAngle;
+
+
+				var velocity = Math.sqrt(Math.pow(shipVelX,2) + Math.pow(shipVelY,2));
+
+
+				shipAngle = Math.atan2(shipVelX,-shipVelY);
+
+				//console.log(shipVelX);
+				//console.log(shipVelY);
+				//console.log("angle")
+
+				//console.log(shipAngle);
+				//console.log("**")
+				//console.log(velocity);
                 if (this._fixedorbred) {
-                    this._fixedorbred.velocity.byAngleAndPower(this._rotate.z - Math.radians(90), 0.2 + velocity * 0.012)
-                }
+                    //this._fixedorbred.velocity.byAngleAndPower(this._rotate.z - Math.radians(90), 0.2 + velocity * 0.012)
+					this._fixedorbred.velocity.byAngleAndPower(shipAngle -Math.PI/2, 0.15 + velocity * 0.017)
+
+				}
                 var bullet = new Bullet()
 					.streamMode(1)
 					.addComponent(IgeVelocityComponent)
-					.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1+velocity*0.012)
+					//.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1+velocity*0.012)
+					.velocity.byAngleAndPower(shipAngle -Math.PI/2, 0.14+velocity*0.017)
+
 					.translateTo(this._translate.x, this._translate.y, 0)
 					.mount(ige.server.scene1);
 				bullet.sourceClient = clientId;
@@ -238,13 +260,35 @@ var Player = IgeEntityBox2d.extend({
 			thrustSound.stop();
 		}
 	},
+
+	carryShip: function (ship, contact) {
+		if (!this._oldship || (this._oldship !== ship)) {
+			var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
+				bodyA = contact.m_fixtureA.m_body,
+				bodyB = contact.m_fixtureB.m_body;
+
+			distanceJointDef.Initialize(
+				bodyA,
+				bodyB,
+				bodyA.GetWorldCenter(),
+				bodyB.GetWorldCenter()
+			);
+
+			this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef);
+
+			this._carryingShip = true;
+			this._ship = ship;
+
+			//ship.originalStart(ship._translate);
+		}
+	},
 	
 	respawn: function() {
 		if(ige.isServer) {
 			var self = this;
 			setTimeout(function() {
 				self.rotateTo(0, 0, 0)
-					.translateTo(0, 0, 0)
+					.translateTo(-1000+Math.random()*2000,-1000+Math.random()*2000,0)
 					.mount(ige.server.scene1);
 				self._box2dBody.SetAngularVelocity(0);
 				self._box2dBody.SetLinearVelocity(new IgePoint(0, 0, 0));
@@ -341,6 +385,24 @@ var Player = IgeEntityBox2d.extend({
 				if (this.controls.shoot) {
 					this.shoot();
 				}
+
+				/*if (this._translate.x > 2100 || this._translate.x < -2100 || this._translate.y>1200 || this._translate.y<-1200) {
+					//this.respawn();
+					this.translateTo(-2100+Math.random()*4200,-1200+Math.random()*2400,0)
+				}*/
+				if (this._translate.x > 4200){
+					this.translateTo(this._translate.x-200,this._translate.y,0);
+				}
+				if (this._translate.x < -4200){
+					this.translateTo(this._translate.x+200,this._translate.y,0);
+				}
+				if (this._translate.y < -2400){
+					this.translateTo(this._translate.x,this._translate.y+200,0);
+				}
+				if (this._translate.y > 2400){
+					this.translateTo(this._translate.x,this._translate.y-200,0);
+				}
+
 			} // isServer
 			/* CEXCLUDE */
 
@@ -408,11 +470,13 @@ var Player = IgeEntityBox2d.extend({
 				if (ige.input.actionState('left')) { // if left key down
 					if (!this.controls.left) { // left wasn't already down
 						this.controls.left = true;
+						thrustSound.play();
 						ige.network.send('playerControlLeftDown');
 					}
 				} else {
 					if (this.controls.left) {
 						this.controls.left = false;
+						thrustSound.stop();
 						ige.network.send('playerControlLeftUp');
 					}
 				}
@@ -420,11 +484,13 @@ var Player = IgeEntityBox2d.extend({
 				if (ige.input.actionState('right')) {
 					if (!this.controls.right) {
 						this.controls.right = true;
+						thrustSound.play();
 						ige.network.send('playerControlRightDown');
 					}
 				} else {
 					if (this.controls.right) {
 						this.controls.right = false;
+						thrustSound.stop();
 						ige.network.send('playerControlRightUp');
 					}
 				}
@@ -446,19 +512,21 @@ var Player = IgeEntityBox2d.extend({
 				if (ige.input.actionState('down')) {
 					if (!this.controls.down) {
 						this.controls.down = true;
+						thrustSound.play();
 						ige.network.send('playerControlDownDown');
 					}
 				} else {
 					if (this.controls.down) {
 						this.controls.down = false;
+						thrustSound.stop();
 						ige.network.send('playerControlDownUp');
 					}
 				}
 
 				if (ige.input.actionState('shoot')) {
 					if (!this.controls.shoot) {
-                        laserSound.stop('laser');
 						this.controls.shoot = true;
+						laserSound.play();
 						ige.network.send('playerControlShootDown');
                         //var now = Date.now();
                         //var elapsed = now - self.lastSoundTime;
@@ -472,8 +540,8 @@ var Player = IgeEntityBox2d.extend({
 					}
 				} else {
 					if (this.controls.shoot) {
-                        laserSound.play('laser');
-;						this.controls.shoot = false;
+						this.controls.shoot = false;
+						laserSound.stop();
 						ige.network.send('playerControlShootUp');
 					}
 				}

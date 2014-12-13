@@ -1,12 +1,25 @@
-Lesson 4
-    //////    LESSON #4: CREATING A NEW ORB OBJECT    //////
-    //////                                            //////
+CODE 4;4
+    //////    CODE #4: HYPERSPACE ON A TIMER        //////
+    //////                                          //////
 
-    new Orb(1.5);
+    var delayMs = 1000; //this is the delay in milliseconds
+    var i = 0;          //this is a variable used to count
 
-    //The code above creates a new "Orb" object.  Orbs are defined
-    //to simulate asteroids that float around in space and have
-    //density and are affected by gravity.  They bounce off each
-    //other but can destroy your ship when then collide with you.
-    //If you happened to collide with one and were destroyed,
-    //check out the next lesson to recreate your ship.
+        var timingInterval = setInterval(function(){
+    		if(i < 10) {
+    			player.translateTo(i*100,i*100,0);
+    			i++;
+    		}
+        }, delayMs);
+
+    //the code above uses a timer and loop
+    //every 1000 milliseconds it checks if it has
+    //gone through the loop 10 times yet.
+    //the variable i keeps track of the number of loops
+    //if i is less than 10, you are moved to x and y
+    //coordinates that are 100 times whatever i is.
+    //try editing the numbers above to constantly
+    //avoid your pursuer.
+
+    //google Math.random() and see if you can figure
+    //out how to translate to random coordinates

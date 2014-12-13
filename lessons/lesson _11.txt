@@ -1,5 +1,5 @@
-Lesson 11
-    //////       LESSON #11: CHANGING THE COLOR       //////
+CODE 11;11
+    //////       CODE #11: CHANGING THE COLOR       //////
     //////               OF YOUR SHIP                 //////
 
     player.color = "blue"

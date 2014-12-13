@@ -57,4 +57,4 @@ Misc snippets
     */
 
     //restart game
-    //ige.server.spawnBalls();
+    //ige.server.spawnRedSpheres();

@@ -142,10 +142,11 @@ var Orb = IgeEntityBox2d.extend({
 					.mount(ige.$('scene1'));
 			}
 		}
-		//ige.server.score += this.pointWorth;
-		//ige.network.send('updateScore', ige.server.score);
-        ige.network.send('updateScore', 0);
+		ige.server.score += this.pointWorth;
+		ige.network.send('updateScore', ige.server.score);
+        //ige.network.send('updateScore', 0);
 		this.destroy();
+
 	}
 	
 });

@@ -1,0 +1,5 @@
+CODE 14;14
+
+ige.server.spawnRedSpheres();
+
+//create some red planetoids to make things interesting

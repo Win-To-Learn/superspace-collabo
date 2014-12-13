@@ -38,7 +38,9 @@ var Client = IgeClass.extend({
             font: new IgeFontSheet('./assets/agency_fb_20pt.png'),
             fontChat: new IgeFontSheet('./assets/verdana_10px.png'),
             fontid: new IgeFontSheet('./assets/arial_narrow_60pt.png'),
-            coordinates: new IgeFontSheet('./assets/verdana_10px.png')
+            coordinates: new IgeFontSheet('./assets/verdana_10px.png'),
+			titlescreen: new IgeFontSheet('./assets/arial_narrow_60pt.png')
+
 		};
 
 		ige.on('texturesLoaded', function () {
@@ -59,14 +61,15 @@ var Client = IgeClass.extend({
 
 					var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					if(location.origin.indexOf("http://192") == 0) {
-						serverUrl = 'http://192.168.1.107:7610'; // This is the url for running the server on LAN
+						serverUrl = 'http://192.168.1.107:7610'; // This is the url for running the server on LAN for mobile debugging
 					}
 					else if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0 || location.origin.indexOf("http://127.0.0.1") == 0) {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
 					}
 
                     //var port = process.env.PORT || 5000;
-					//ige.network.start(port, function () {
+					//var port = 5000;
+					ige.network.start(serverUrl, function () {
 					ige.network._onError = function (data) {
 						if(data.reason == "Cannot establish connection, is server running?") {
 							$("body").html(data.reason);
@@ -77,6 +80,16 @@ var Client = IgeClass.extend({
 						
 						//login.init();
 						//login.showLogin();
+
+						/*
+						var lessonId = 'someNewId'; // has to be unique, lessons are differentiated with this
+						lessonList[lessonId] = 'lesson content that’s going to be put in the codebox';
+						console.log(lessonList);
+						$('#lessonList').append('<div class=lessonButton data-lesson=lessonId>');
+						$('.lessonButton[data-lesson'+lessonId+']').click();
+						*/
+
+
 						
 						ige.network.define('loginSuccessful', self._onLoginSuccessful); // Defined in ./gameClasses/ClientNetworkEvents.js
 						ige.network.define('loginDenied', self._onLoginDenied); // Defined in ./gameClasses/ClientNetworkEvents.js
@@ -103,7 +116,12 @@ var Client = IgeClass.extend({
 							
 							//myAud=document.getElementById("Audio1");
 							//myAud.volume=0.4;
-								
+
+
+
+
+
+
 							/* ------------------------------------------- *\
 												Chat system
 							\* ------------------------------------------- */
@@ -195,6 +213,7 @@ var Client = IgeClass.extend({
 								.autoSize(true)
 								.scene(self.mainScene)
 								.drawBounds(false)
+								.camera.scaleTo(.5,.5,.5)
 								.depth(0)
 								.mount(ige);
 
@@ -206,7 +225,7 @@ var Client = IgeClass.extend({
 								.height(150)
 								.autoSize(false)
 								.borderColor('#ffffff')
-								.camera.scaleTo(.04,.04,.04)
+								.camera.scaleTo(.03,.03,.03)
 								.depth(1)
 								.scene(self.mainScene)
 								.mount(ige);
@@ -221,6 +240,7 @@ var Client = IgeClass.extend({
 								.text('Team B')
 								.top(5)
 								.right(10)
+								.hide()
 								.mount(self.uiScene);
 
                         self.score = new IgeFontEntity()
@@ -229,6 +249,7 @@ var Client = IgeClass.extend({
                             .text('Team A')
                             .top(5)
                             .right(100)
+							.hide()
                             .mount(self.uiScene);
 
 
@@ -236,7 +257,7 @@ var Client = IgeClass.extend({
 								.texture(ige.client.textures.font)
 								.width(100)
 								.text('Score')
-								.top(10)
+								.top(-80)
 								.right(10)
 								.height(200)
                                 .hide()
@@ -250,6 +271,7 @@ var Client = IgeClass.extend({
 								.colorOverlay('#ff6000')
 								.top(35)
 								.right(10)
+								.hide()
 								.mount(self.uiScene);
 
 
@@ -261,6 +283,7 @@ var Client = IgeClass.extend({
                             .colorOverlay('#ff6000')
                             .top(35)
                             .right(100)
+							.hide()
                             .mount(self.uiScene);
 
 
@@ -268,7 +291,7 @@ var Client = IgeClass.extend({
                             .id('coordinates1')
                             .texture(ige.client.textures.coordinates)
                             .width(100)
-                            .text('-3000,1500')
+                            .text('-4200,2400')
                             .colorOverlay('#ff6000')
                             .top(140)
                             .left(-10)
@@ -278,7 +301,7 @@ var Client = IgeClass.extend({
                             .id('coordinates2')
                             .texture(ige.client.textures.coordinates)
                             .width(100)
-                            .text('3000,-1500')
+                            .text('4200,-2400')
                             .colorOverlay('#ff6000')
                             .top(-10)
                             .left(245)
@@ -293,6 +316,7 @@ var Client = IgeClass.extend({
 								.text('Time')
 								.top(5)
 								.right(200)
+								.hide()
 								.mount(self.uiScene);
 
 							self.timerText = new IgeFontEntity()
@@ -302,26 +326,44 @@ var Client = IgeClass.extend({
 								.colorOverlay('#ff6000')
 								.top(35)
 								.right(200)
+								.hide()
 								.mount(self.uiScene);
 
 							self.rules = new IgeFontEntity()
 								.texture(ige.client.textures.font)
 								.width(600)
 								.height(200)
-								.text('left, right, and up = thrust, b = fire\nwhen all players are ready shoot the red planetoids into the green goals')
+								.text('_do not get tagged!\n_ARROW keys to move\n_press B to shoot asteroids in path\n_play limits shown in minimap\n_edit power codes for advantages')
 								.colorOverlay('#ff6000')
-								.top(50)
-								.left(270)
+								.top(20)
+								.left(300)
 								.textAlignX(0)
 								.textAlignY(0)
 								.mount(self.uiScene);
 
+						self.titlescreen = new IgeFontEntity()
+							.texture(ige.client.textures.font)
+							.width(600)
+							.height(400)
+							.text('_click to play\nSTARCODERGAME.COM\n_alpha ver 0_2')
+							.colorOverlay('#ff6000')
+							.top(130)
+							.left(300)
+							.textAlignX(0)
+							.textAlignY(0)
+							.mount(self.uiScene);
+
 							setTimeout(function() {
 								self.rules.destroy();
-							}, 10000);
+							}, 24000);
+
+						setTimeout(function() {
+							self.titlescreen.destroy();
+						}, 30000);
 
 
-							var intTimer1 = 0;
+
+						var intTimer1 = 0;
 
 							var a = new IgeInterval(function () {
 								var d = new Date();
@@ -371,12 +413,12 @@ var Client = IgeClass.extend({
 							// Ask the server to create an entity for us
 							ige.network.send('playerEntity');
 
-						//}); // login
+						}); // login
 					});
 				}
 			});
 		}); // texturesloaded
-	}
+	}//init function
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Client; }

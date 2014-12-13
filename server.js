@@ -37,6 +37,7 @@ var Server = IgeClass.extend({
 			SELECT, INSERT, UPDATE, DELETE
 			CREATE, ALTER, INDEX
 		\* ------------------------------------------- */
+		/*
 		self.tables = { // type, null, key, default, extra
 			'users' : {
 				'id' : ['int(11)', 'NO', 'PRI', null, 'auto_increment'],
@@ -144,16 +145,18 @@ var Server = IgeClass.extend({
 				}
 			}
 		});
-		
+
+		*/
 		/* ------------------------------------------- *\
 						Game itself
 		\* ------------------------------------------- */
-		ige.on('mysqlReady', function() {
+		//ige.on('mysqlReady', function() {
 		// Add the networking component
+		//ige.addComponent(IgeNetIoComponent)
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			.network.start(7610, function () {
-            //.network.start(2000, function () {
+			//.network.start(5000, function () {
+            .network.start(7610, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
@@ -230,13 +233,15 @@ var Server = IgeClass.extend({
 										Spawn asteroids
 						\* ------------------------------------------- */
 
-
-						for(var i = 0; i < 3; i++) {
-							scale = 1 + Math.random();
-							var orb3 = new Orb(scale)
-								.translateTo((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, 0)
-								.rotateTo(0,0,Math.radians(Math.random()*360))
+						self.spawnOrbs = function() {
+							for (var i = 0; i < 15; i++) {
+								scale = 1 + Math.random();
+								var orb3 = new Orb(scale)
+									.translateTo(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800, 0)
+									.rotateTo(0, 0, Math.radians(Math.random() * 360))
+							}
 						}
+						self.spawnOrbs();
 
 
 						/* ------------------------------------------- *\
@@ -245,22 +250,119 @@ var Server = IgeClass.extend({
 						
                         var fixedorbrad = 1.0;
 
-                        self.spawnOrbs = function() {
-                            new Planetoid(fixedorbrad)
+                        self.spawnBoss = function() {
+                            var plan1 = new Planetoid(2)
                                 //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(200, 100, 0);
+                                .translateTo(150, 100, 0)
+								.velocity.byAngleAndPower(Math.radians(225),0.2);
 
-                            new Planetoid(fixedorbrad)
+							var plan2 = new Planetoid(fixedorbrad)
                                 //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(500, -500, 0);
+                                .translateTo(300, 100, 0);
 
-                            new Planetoid(fixedorbrad)
+							var plan3 = new Planetoid(fixedorbrad)
                                 //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(1000, -1000, 0);
+                                .translateTo(400, 100, 0);
 
-                            new Planetoid(fixedorbrad)
+							var plan4 = new Planetoid(fixedorbrad)
                                 //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(-300, -1200, 0);
+                                .translateTo(500, 100, 0)
+								.velocity.byAngleAndPower(Math.radians(15),0.4);
+
+							var plan5 = new Planetoid(fixedorbrad)
+								//.rotateTo(0, 0, Math.radians(Math.random() * 360))
+								.translateTo(0, 100, 0);
+
+							var plan6 = new Planetoid(fixedorbrad)
+								//.rotateTo(0, 0, Math.radians(Math.random() * 360))
+								.translateTo(-100, 100, 0);
+
+							var plan7 = new Planetoid(fixedorbrad)
+								//.rotateTo(0, 0, Math.radians(Math.random() * 360))
+								.translateTo(-200, 100, 0)
+								.velocity.byAngleAndPower(Math.radians(15),0.4);
+
+
+
+							var RevoluteJointDef1 = new ige.box2d.b2RevoluteJointDef(),
+								bodyA = plan1._box2dBody,
+								bodyB = plan2._box2dBody;
+
+							RevoluteJointDef1.Initialize(
+								bodyA,
+								bodyB,
+								//bodyA.GetWorldCenter(),
+								bodyB.GetWorldCenter()
+							);
+
+							this._orbRope1 = ige.box2d._world.CreateJoint(RevoluteJointDef1);
+
+							var DistanceJointDef2 = new ige.box2d.b2DistanceJointDef(),
+								bodyA = plan2._box2dBody,
+								bodyB = plan3._box2dBody;
+
+							DistanceJointDef2.Initialize(
+								bodyA,
+								bodyB,
+								bodyA.GetWorldCenter(),
+								bodyB.GetWorldCenter()
+							);
+
+							this._orbRope2 = ige.box2d._world.CreateJoint(DistanceJointDef2);
+
+							var DistanceJointDef3 = new ige.box2d.b2DistanceJointDef(),
+								bodyA = plan3._box2dBody,
+								bodyB = plan4._box2dBody;
+
+							DistanceJointDef3.Initialize(
+								bodyA,
+								bodyB,
+								bodyA.GetWorldCenter(),
+								bodyB.GetWorldCenter()
+							);
+
+							this._orbRope3 = ige.box2d._world.CreateJoint(DistanceJointDef3);
+
+							var RevoluteJointDef4 = new ige.box2d.b2RevoluteJointDef(),
+								bodyA = plan1._box2dBody,
+								bodyB = plan5._box2dBody;
+
+							RevoluteJointDef4.Initialize(
+								bodyA,
+								bodyB,
+								bodyA.GetWorldCenter(),
+								bodyB.GetWorldCenter()
+							);
+
+							this._orbRope4 = ige.box2d._world.CreateJoint(RevoluteJointDef4);
+
+							var DistanceJointDef5 = new ige.box2d.b2DistanceJointDef(),
+								bodyA = plan5._box2dBody,
+								bodyB = plan6._box2dBody;
+
+							DistanceJointDef5.Initialize(
+								bodyA,
+								bodyB,
+								bodyA.GetWorldCenter(),
+								bodyB.GetWorldCenter()
+							);
+
+							this._orbRope5 = ige.box2d._world.CreateJoint(DistanceJointDef5);
+
+							var DistanceJointDef6 = new ige.box2d.b2DistanceJointDef(),
+								bodyA = plan6._box2dBody,
+								bodyB = plan7._box2dBody;
+
+							DistanceJointDef6.Initialize(
+								bodyA,
+								bodyB,
+								bodyA.GetWorldCenter(),
+								bodyB.GetWorldCenter()
+							);
+
+							this._orbRope6 = ige.box2d._world.CreateJoint(DistanceJointDef6);
+
+
                             /*
                             new Planetoid(fixedorbrad)
                                 //.rotateTo(0, 0, Math.radians(Math.random() * 360))
@@ -280,31 +382,31 @@ var Server = IgeClass.extend({
                             //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
                             .rotateTo(0, 0, Math.radians(Math.random() * 360))
                             .translateTo(0, 0, 0);*/
+						self.spawnGoals = function() {
+							var goal1 = new Planetoid(4)
+								.streamMode(1)
+								//.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+								.rotateTo(0, 0, Math.radians(Math.random() * 360))
+								.translateTo(1000, 0, 0);
 
-                        var goal1  = new Planetoid(4)
-                            .streamMode(1)
-                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
-                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
-                            .translateTo(1700, 0, 0);
+							goal1.color = 'rgb(0,255,0)';
+							goal1.fillColor = 'rgba(0,255,0,0.35)';
+							goal1.isgoal = true;
+							goal1.leftgoal = false;
+							//goal1.goalnum = 0;
 
-                            goal1.color='rgb(0,255,0)';
-                            goal1.fillColor='rgba(0,255,0,0.35)';
-                            goal1.isgoal = true;
-                            goal1.leftgoal = false;
-                            //goal1.goalnum = 0;
+							var goal2 = new Planetoid(4)
+								.streamMode(1)
+								//.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+								.rotateTo(0, 0, Math.radians(Math.random() * 360))
+								.translateTo(-1000, 0, 0)
 
-                        var goal2  = new Planetoid(4)
-                            .streamMode(1)
-                            //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
-                            .rotateTo(0, 0, Math.radians(Math.random() * 360))
-                            .translateTo(-1700, 0, 0)
-
-                            goal2.color='rgb(0,255,0)';
-                            goal2.fillColor='rgba(0,255,0,0.35)';
-                            goal2.isgoal = true;
-                            goal2.leftgoal = true;
-                            //goal2.goalnum = -1;
-
+							goal2.color = 'rgb(255,255,0)';
+							goal2.fillColor = 'rgba(255,255,0,0.35)';
+							goal2.isgoal = true;
+							goal2.leftgoal = true;
+							//goal2.goalnum = -1;
+						}
                         /*
                         new FixedOrbz(4)
                             .streamMode(1)
@@ -331,15 +433,15 @@ var Server = IgeClass.extend({
                             .translateTo(-1500, -300, 0);
                         */
 
-                        self.spawnBalls = function() {
-                            for (int1 = 0; int1 < 4; int1++) {
+                        self.spawnRedSpheres = function() {
+                            for (int1 = 0; int1 < 2; int1++) {
                                 new FixedOrbRed(1.5)
                                     .streamMode(1)
                                     //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
                                     .rotateTo(0, 0, Math.radians(Math.random() * 360))
                                     .translateTo(-800 + Math.random() * 600, -1300 + Math.random() * 2600, 0);
                             }
-                            for (int1 = 0; int1 < 3; int1++) {
+                            for (int1 = 0; int1 < 1; int1++) {
                                 new FixedOrbRed(1.5)
                                     .streamMode(1)
                                     //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
@@ -347,7 +449,7 @@ var Server = IgeClass.extend({
                                     .translateTo(200 + Math.random() * 600, -1300 + Math.random() * 2600, 0);
                             }
                         }
-                        self.spawnBalls();
+                        //self.spawnRedSpheres();
 
                         /*
                         new FixedOrbRed(2)
@@ -403,10 +505,34 @@ var Server = IgeClass.extend({
                                         B.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
 
                                 }
+								else if(A.category() == 'ship' && B.category() == 'ship') {
+
+									//ige.network.send('updateTouchScore', tempScores);
+									console.log('contact with ship and ship');
+									//B.carryShip(contact.igeEntityByCategory('ship'), contact);
+									A.shape = [
+
+										[1,0],
+										[1,-1],
+										[0,-1],
+										[-1,0],
+										[-1,1],
+										[0,1]
+									];
+									B.shape = [
+
+										[1,0],
+										[1,-1],
+										[0,-1],
+										[-1,0],
+										[-1,1],
+										[0,1]
+									];
+								}
                                 else if (A.category() == 'orb' && B.category() == 'bullet') {
                                     A.exploding = true;
                                     B.destroy();
-									//ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                 }
                                 else if (A.category() == 'fixedorb' && B.category() == 'fixedorb') {
                                     A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
@@ -429,9 +555,9 @@ var Server = IgeClass.extend({
 
                                             //the A. code below crashes the server when you are too close
                                             //to the goals
-                                            A.unMount();
-                                            A._box2dBody.SetAwake(false);
-                                            A._box2dBody.SetActive(false);
+                                            //A.unMount();
+                                            //A._box2dBody.SetAwake(false);
+                                            //A._box2dBody.SetActive(false);
                                             A.destroy();
                                             //A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
                                             ige.server.score += 1;
@@ -442,9 +568,9 @@ var Server = IgeClass.extend({
                                             console.log("goal should be right");
                                             //A.exploding = true;
                                             //console.log("hey");
-                                            A.unMount();
-                                            A._box2dBody.SetAwake(false);
-                                            A._box2dBody.SetActive(false);
+                                            //A.unMount();
+                                            //A._box2dBody.SetAwake(false);
+                                            //A._box2dBody.SetActive(false);
                                             A.destroy();
                                             //A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
                                             ige.server.score2 -= 1;
@@ -506,7 +632,7 @@ var Server = IgeClass.extend({
 					}
 				});
 			});
-		}); // mysqlReady
+		//}); // mysqlReady
 	}
 });
 

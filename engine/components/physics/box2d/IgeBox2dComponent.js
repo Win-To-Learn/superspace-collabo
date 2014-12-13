@@ -34,7 +34,7 @@ var IgeBox2dComponent = IgeEventingClass.extend({
 		this.b2Contact = Box2D.Dynamics.Contacts.b2Contact;
 		this.b2FilterData = Box2D.Dynamics.b2FilterData;
 		this.b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef;
-
+		this.b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef;
 		// Extend the b2Contact class to allow the IGE entity accessor
 		// and other helper methods
 		this.b2Contact.prototype.igeEntityA = function () {

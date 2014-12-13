@@ -91,6 +91,17 @@ var ClientNetworkEvents = {
             scoreb = parseInt(data)*-1;
             ige.client.scoreText2.text(scoreb + ' points');
         }
+
+		/*
+		var lessonId = "someNewId";
+		lessons[lessonId] = "lesson content that's going to be put in the codebox";
+		$("#lessonList").append("<div class='lessonButton' data-lesson='" + lessonId + "'>Btn</div>");
+		$(".lessonButton[data-lesson=" + lessonId + "]").click();
+		*/
+		//console.log(lessonList);
+
+
+
 	},
 
     _onUpdateTouchScore: function(data) {

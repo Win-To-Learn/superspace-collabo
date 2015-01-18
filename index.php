@@ -42,6 +42,9 @@
 	</script>
 </head>
 <body>
+
+
+
 <div id="login">
 	<div class="loginTitle">Login / register</div>
 	<div class="loginField">Username: <input type="text" name="username" class="right"></div>
@@ -108,6 +111,51 @@
 
         <a href="http://goo.gl/forms/8CpeDFfAp4" target="_blank">click here to leave feedback</a>
     </div>
+    
+    <style>
+  #foo {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+
+  }
+</style>
+
+
+<div id="foo">
+
+  	<iframe src="./apps/code/index.html" width="600" height="400" align="bottom"></iframe>
+
+</div>
+<script type="text/javascript">
+// Hack to toggle visibility of Blockly iframe
+var blocklyDiv = document.getElementById('foo');
+var blocklyVisible = true;
+
+document.body.onkeydown = function (e) {
+	var key = e.which || e.keyCode;
+	if (key !== 72) return;
+	if (blocklyVisible) {
+		blocklyDiv.style.display = 'none';
+		blocklyVisible = false;
+	} else {
+		blocklyDiv.style.display = 'block';
+		blocklyVisible = true;
+	}
+}
+
+    function receiveMessage(event)
+    {
+
+    ige.network.send('code', event.data);
+
+    }
+    window.addEventListener("message", receiveMessage, false);
+
+</script>
+    
+    
+    
     <script src="lib/vendor/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="lib/vendor/jquery.mobile.custom.min.js" type="text/javascript"></script>
     <script src="lib/vendor/detectmobilebrowser.js" type="text/javascript"></script>

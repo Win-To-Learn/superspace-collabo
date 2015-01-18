@@ -22,15 +22,15 @@ var Player = IgeEntityBox2d.extend({
 		self.color = "white";
 		var scale = 1.0;
 		
-		self.shape = [
+		/*self.shape = [
 			[0,-1],
 			[1,1],
 			[0,0.5],
 			[-1,1],
 			[0,-1]
-		];
+		];*/
 		
-		/*self.shape = [
+		self.shape = [
 			[-1,-1],
 			[-0.5,0],
 			[-1,1],
@@ -39,7 +39,7 @@ var Player = IgeEntityBox2d.extend({
 			[0.5,0],
 			[1,-1],
 			[0,-0.5]
-		];*/
+		];
 
 		this.controls = {
 			left: false,

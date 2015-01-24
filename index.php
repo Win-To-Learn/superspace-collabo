@@ -144,13 +144,13 @@ document.body.onkeydown = function (e) {
 	}
 }
 
-    function receiveMessage(event)
-    {
+function receiveMessage(event)
+{
 
-    ige.network.send('code', event.data);
+ige.network.send('code', event.data);
 
-    }
-    window.addEventListener("message", receiveMessage, false);
+}
+window.addEventListener("message", receiveMessage, false);
 
 </script>
     

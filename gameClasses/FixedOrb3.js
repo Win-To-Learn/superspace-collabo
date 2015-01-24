@@ -62,7 +62,6 @@ var FixedOrbz = IgeEntityBox2d.extend({
 			
 		
 			self._thrustPower = 8*scale;
-
 			self.box2dBody({
 				type: 'kinematic',
 				linearDamping: 2,
@@ -87,7 +86,7 @@ var FixedOrbz = IgeEntityBox2d.extend({
             this.texture(ige.client.textures.fixedorbz);
 
 
-                chimeSound.play();
+                //chimeSound.play();
 
         }
 

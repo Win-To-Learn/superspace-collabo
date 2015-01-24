@@ -291,7 +291,6 @@ var IgeBox2dComponent = IgeEventingClass.extend({
 
 		// Create the new body
 		tempBod = this._world.CreateBody(tempDef);
-
 		// Now apply any post-creation attributes we need to
 		for (param in body) {
 			if (body.hasOwnProperty(param)) {

@@ -61,7 +61,7 @@ var Client = IgeClass.extend({
 
 					var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					if(location.origin.indexOf("http://192") == 0) {
-						serverUrl = 'http://192.168.1.107:7610'; // This is the url for running the server on LAN for mobile debugging
+						serverUrl = 'http://192.168.1.187:7610'; // This is the url for running the server on LAN for mobile debugging
 					}
 					else if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0 || location.origin.indexOf("http://127.0.0.1") == 0) {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
@@ -100,6 +100,8 @@ var Client = IgeClass.extend({
 							ige.network.define('chatJoin', self._onChatJoin); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('chatMessage', self._onChatMessage); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('scored', self._onScored); // Defined in ./gameClasses/ClientNetworkEvents.js
+							//ige.network.define('fixedorbzContact', self._onFixedorbzContact); // Defined in ./gameClasses/ClientNetworkEvents.js
+
 							ige.network.define('code', self._onCode); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('updateTouchScore', self._onUpdateTouchScore); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('updateScore', self._onUpdateScore); // Defined in ./gameClasses/ClientNetworkEvents.js
@@ -234,7 +236,7 @@ var Client = IgeClass.extend({
 											UI Text elements
 							\* ------------------------------------------- */
 							
-							self.score = new IgeFontEntity()
+							self.scoreA = new IgeFontEntity()
 								.texture(ige.client.textures.font)
 								.width(100)
 								.text('Team B')
@@ -243,7 +245,7 @@ var Client = IgeClass.extend({
 								.hide()
 								.mount(self.uiScene);
 
-                        self.score = new IgeFontEntity()
+                        self.scoreB = new IgeFontEntity()
                             .texture(ige.client.textures.font)
                             .width(100)
                             .text('Team A')
@@ -260,7 +262,7 @@ var Client = IgeClass.extend({
 								.top(-80)
 								.right(10)
 								.height(200)
-                                .hide()
+                                //.hide()
 								.mount(self.uiScene);
 
 							self.scoreText = new IgeFontEntity()
@@ -271,7 +273,7 @@ var Client = IgeClass.extend({
 								.colorOverlay('#ff6000')
 								.top(35)
 								.right(10)
-								.hide()
+								//.hide()
 								.mount(self.uiScene);
 
 

@@ -15,6 +15,9 @@ var Server = IgeClass.extend({
         this.fixedorbreds = [];
         this.fixedorbzs = [];
 
+		// Queue for changes that need to be handled outside the Box2D update method
+		this.changeQueue = [];
+
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
@@ -22,7 +25,7 @@ var Server = IgeClass.extend({
             .box2d.sleep(true)
             .box2d.createWorld()
             .box2d.mode(0)
-            .box2d.start();
+           	.box2d.start();
 
 		/* ------------------------------------------- *\
 						Database
@@ -170,6 +173,7 @@ var Server = IgeClass.extend({
                         ige.network.define('chatJoin', self._onChatJoin);
                         ige.network.define('chatMessage', self._onChatMessage);
                         ige.network.define('scored');
+						//ige.network.define('fixedorbzContact');
                         ige.network.define('updateScore');
                         ige.network.define('updateTouchScore');
                         ige.network.define('code', self._onCode);
@@ -481,6 +485,7 @@ var Server = IgeClass.extend({
 							function (contact) {
 								var A = contact.igeEntityA();
 								var B = contact.igeEntityB();
+								//console.log('Contact', A.category(), B.category());
                                 //var C = contact.igeEntityC();
 								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 								if(A.category() == 'planetoid' && B.category() == 'ship') {
@@ -533,6 +538,12 @@ var Server = IgeClass.extend({
                                     A.exploding = true;
                                     B.destroy();
 									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+									self.changeQueue.push({
+										action: 'create',
+										type: 'FixedOrbz',
+										scale: 0.8,
+										translate: {x: A._translate.x, y: A._translate.y}
+									});
                                 }
                                 else if (A.category() == 'fixedorb' && B.category() == 'fixedorb') {
                                     A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
@@ -594,12 +605,43 @@ var Server = IgeClass.extend({
                                     //ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
                                     ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
 									console.log("contact with asteroid and ship");
+								} else if (A.category() == 'fixedorbz' && B.category() == 'ship') {
+									console.log('contact with fixed orbz and ship');
+									ige.network.send('code', {label: 'Orb Contact', code: '// Orb contact'},
+										//ige.network.send('fixedorbzContact');
+
+
+										A.sourceClient);
+										A.destroy();
 								}
 							},
 							// Listen for when contact's end
 							function (contact) {
 							}
 						);
+
+						/* ------------------------------------------- *\
+						                Update physics objects
+						/* ------------------------------------------- */
+
+						self.update = function () {
+							// Obviously more virtualized than currently necessary
+							for (var i = 0, change; change = self.changeQueue[i]; i++) {
+								switch (change.action) {
+									case 'create':
+										switch (change.type) {
+											case 'FixedOrbz':
+												new FixedOrbz(change.scale)
+													.translateTo(change.translate.x, change.translate.y, 0);
+												break;
+										}
+										break;
+								}
+							}
+							self.changeQueue = [];
+						};
+
+						ige.box2d.updateCallback(self.update);
 						
 						/* ------------------------------------------- *\
 											Color randomiser

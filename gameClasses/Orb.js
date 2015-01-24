@@ -122,6 +122,8 @@ var Orb = IgeEntityBox2d.extend({
     },
 	
 	explode: function() {
+
+		/**
 		var count = 2;
 		if(this.scale / 2 > 0.3) {
 			for(var i = 0; i < count; i++) {
@@ -142,6 +144,13 @@ var Orb = IgeEntityBox2d.extend({
 					.mount(ige.$('scene1'));
 			}
 		}
+		 **/
+
+		scale = 1 + Math.random();
+		var orb3 = new Orb(scale)
+			.translateTo(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800, 0)
+			.rotateTo(0, 0, Math.radians(Math.random() * 360))
+
 		ige.server.score += this.pointWorth;
 		ige.network.send('updateScore', ige.server.score);
         //ige.network.send('updateScore', 0);

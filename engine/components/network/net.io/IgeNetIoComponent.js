@@ -27,7 +27,8 @@ var IgeNetIoComponent = IgeEventingClass.extend([
 		/* CEXCLUDE */
 		if (ige.isServer) {
 			this.implement(IgeNetIoServer);
-			this._netio = require('../../../' + modulePath + 'net.io-server').Server;
+			//this._netio = require('../../../' + modulePath + 'net.io-server').Server;
+			this._netio = require('../../../../server/node_modules/net.io-server').Server;
 			//this._netio = require('../../../' + modulePath + 'net.io').Server;
 			this._acceptConnections = false;
 		}

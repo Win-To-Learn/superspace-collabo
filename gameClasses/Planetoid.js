@@ -14,6 +14,8 @@ var Planetoid = IgeEntityBox2d.extend({
 		self.touched = false;
         self.leftgoal = false;
         self.isgoal = false;
+
+		self.isHydraHead = false;
 		
 		if(arguments.length < 1) {
 			scale = 2;
@@ -55,6 +57,8 @@ var Planetoid = IgeEntityBox2d.extend({
 					filter: {
 						categoryBits: 0x00ff,
 						maskBits: 0xffff //& ~0x0008
+						//categoryBits: 0x0016,
+						//maskBits: 0xffff & ~0x0008
 					},
 					shape: {
 						type: 'polygon',
@@ -133,6 +137,46 @@ var Planetoid = IgeEntityBox2d.extend({
 			else if(!this.touched) {
 				this._box2dBody.SetAngularVelocity(-0.4);
 			}
+
+			if (this.isHydraHead == true) {
+				var b2vel = this._box2dBody.GetLinearVelocity();
+				var shipVelX = b2vel.x;
+				var shipVelY = b2vel.y;
+				var shipAngle;
+
+
+				var velocity = Math.sqrt(Math.pow(shipVelX,2) + Math.pow(shipVelY,2));
+				//console.log(velocity);
+
+
+				shipAngle = Math.atan2(shipVelX,-shipVelY);
+
+
+				//console.log(shipAngle);
+
+
+
+				if (this._translate.x > 4200) {
+					this.translateTo(this._translate.x - 400, this._translate.y, 0);
+					this.velocity.byAngleAndPower(shipAngle +Math.PI/2, velocity * 0.017)
+				}
+				if (this._translate.x < -4200) {
+					this.translateTo(this._translate.x + 400, this._translate.y, 0);
+					this.velocity.byAngleAndPower(shipAngle +Math.PI/2, 0.15 + velocity * 0.017)
+				}
+				if (this._translate.y < -2400) {
+					this.translateTo(this._translate.x, this._translate.y + 400, 0);
+					this.velocity.byAngleAndPower(shipAngle +Math.PI/2, 0.15 + velocity * 0.017)
+				}
+				if (this._translate.y > 2400) {
+					this.translateTo(this._translate.x, this._translate.y - 400, 0);
+					this.velocity.byAngleAndPower(shipAngle +Math.PI/2, 0.15 + velocity * 0.017)
+				}
+
+			}
+
+
+
 		}
 		IgeEntity.prototype.tick.call(this, ctx);
     },

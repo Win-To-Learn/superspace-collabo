@@ -1,0 +1,10 @@
+CODE 15;15
+
+fr = new FixedOrbRed(8)
+    .translateTo(-800,200,0);
+
+fr.color = 'rgb(50,155,0)';
+fr.fillColor = 'rgba(0,155,50,0.35)';
+
+//create your own planet
+//change coordinates to move it to another part of the galaxy

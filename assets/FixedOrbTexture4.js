@@ -1,8 +1,12 @@
+//texture for fixedorbred
+
 var image = {
 	render: function (ctx, entity) {
 		// Draw the orb entity
-		ctx.fillStyle = 'rgba(255,0,255,0.35)';
-		ctx.strokeStyle = '#ff0000';
+		ctx.strokeStyle = entity.color;
+		ctx.fillStyle = entity.fillColor;
+		//ctx.fillStyle = 'rgba(255,0,255,0.35)';
+		//ctx.strokeStyle = '#ff0000';
 		ctx.lineWidth = 2.5/entity._scale.x;
         //ctx.lineWidth = 5;
 		ctx.beginPath();

@@ -11,7 +11,9 @@ var FixedOrbRed = IgeEntityBox2d.extend({
         //self.touched = false;
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
-        this._rectColor = '#ffc600';
+        //this._rectColor = '#ffc600';
+		self.color = 'rgb(255,0,0)';
+		self.fillColor = 'rgba(0,255,0,0.25)';
 
 
 		
@@ -53,8 +55,11 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 					friction: 0.2,
 					restitution: 2.5,
 					filter: {
-						categoryBits: 0x00ff,
-						maskBits: 0xffff //& ~0x0008
+						//categoryBits: 0x00ff,
+						//categoryBits: 0x0008,
+						//maskBits: 0xffff //& ~0x0008
+						//categoryBits: 0x0016,
+						//maskBits: 0xffff & ~0x0008
 					},
 					shape: {
 						type: 'polygon',
@@ -71,10 +76,10 @@ var FixedOrbRed = IgeEntityBox2d.extend({
                 //isSensor: true,
 				type: 'dynamic',
 				linearDamping: 0.5,
-				angularDamping: 200,
+				angularDamping: 0,
 				allowSleep: true,
 				fixtures: fixDefs,
-				fixedRotation: true,
+				fixedRotation: false,
                 gravityScale: 0.0
 			});
 			
@@ -82,7 +87,9 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 			self.addComponent(IgeVelocityComponent)
 				.category('fixedorbred')
 				.streamMode(1)
-				.mount(ige.$('scene1'));
+				//.mount(ige.$('scene1'));
+				.mount(ige.server.scene1);
+
 				
 			ige.server.fixedorbreds.push(this);
 			
@@ -93,8 +100,30 @@ var FixedOrbRed = IgeEntityBox2d.extend({
         }
 
         this.scaleTo(scale,scale,1);
+		self.streamSections(['transform', 'color']);
 		
     },
+
+	streamSectionData: function (sectionId, data) {
+		// Check if the section is one that we are handling
+		switch(sectionId) {
+			case 'color':
+				if (data) {
+					var s = JSON.parse(data);
+					this.color = s[0];
+					this.fillColor = s[1];
+				}
+				else {
+					return JSON.stringify([this.color,this.fillColor]);
+				}
+				break;
+			default:
+				return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
+				break;
+		}
+	},
+
+
 
 
     tick: function (ctx) {

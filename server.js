@@ -252,13 +252,15 @@ var Server = IgeClass.extend({
 										Spawn planetoids
 						\* ------------------------------------------- */
 						
-                        var fixedorbrad = 1.0;
+                        var fixedorbrad = 1.5;
 
                         self.spawnBoss = function() {
-                            var plan1 = new Planetoid(2)
+                            var plan1 = new Planetoid(1)
                                 //.rotateTo(0, 0, Math.radians(Math.random() * 360))
                                 .translateTo(150, 100, 0)
 								.velocity.byAngleAndPower(Math.radians(225),0.2);
+
+							plan1.isHydraHead = true;
 
 							var plan2 = new Planetoid(fixedorbrad)
                                 //.rotateTo(0, 0, Math.radians(Math.random() * 360))
@@ -378,6 +380,7 @@ var Server = IgeClass.extend({
                             */
 
                         }
+						self.spawnBoss();
                         //self.spawnOrbs();
 
 
@@ -503,11 +506,24 @@ var Server = IgeClass.extend({
                                         //A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
 									}
 								}
+								//new code to destroy hydra by shooting the center of it
+								//need to add points and add code snippet as a result
+								else if(A.category() == 'planetoid' && B.category() == 'bullet') {
+									if(A.isHydraHead) {
+										A.destroy();
+										//ige.network.send('updateTouchScore', tempScores);
+										console.log('contact with planetoid and bullet');
+										//A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
+									}
+									else{
+										B.destroy();
+									}
+								}
                                 else if(A.category() == 'fixedorbred' && B.category() == 'ship') {
 
                                         //ige.network.send('updateTouchScore', tempScores);
                                         console.log('contact with fixedorb and ship');
-                                        B.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
+                                        //B.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
 
                                 }
 								else if(A.category() == 'ship' && B.category() == 'ship') {

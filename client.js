@@ -29,8 +29,10 @@ var Client = IgeClass.extend({
 		this.textures = {
 			ship: new IgeTexture('./assets/PlayerTexture.js'),
             orb: new IgeTexture('./assets/OrbTexture.js'),
+			rectangle: new IgeTexture('./assets/Rectangle.js'),
             planetoid: new IgeTexture('./assets/PlanetoidTexture.js'),
             fixedorbred: new IgeTexture('./assets/FixedOrbTexture4.js'),
+			tree: new IgeTexture('./assets/TreeTexture.js'),
             fixedorbz: new IgeTexture('./assets/FixedOrbTexture3.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
             stars: new IgeTexture('./assets/stars2.png'),
@@ -57,9 +59,9 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
-					var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
+					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					if(location.origin.indexOf("http://192") == 0) {
 						serverUrl = 'http://192.168.1.187:7610'; // This is the url for running the server on LAN for mobile debugging
 					}

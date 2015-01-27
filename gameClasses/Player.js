@@ -10,6 +10,7 @@ var Player = IgeEntityBox2d.extend({
 		var self = this;
         self.clientId = clientId;
         self.score = 0;
+		self.gotPickup = false;
 
         self.lastSoundTime = Date.now();
 
@@ -116,7 +117,7 @@ var Player = IgeEntityBox2d.extend({
                 restitution: 0.0,
                 isSensor: true,
                 filter: {
-                    categoryBits: 0x0100,
+                    categoryBits: 0x0010,
                     maskBits: 0xffff
                 },
                 shape: {
@@ -149,6 +150,27 @@ var Player = IgeEntityBox2d.extend({
 				.text(self.nametag)
 				.textAlignX(1)
 				.top(-100)
+				.mount(self);
+
+
+			self.thrustEmitter = new IgeParticleEmitter()
+				// Set the particle entity to generate for each particle
+				.particle(ThrustParticle)
+				// Set particle life to 300ms
+				.lifeBase(400)
+				// Set output to 60 particles a second (1000ms)
+				.quantityBase(60)
+				.quantityTimespan(1500)
+				// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
+				.deathOpacityBase(0)
+				// Set velocity vector to y = 0.05, with variance values
+				.velocityVector(new IgePoint(0, 0.05, 0), new IgePoint(-0.04, 0.05, 0), new IgePoint(0.04, 0.15, 0))
+				// Mount new particles to the object scene
+				//.particleMountTarget(ige.client.objectScene)
+				.particleMountTarget(ige.client.scene1)
+				// Move the particle emitter to the bottom of the ship
+				.translateTo(0, 5, 0)
+				// Mount the emitter to the ship
 				.mount(self);
 		}
 		
@@ -236,7 +258,12 @@ var Player = IgeEntityBox2d.extend({
 			}
 		}
 	},
-	
+
+	changePickupScore: function(){
+		this.score++;
+		this.gotPickup = false;
+	},
+
 	explode: function() {
 		this.exploding = false;
 		if(ige.isServer) {
@@ -282,7 +309,10 @@ var Player = IgeEntityBox2d.extend({
 			//ship.originalStart(ship._translate);
 		}
 	},
-	
+
+
+
+
 	respawn: function() {
 		if(ige.isServer) {
 			var self = this;
@@ -340,6 +370,10 @@ var Player = IgeEntityBox2d.extend({
 	 * @param ctx The canvas context to render to.
 	 */
 	tick: function (ctx) {
+		if(this.gotPickup) {
+			this.changePickupScore();
+		}
+
 		if(this.exploding) {
 			this.explode();
 		}
@@ -366,9 +400,11 @@ var Player = IgeEntityBox2d.extend({
 					//var radians = this._rotate.z + Math.radians(-90),
 					//thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 					//this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
+
 					var radians = Math.radians(270);
 					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
+
 
 				if (this.controls.down) {
 					var radians = Math.radians(90);
@@ -471,12 +507,15 @@ var Player = IgeEntityBox2d.extend({
 					if (!this.controls.left) { // left wasn't already down
 						this.controls.left = true;
 						thrustSound.play();
+						this.thrustEmitter.start();
+						console.log("emitter started");
 						ige.network.send('playerControlLeftDown');
 					}
 				} else {
 					if (this.controls.left) {
 						this.controls.left = false;
 						thrustSound.stop();
+						this.thrustEmitter.stop();
 						ige.network.send('playerControlLeftUp');
 					}
 				}
@@ -485,12 +524,14 @@ var Player = IgeEntityBox2d.extend({
 					if (!this.controls.right) {
 						this.controls.right = true;
 						thrustSound.play();
+						this.thrustEmitter.start();
 						ige.network.send('playerControlRightDown');
 					}
 				} else {
 					if (this.controls.right) {
 						this.controls.right = false;
 						thrustSound.stop();
+						this.thrustEmitter.stop();
 						ige.network.send('playerControlRightUp');
 					}
 				}
@@ -500,12 +541,14 @@ var Player = IgeEntityBox2d.extend({
 						this.controls.thrust = true;
 						ige.network.send('playerControlThrustDown');
 						thrustSound.play();
+						this.thrustEmitter.start();
 					}
 				} else {
 					if (this.controls.thrust) {
 						this.controls.thrust = false;
 						ige.network.send('playerControlThrustUp');
 						thrustSound.stop();
+						this.thrustEmitter.stop();
 					}
 				}
 
@@ -513,12 +556,14 @@ var Player = IgeEntityBox2d.extend({
 					if (!this.controls.down) {
 						this.controls.down = true;
 						thrustSound.play();
+						this.thrustEmitter.start();
 						ige.network.send('playerControlDownDown');
 					}
 				} else {
 					if (this.controls.down) {
 						this.controls.down = false;
 						thrustSound.stop();
+						this.thrustEmitter.stop();
 						ige.network.send('playerControlDownUp');
 					}
 				}

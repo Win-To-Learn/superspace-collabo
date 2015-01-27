@@ -7,12 +7,14 @@ var Server = IgeClass.extend({
         serverScore = 0;
 		ige.timeScale(1);
 		ige.debugEnabled(true);
+		this.tempScores = [];
 
 		// Define an object to hold references to our player entities
 		this.players = {};
         this.orbs = [];
         this.planetoids = [];
         this.fixedorbreds = [];
+		this.trees = [];
         this.fixedorbzs = [];
 
 		// Queue for changes that need to be handled outside the Box2D update method
@@ -247,7 +249,7 @@ var Server = IgeClass.extend({
 						}
 						self.spawnOrbs();
 
-
+						//var tree1 = new Tree(1);
 						/* ------------------------------------------- *\
 										Spawn planetoids
 						\* ------------------------------------------- */
@@ -458,6 +460,7 @@ var Server = IgeClass.extend({
                         }
                         //self.spawnRedSpheres();
 
+						//var tree1 = new Tree(0.1);
                         /*
                         new FixedOrbRed(2)
                             .streamMode(1)
@@ -492,19 +495,21 @@ var Server = IgeClass.extend({
                                 //var C = contact.igeEntityC();
 								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
 								if(A.category() == 'planetoid' && B.category() == 'ship') {
-									if(!A.touched) {
-										B.score++;
+									//if(!A.touched) {
+										B.score = B.score+1;
+										B.gotPickup = true;
 										A.exploding = true;
-										var tempScores = [];
+
 										for (var i in self.players){
-											tempScores.push(
+											self.tempScores.push(
 												{'id' : self.players[i].id(), 'score' : self.players[i].score}
 											);
 										}
 										//ige.network.send('updateTouchScore', tempScores);
 										console.log('contact with planetoid and ship');
+
                                         //A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
-									}
+									//}
 								}
 								//new code to destroy hydra by shooting the center of it
 								//need to add points and add code snippet as a result
@@ -520,9 +525,20 @@ var Server = IgeClass.extend({
 									}
 								}
                                 else if(A.category() == 'fixedorbred' && B.category() == 'ship') {
+									//if (B.score > 3) {
+									//if (B.gotPickup) {
+									if (ige.server.score > 100){
+										A.growingTree = true;
+									}
+									//}
+										//new FixedOrbRed(15)
+										//	.translateTo(0,0,0);
 
+									//var orb9 = new Orb(1.5)
+									//	.streamMode(1)
+									//	.translateTo(0,0,0);
                                         //ige.network.send('updateTouchScore', tempScores);
-                                        console.log('contact with fixedorb and ship');
+                                    //    console.log('contact with fixedorb and ship');
                                         //B.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
 
                                 }

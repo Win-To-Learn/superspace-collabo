@@ -8,6 +8,8 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		
 		var self = this;
 
+		self.growingTree = false;
+
         //self.touched = false;
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
@@ -51,15 +53,16 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 			for (var i = 0; i < self.triangles.length; i++) {
 				fixDefs.push({
-					density: 0.1,
+					density: 10,
 					friction: 0.2,
-					restitution: 2.5,
+					restitution: 0.1,
 					filter: {
+						//with all commented out, there is no collision
 						//categoryBits: 0x00ff,
 						//categoryBits: 0x0008,
 						//maskBits: 0xffff //& ~0x0008
-						//categoryBits: 0x0016,
-						//maskBits: 0xffff & ~0x0008
+						categoryBits: 0x0016,
+						maskBits: 0xffff //& ~0x0008
 					},
 					shape: {
 						type: 'polygon',
@@ -123,11 +126,34 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		}
 	},
 
+	growTree: function() {
+
+		//var orb1 = new Orb(10)
+		//	.translateTo(0,0,0);
+		//this.growingTree=false;
+
+
+		console.log('growing tree');
+		scale = 1 + Math.random();
+		var tree1 = new Tree(scale)
+			.translateTo(0,0,0);
+
+		tree1.color = 'rgb(50,155,0)';
+		tree1.fillColor = 'rgba(0,155,50,0.35)';
+		this.growingTree = false;
+
+
+	},
+
 
 
 
     tick: function (ctx) {
 		if (ige.isServer) {
+
+			if(this.growingTree){
+				this.growTree();
+			}
 
 			if(this.exploding) {
 				this.explode();

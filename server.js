@@ -17,9 +17,6 @@ var Server = IgeClass.extend({
 		this.trees = [];
         this.fixedorbzs = [];
 
-		// Queue for changes that need to be handled outside the Box2D update method
-		this.changeQueue = [];
-
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
@@ -491,187 +488,18 @@ var Server = IgeClass.extend({
 							function (contact) {
 								var A = contact.igeEntityA();
 								var B = contact.igeEntityB();
-								//console.log('Contact', A.category(), B.category());
-                                //var C = contact.igeEntityC();
-								//console.log('Contact begins between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-								if(A.category() == 'planetoid' && B.category() == 'ship') {
-									//if(!A.touched) {
-										B.score = B.score+1;
-										B.gotPickup = true;
-										A.exploding = true;
 
-										for (var i in self.players){
-											self.tempScores.push(
-												{'id' : self.players[i].id(), 'score' : self.players[i].score}
-											);
-										}
-										//ige.network.send('updateTouchScore', tempScores);
-										console.log('contact with planetoid and ship');
-
-                                        //A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
-									//}
-								}
-								//new code to destroy hydra by shooting the center of it
-								//need to add points and add code snippet as a result
-								else if(A.category() == 'planetoid' && B.category() == 'bullet') {
-									if(A.isHydraHead) {
-										A.destroy();
-										//ige.network.send('updateTouchScore', tempScores);
-										console.log('contact with planetoid and bullet');
-										//A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
+								// Try calling A's collision handler on B; if not handled, try the other way
+								if (!A.onContact || !A.onContact(B, contact)) {
+									if (B.onContact) {
+										B.onContact(A, contact);
 									}
-									else{
-										B.destroy();
-									}
-								}
-                                else if(A.category() == 'fixedorbred' && B.category() == 'ship') {
-									//if (B.score > 3) {
-									//if (B.gotPickup) {
-									if (ige.server.score > 100){
-										A.growingTree = true;
-									}
-									//}
-										//new FixedOrbRed(15)
-										//	.translateTo(0,0,0);
-
-									//var orb9 = new Orb(1.5)
-									//	.streamMode(1)
-									//	.translateTo(0,0,0);
-                                        //ige.network.send('updateTouchScore', tempScores);
-                                    //    console.log('contact with fixedorb and ship');
-                                        //B.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
-
-                                }
-								else if(A.category() == 'ship' && B.category() == 'ship') {
-
-									//ige.network.send('updateTouchScore', tempScores);
-									console.log('contact with ship and ship');
-									//B.carryShip(contact.igeEntityByCategory('ship'), contact);
-									A.shape = [
-
-										[1,0],
-										[1,-1],
-										[0,-1],
-										[-1,0],
-										[-1,1],
-										[0,1]
-									];
-									B.shape = [
-
-										[1,0],
-										[1,-1],
-										[0,-1],
-										[-1,0],
-										[-1,1],
-										[0,1]
-									];
-								}
-                                else if (A.category() == 'orb' && B.category() == 'bullet') {
-                                    A.exploding = true;
-                                    B.destroy();
-									ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-									self.changeQueue.push({
-										action: 'create',
-										type: 'FixedOrbz',
-										scale: 0.8,
-										translate: {x: A._translate.x, y: A._translate.y}
-									});
-                                }
-                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorb') {
-                                    A.carryOrb(contact.igeEntityByCategory('fixedorb'), contact);
-                                }
-                                else if (A.category() == 'fixedorbred' && B.category() == 'planetoid') {
-                                    console.log("red orb and planetoid");
-                                    //ige.server.spawnOrbs();
-                                    //var newball = new FixedOrbRed(2);
-                                        //newball.streamMode(1)
-                                        //.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
-                                        //newball.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                        //newball.translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
-                                    if (B.isgoal == true) {
-
-                                        if (B.leftgoal == true) {
-
-                                            console.log("goal should be left");
-                                            //A.exploding = true;
-                                            //console.log("hey");
-
-                                            //the A. code below crashes the server when you are too close
-                                            //to the goals
-                                            //A.unMount();
-                                            //A._box2dBody.SetAwake(false);
-                                            //A._box2dBody.SetActive(false);
-                                            A.destroy();
-                                            //A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
-                                            ige.server.score += 1;
-                                            ige.network.send('updateScore', ige.server.score);
-                                            //this.respawn();
-                                        }
-                                        else if (B.leftgoal == false) {
-                                            console.log("goal should be right");
-                                            //A.exploding = true;
-                                            //console.log("hey");
-                                            //A.unMount();
-                                            //A._box2dBody.SetAwake(false);
-                                            //A._box2dBody.SetActive(false);
-                                            A.destroy();
-                                            //A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
-                                            ige.server.score2 -= 1;
-                                            ige.network.send('updateScore', ige.server.score2);
-                                            //this.respawn();
-
-
-                                        }
-                                    }
-                                    else{
-                                    //A.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
-                                    }
-                                }
-                                else if (A.category() == 'fixedorb' && B.category() == 'fixedorbz') {
-                                    A.destroy();
-                                    ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-                                }
-                                else if(A.category() == 'orb' && B.category() == 'ship') {
-                                    A.exploding = true;
-									B.exploding = true;
-                                    //ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-                                    ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-									console.log("contact with asteroid and ship");
-								} else if (A.category() == 'fixedorbz' && B.category() == 'ship') {
-									console.log('contact with fixed orbz and ship');
-									ige.network.send('code', {label: 'Orb Contact', code: '// Orb contact'},
-										//ige.network.send('fixedorbzContact');
-
-
-										A.sourceClient);
-										A.destroy();
 								}
 							},
 							// Listen for when contact's end
 							function (contact) {
 							}
 						);
-
-						/* ------------------------------------------- *\
-						                Update physics objects
-						/* ------------------------------------------- */
-
-						self.update = function () {
-							// Obviously more virtualized than currently necessary
-							for (var i = 0, change; change = self.changeQueue[i]; i++) {
-								switch (change.action) {
-									case 'create':
-										switch (change.type) {
-											case 'FixedOrbz':
-												new FixedOrbz(change.scale)
-													.translateTo(change.translate.x, change.translate.y, 0);
-												break;
-										}
-										break;
-								}
-							}
-							self.changeQueue = [];
-						};
 
 						ige.box2d.updateCallback(self.update);
 						

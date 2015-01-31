@@ -145,17 +145,15 @@ var Orb = IgeEntityBox2d.extend({
 			}
 		}
 		 **/
-
 		scale = 1 + Math.random();
 		var orb3 = new Orb(scale)
 			.translateTo(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800, 0)
 			.rotateTo(0, 0, Math.radians(Math.random() * 360))
-
-		ige.server.score += this.pointWorth;
-		ige.network.send('updateScore', ige.server.score);
+		var fixed = new FixedOrbz(0.8).translateTo(this._translate.x, this._translate.y, 0);
+		//ige.server.score += this.pointWorth;
+		//ige.network.send('updateScore', ige.server.score);
         //ige.network.send('updateScore', 0);
 		this.destroy();
-
 	}
 	
 });

@@ -233,14 +233,64 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 					.mount(ige.$('scene1'));
 			}
 		}*/
-		ige.server.score += this.pointWorth;
-		ige.network.send('updateScore', ige.server.score);
+		//ige.server.score += this.pointWorth;
+		//ige.network.send('updateScore', ige.server.score);
 		this.destroy();
         delete ige.server.fixedorbreds[ige.server.fixedorbreds.indexOf(this)];
         //console.log(ige.server.fixedorbs.length);
         //console.log(fixedorbs);
+	},
+
+	onContact: function (other, contact) {
+		switch (other.category()) {
+			case 'planetoid':
+				console.log("red orb and planetoid");
+				//ige.server.spawnOrbs();
+				//var newball = new FixedOrbRed(2);
+				//newball.streamMode(1)
+				//.translateTo(this._translate.x - -this._geometry.x + this._geometry.x * this.scale, this._translate.y, 0);
+				//newball.rotateTo(0, 0, Math.radians(Math.random() * 360))
+				//newball.translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+				if (other.isgoal == true) {
+					if (other.leftgoal == true) {
+
+						console.log("goal should be left");
+						//A.exploding = true;
+						//console.log("hey");
+
+						//the A. code below crashes the server when you are too close
+						//to the goals
+						//A.unMount();
+						//A._box2dBody.SetAwake(false);
+						//A._box2dBody.SetActive(false);
+						this.destroy();
+						//A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+						ige.server.score += 1;
+						ige.network.send('updateScore', ige.server.score);
+						//this.respawn();
+					}
+					else if (other.leftgoal == false) {
+						console.log("goal should be right");
+						//A.exploding = true;
+						//console.log("hey");
+						//A.unMount();
+						//A._box2dBody.SetAwake(false);
+						//A._box2dBody.SetActive(false);
+						this.destroy();
+						//A._translateTo(-1200+Math.random()*2400, -600+Math.random()*1200, 0);
+						ige.server.score2 -= 1;
+						ige.network.send('updateScore', ige.server.score2);
+						//this.respawn();
+					}
+				} else {
+					//A.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
+				}
+				return true;
+			default:
+				return false;
+		}
 	}
-	
+
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = FixedOrbRed; }

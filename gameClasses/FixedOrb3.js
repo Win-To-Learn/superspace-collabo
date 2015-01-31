@@ -146,11 +146,11 @@ var FixedOrbz = IgeEntityBox2d.extend({
 					.mount(ige.$('scene1'));
 			}
 		}
-		ige.server.score += this.pointWorth;
-		ige.network.send('updateScore', ige.server.score);
+		//ige.server.score += this.pointWorth;
+		//ige.network.send('updateScore', ige.server.score);
 		this.destroy();
 	}
-	
+
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = FixedOrbz; }

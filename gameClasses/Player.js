@@ -21,6 +21,13 @@ var Player = IgeEntityBox2d.extend({
 		self._lastShoot = ige._timeScaleLastTimestamp;
 		self.exploding = false;
 		self.color = "white";
+
+		self.score = 0;
+		self.orbsCollected = 0;
+
+		self.bulletSpread = 0;
+		self.bulletCount = 1;
+
 		var scale = 1.0;
 		
 		/*self.shape = [
@@ -227,33 +234,37 @@ var Player = IgeEntityBox2d.extend({
 				var shipVelY = b2vel.y;
 				var shipAngle;
 
-
 				var velocity = Math.sqrt(Math.pow(shipVelX,2) + Math.pow(shipVelY,2));
 
-
 				shipAngle = Math.atan2(shipVelX,-shipVelY);
-
-				//console.log(shipVelX);
-				//console.log(shipVelY);
-				//console.log("angle")
-
-				//console.log(shipAngle);
-				//console.log("**")
-				//console.log(velocity);
                 if (this._fixedorbred) {
                     //this._fixedorbred.velocity.byAngleAndPower(this._rotate.z - Math.radians(90), 0.2 + velocity * 0.012)
 					this._fixedorbred.velocity.byAngleAndPower(shipAngle -Math.PI/2, 0.15 + velocity * 0.017)
 
 				}
-                var bullet = new Bullet()
-					.streamMode(1)
-					.addComponent(IgeVelocityComponent)
-					//.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1+velocity*0.012)
-					.velocity.byAngleAndPower(shipAngle -Math.PI/2, 0.14+velocity*0.017)
 
-					.translateTo(this._translate.x, this._translate.y, 0)
-					.mount(ige.server.scene1);
-				bullet.sourceClient = clientId;
+				var steps = this.bulletCount - 1;
+				var bulletSpreadRad = steps ? this.bulletSpread * Math.PI / 180 : 0;
+				var deltaA = steps ? bulletSpreadRad / steps : 0;
+				for (var i = 0, a = -bulletSpreadRad / 2; i <= steps; i++, a += deltaA) {
+					var bullet = new Bullet()
+						.streamMode(1)
+						.addComponent(IgeVelocityComponent)
+						//.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1+velocity*0.012)
+						.velocity.byAngleAndPower(shipAngle -Math.PI/2 + a, 0.14+velocity*0.017)
+						.translateTo(this._translate.x, this._translate.y, 0)
+						.mount(ige.server.scene1);
+					bullet.source = this;
+				}
+                //var bullet = new Bullet()
+				//	.streamMode(1)
+				//	.addComponent(IgeVelocityComponent)
+				//	//.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1+velocity*0.012)
+				//	.velocity.byAngleAndPower(shipAngle -Math.PI/2, 0.14+velocity*0.017)
+                //
+				//	.translateTo(this._translate.x, this._translate.y, 0)
+				//	.mount(ige.server.scene1);
+				//bullet.sourceClient = clientId;
 				this._lastShoot = ige._timeScaleLastTimestamp;
 			}
 		}
@@ -370,6 +381,7 @@ var Player = IgeEntityBox2d.extend({
 	 * @param ctx The canvas context to render to.
 	 */
 	tick: function (ctx) {
+		//console.log('Player tick', this.clientId);
 		if(this.gotPickup) {
 			this.changePickupScore();
 		}
@@ -595,6 +607,77 @@ var Player = IgeEntityBox2d.extend({
 
 		// Call the IgeEntity (super-class) tick() method
 		IgeEntity.prototype.tick.call(this, ctx);
+	},
+
+	onContact: function (other, contact) {
+		switch (other.category()) {
+			case 'planetoid':
+				this.score = this.score + 1;
+				this.gotPickup = true;
+				other.exploding = true;
+
+				for (var i in ige.server.players) {
+					ige.server.tempScores.push(
+						{'id' : ige.server.players[i].id(), 'score' : ige.server.players[i].score}
+					);
+				}
+				//ige.network.send('updateTouchScore', tempScores);
+				console.log('contact with planetoid and ship');
+				ige.network.send('updateScore', this.score, this.clientId);
+				return true;
+			case 'fixedorbred':
+				if (ige.server.score > 100){
+					other.growingTree = true;
+				}
+				return true;
+			case 'ship':
+				//ige.network.send('updateTouchScore', tempScores);
+				console.log('contact with ship and ship');
+				//B.carryShip(contact.igeEntityByCategory('ship'), contact);
+				this.shape = [
+
+					[1,0],
+					[1,-1],
+					[0,-1],
+					[-1,0],
+					[-1,1],
+					[0,1]
+				];
+				other.shape = [
+
+					[1,0],
+					[1,-1],
+					[0,-1],
+					[-1,0],
+					[-1,1],
+					[0,1]
+				];
+				return true;
+			case 'orb':
+				this.exploding = true;
+				other.exploding = true;
+				//ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
+				this.score += other.pointWorth;
+				ige.network.send('scored', '+' + other.pointWorth + ' points!', this.clientId);
+				ige.network.send('updateScore', this.score, this.clientId);
+				console.log("contact with asteroid and ship");
+				return true;
+			case 'fixedorbz':
+				console.log('contact with fixed orbz and ship');
+				if (this.orbsCollected++ === 3) {
+					ige.network.send('code', {label: 'Weapon Upgrade', code: 'player.upgradeFiringArc();'},
+						this.sourceClient);
+				}
+				other.destroy();
+				return true;
+			default:
+				return false;
+		}
+	},
+
+	upgradeFiringArc: function () {
+		this.bulletSpread = 40;
+		this.bulletCount = 3;
 	}
 });
 

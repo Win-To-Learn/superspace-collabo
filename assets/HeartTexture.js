@@ -4,6 +4,10 @@ var image = {
 		ctx.fillStyle = 'rgba(0,0,0,0.8)';
 		ctx.strokeStyle = '#e371ff';
 		ctx.lineWidth = 1/entity._scale.x;
+
+
+
+
 		ctx.beginPath();
 		//ctx.moveTo(entity._geometry.x, entity._geometry.y);
         //ctx.lineTo(entity._geometry.x / 2, -entity._geometry.y / 2);
@@ -28,5 +32,6 @@ var image = {
 		ctx.closePath();
 		ctx.fill();
 		ctx.stroke();
+
 	}
 };

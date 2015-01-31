@@ -126,21 +126,75 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		}
 	},
 
-	growTree: function() {
+
+	growTree: function(contact) {
 
 		//var orb1 = new Orb(10)
 		//	.translateTo(0,0,0);
 		//this.growingTree=false;
 
 
-		console.log('growing tree');
-		scale = 1 + Math.random();
+		//console.log('growing tree');
+		scale = 10* Math.random();
 		var tree1 = new Tree(scale)
-			.translateTo(0,0,0);
+			.translateTo(this._translate.x,this._translate.y,0);
 
 		tree1.color = 'rgb(50,155,0)';
 		tree1.fillColor = 'rgba(0,155,50,0.35)';
+
 		this.growingTree = false;
+
+		/**var distanceJointDef2 = new ige.box2d.b2DistanceJointDef(),
+			bodyA = contact.m_fixtureA.m_body,
+			bodyB = contact.m_fixtureB.m_body;
+
+		distanceJointDef2.Initialize(
+			bodyA,
+			bodyB,
+			bodyA.GetWorldCenter(),
+			bodyB.GetWorldCenter()
+		);
+
+
+		this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef2);
+		**/
+
+		//var b2WeldJoint = Box2D.Dynamics.Joints.b2WeldJoint;
+		//var b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef;
+
+		//var joint_def = new b2WeldJointDef();
+		//joint_def.Initialize(this, tree1, this._box2dBody.GetWorldCenter(), tree1._box2dBody.GetWorldCenter());
+		//var joint = ige.box2d.world().CreateJoint(joint_def);
+
+		//var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
+			//bodyA = this._box2dBody,
+			//bodyB = tree1._box2dBody;
+			//bodyC = contact.m_fixtureA.m_body;
+		//bodyA = contact.m_fixtureA.m_body,
+		//bodyB = contact.m_fixtureB.m_body;
+
+
+		//distanceJointDef.Initialize(
+		//	bodyA,
+		//	bodyB,
+		//	bodyA.GetWorldCenter(),
+		//	bodyB.GetWorldCenter()
+		//);
+
+		//this._orbRope2 = ige.box2d._world.CreateJoint(distanceJointDef);
+
+		//var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
+		//	bodyA = contact.m_fixtureA.m_body,
+		//	bodyB = contact.m_fixtureB.m_body;
+
+		//distanceJointDef.Initialize(
+		//	bodyA,
+		//	bodyB,
+		//	bodyA.GetWorldCenter(),
+		//	bodyB.GetWorldCenter()
+		//);
+
+		//this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef);
 
 
 	},
@@ -207,6 +261,28 @@ var FixedOrbRed = IgeEntityBox2d.extend({
             fixedorbred.originalStart(fixedorbred._translate);
         }
     },
+
+	attachTree: function (fixedorbred, contact) {
+		if (!this._oldOrb || (this._oldOrb !== fixedorbred)) {
+			var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
+				bodyA = contact.m_fixtureA.m_body,
+				bodyB = contact.m_fixtureB.m_body;
+
+			distanceJointDef.Initialize(
+				bodyA,
+				bodyB,
+				bodyA.GetWorldCenter(),
+				bodyB.GetWorldCenter()
+			);
+
+			this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef);
+
+			this._carryingOrb = true;
+			this._fixedorbred = fixedorbred;
+
+			fixedorbred.originalStart(fixedorbred._translate);
+		}
+	},
 
 
 	

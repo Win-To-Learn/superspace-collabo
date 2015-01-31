@@ -61,9 +61,11 @@ var Client = IgeClass.extend({
 					// got a username or something?
 					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
+
+
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					if(location.origin.indexOf("http://192") == 0) {
-						serverUrl = 'http://192.168.1.187:7610'; // This is the url for running the server on LAN for mobile debugging
+						serverUrl = 'http://192.168.1.33:7610'; // This is the url for running the server on LAN for mobile debugging
 					}
 					else if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0 || location.origin.indexOf("http://127.0.0.1") == 0) {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally

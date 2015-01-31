@@ -508,7 +508,7 @@ var Server = IgeClass.extend({
 										//ige.network.send('updateTouchScore', tempScores);
 										console.log('contact with planetoid and ship');
 
-                                        //A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
+                                        //A.attachTree(contact.igeEntityByCategory('planetoid'), contact);
 									//}
 								}
 								//new code to destroy hydra by shooting the center of it
@@ -529,6 +529,7 @@ var Server = IgeClass.extend({
 									//if (B.gotPickup) {
 									if (ige.server.score > 100){
 										A.growingTree = true;
+										//A.growTree(contact);
 									}
 									//}
 										//new FixedOrbRed(15)

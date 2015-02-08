@@ -5,6 +5,8 @@ var igeClientConfig = {
 		/* Your custom game JS scripts */
 		'./gameClasses/ClientNetworkEvents.js',
 
+		'./gameClasses/BasicOrb.js',
+		'./gameClasses/Hydra.js',
         './gameClasses/Orb.js',
         './gameClasses/Planetoid.js',
         './gameClasses/FixedOrb4.js',

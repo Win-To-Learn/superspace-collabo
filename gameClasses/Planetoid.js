@@ -36,8 +36,8 @@ var Planetoid = IgeEntityBox2d.extend({
 					.addPoint(this._geometry.x * scale, this._geometry.y * scale / 2)
 					.addPoint(this._geometry.x * scale / 2, this._geometry.y * scale)
 					.addPoint(-this._geometry.x * scale / 2, this._geometry.y * scale)
-					.addPoint(-this._geometry.x * scale, this._geometry.y * scale / 2)
-					
+					.addPoint(-this._geometry.x * scale, this._geometry.y * scale / 2);
+
 			// Scale the polygon by the box2d scale ratio
 			collisionPoly.divide(ige.box2d._scaleRatio);
 

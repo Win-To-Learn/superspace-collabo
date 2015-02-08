@@ -1,6 +1,8 @@
 var config = {
 	include: [
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
+		{name: 'BasicOrb', path: './gameClasses/BasicOrb'},
+		{name: 'Hydra', path: './gameClasses/Hydra'},
         {name: 'Orb', path: './gameClasses/Orb'},
         {name: 'Planetoid', path: './gameClasses/Planetoid'},
         {name: 'FixedOrbRed', path: './gameClasses/FixedOrb4'},

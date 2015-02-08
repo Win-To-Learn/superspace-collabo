@@ -21,6 +21,15 @@ var HydraHead = BasicOrb.extend({
         BasicOrb.prototype.init.call(this, scale);
 
         this.category('hydrahead');
+    },
+
+    onContact: function (other, contact) {
+        switch (other.category()) {
+            case 'bullet':
+                console.log('bullet hit hydra head');
+                this.destroy();     // Just testing
+                break;
+        }
     }
 });
 
@@ -46,8 +55,18 @@ var HydraArm = BasicOrb.extend({
     init: function (scale) {
         BasicOrb.prototype.init.call(this, scale);
 
-        this.category('hydrahead');
+        this.category('hydraarm');
+    },
+
+    onContact: function (other, contact) {
+        switch (other.category()) {
+            case 'bullet':
+                console.log('bullet hit hydra arm');
+                other.destroy();
+                break;
+        }
     }
+
 });
 
 

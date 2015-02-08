@@ -86,10 +86,12 @@ var BasicOrb = IgeEntityBox2d.extend({
             this.texture(ige.client.textures[this.textureDef]);
         }
 
+		//self.addComponent(IgeVelocityComponent);
+
         this.scaleTo(scale,scale,1);
 		
     }
-	
+
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BasicOrb; }

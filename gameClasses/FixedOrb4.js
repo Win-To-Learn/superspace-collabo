@@ -135,14 +135,24 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 
 		//console.log('growing tree');
-		scale = 10* Math.random();
-		var tree1 = new Tree(scale)
-			.translateTo(this._translate.x,this._translate.y,0);
+		if (!this.tree) {
+			scale = 10 * Math.random();
+			this.tree = new Tree(scale)
+				.translateTo(this._translate.x, this._translate.y - 40, 0);
 
-		tree1.color = 'rgb(50,155,0)';
-		tree1.fillColor = 'rgba(0,155,50,0.35)';
+			this.tree.color = 'rgb(50,155,0)';
+			this.tree.fillColor = 'rgba(0,155,50,0.35)';
+
+			var joint = new ige.box2d.b2RevoluteJointDef();
+			joint.Initialize(this._box2dBody, this.tree._box2dBody, this._box2dBody.GetWorldCenter());
+			joint.enableLimit = true;
+			joint.lowerAngle = 0;
+			joint.upperAngle = 0;
+			ige.box2d._world.CreateJoint(joint);
+		}
 
 		this.growingTree = false;
+
 
 		/**var distanceJointDef2 = new ige.box2d.b2DistanceJointDef(),
 			bodyA = contact.m_fixtureA.m_body,
@@ -319,6 +329,9 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 	onContact: function (other, contact) {
 		switch (other.category()) {
+			case 'ship':
+				this.growingTree = true;
+				break;
 			case 'planetoid':
 				console.log("red orb and planetoid");
 				//ige.server.spawnOrbs();

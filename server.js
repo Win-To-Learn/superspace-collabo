@@ -456,7 +456,7 @@ var Server = IgeClass.extend({
                                     .translateTo(200 + Math.random() * 600, -1300 + Math.random() * 2600, 0);
                             }
                         }
-                        //self.spawnRedSpheres();
+                        self.spawnRedSpheres();
 
 						//var tree1 = new Tree(0.1);
                         /*

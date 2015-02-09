@@ -10,7 +10,7 @@ var HydraHead = BasicOrb.extend({
         allowSleep: true,
         fixedRotation: false,
         gravityScale: 0.0,
-        density: 10,
+        density: 100,
         friction: 1.0,
         restitution: 0.5,
         categoryBits: 0x00ff,
@@ -45,7 +45,7 @@ var HydraArm = BasicOrb.extend({
         allowSleep: true,
         fixedRotation: false,
         gravityScale: 0.0,
-        density: 2,
+        density: 4,
         friction: 1.0,
         restitution: 0.5,
         categoryBits: 0x00ff,
@@ -63,6 +63,9 @@ var HydraArm = BasicOrb.extend({
             case 'bullet':
                 console.log('bullet hit hydra arm');
                 other.destroy();
+                break;
+            case 'ship':
+                other.exploding = true;
                 break;
         }
     }
@@ -83,11 +86,12 @@ var Hydra = IgeClass.extend({
             .mount(ige.$('scene1'));
 
         this.arms = [];
+        var innerArms = [];
         for (var a = 0, angle = pi/4; a < 4; a++, angle += pi/2) {
             var prevBody = this.head;
-            for (var r = 1, scaleFactor = 0.8; r <= 3; r++, scaleFactor *= 0.8) {
-                var ax = x + r*200*scaleFactor*Math.cos(angle);
-                var ay = y + r*200*scaleFactor*Math.sin(angle);
+            for (var r = 1, scaleFactor = 0.8; r <= 6; r++, scaleFactor *= 0.8) {
+                var ax = x + r*200*Math.sqrt(scaleFactor)*Math.cos(angle);
+                var ay = y + r*200*Math.sqrt(scaleFactor)*Math.sin(angle);
                 var arm = new HydraArm(baseScale*scaleFactor)
                     .translateTo(ax, ay, 0)
                     .streamMode(1)
@@ -97,16 +101,25 @@ var Hydra = IgeClass.extend({
                 joint.Initialize(prevBody._box2dBody, arm._box2dBody, prevBody._box2dBody.GetWorldCenter());
                 if (r === 1) {
                     joint.enableMotor = true;
-                    joint.motorSpeed = 100*pi;
-                    joint.maxMotorTorque = 20000;
+                    joint.motorSpeed = 1000*pi;
+                    joint.maxMotorTorque = 50000;
                 } else {
                     joint.enableLimit = true;
                     joint.lowerAngle = pi/6;
                     joint.upperAngle = pi/6;
+                    innerArms.push(arm);
                 }
                 ige.box2d._world.CreateJoint(joint);
                 prevBody = arm;
             }
+        }
+        for (var i = 0, j = 1, l = innerArms.length; i < l; i++, j = (i + 1) % l) {
+            joint = new ige.box2d.b2DistanceJointDef();
+            joint.Initialize(innerArms[i]._box2dBody, innerArms[j]._box2dBody,
+                innerArms[i]._box2dBody.GetWorldCenter(), innerArms[j]._box2dBody.GetWorldCenter());
+            joint.frequencyHz = 5;
+            joint.dampingRatio = 0.5;
+            ige.box2d._world.CreateJoint(joint);
         }
     }
 });

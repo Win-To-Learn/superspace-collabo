@@ -252,136 +252,137 @@ var Server = IgeClass.extend({
 						\* ------------------------------------------- */
 						
                         var fixedorbrad = 1.5;
+                        //
+                        //self.spawnBoss = function() {
+                         //   var plan1 = new Planetoid(1)
+                         //       //.rotateTo(0, 0, Math.radians(Math.random() * 360))
+                         //       .translateTo(150, 100, 0)
+						//		.velocity.byAngleAndPower(Math.radians(225),0.2);
+                        //
+						//	plan1.isHydraHead = true;
+                        //
+						//	var plan2 = new Planetoid(fixedorbrad)
+                         //       //.rotateTo(0, 0, Math.radians(Math.random() * 360))
+                         //       .translateTo(300, 100, 0);
+                        //
+						//	var plan3 = new Planetoid(fixedorbrad)
+                         //       //.rotateTo(0, 0, Math.radians(Math.random() * 360))
+                         //       .translateTo(400, 100, 0);
+                        //
+						//	var plan4 = new Planetoid(fixedorbrad)
+                         //       //.rotateTo(0, 0, Math.radians(Math.random() * 360))
+                         //       .translateTo(500, 100, 0)
+						//		.velocity.byAngleAndPower(Math.radians(15),0.4);
+                        //
+						//	var plan5 = new Planetoid(fixedorbrad)
+						//		//.rotateTo(0, 0, Math.radians(Math.random() * 360))
+						//		.translateTo(0, 100, 0);
+                        //
+						//	var plan6 = new Planetoid(fixedorbrad)
+						//		//.rotateTo(0, 0, Math.radians(Math.random() * 360))
+						//		.translateTo(-100, 100, 0);
+                        //
+						//	var plan7 = new Planetoid(fixedorbrad)
+						//		//.rotateTo(0, 0, Math.radians(Math.random() * 360))
+						//		.translateTo(-200, 100, 0)
+						//		.velocity.byAngleAndPower(Math.radians(15),0.4);
+                        //
+                        //
+                        //
+						//	var RevoluteJointDef1 = new ige.box2d.b2RevoluteJointDef(),
+						//		bodyA = plan1._box2dBody,
+						//		bodyB = plan2._box2dBody;
+                        //
+						//	RevoluteJointDef1.Initialize(
+						//		bodyA,
+						//		bodyB,
+						//		//bodyA.GetWorldCenter(),
+						//		bodyB.GetWorldCenter()
+						//	);
+                        //
+						//	this._orbRope1 = ige.box2d._world.CreateJoint(RevoluteJointDef1);
+                        //
+						//	var DistanceJointDef2 = new ige.box2d.b2DistanceJointDef(),
+						//		bodyA = plan2._box2dBody,
+						//		bodyB = plan3._box2dBody;
+                        //
+						//	DistanceJointDef2.Initialize(
+						//		bodyA,
+						//		bodyB,
+						//		bodyA.GetWorldCenter(),
+						//		bodyB.GetWorldCenter()
+						//	);
+                        //
+						//	this._orbRope2 = ige.box2d._world.CreateJoint(DistanceJointDef2);
+                        //
+						//	var DistanceJointDef3 = new ige.box2d.b2DistanceJointDef(),
+						//		bodyA = plan3._box2dBody,
+						//		bodyB = plan4._box2dBody;
+                        //
+						//	DistanceJointDef3.Initialize(
+						//		bodyA,
+						//		bodyB,
+						//		bodyA.GetWorldCenter(),
+						//		bodyB.GetWorldCenter()
+						//	);
+                        //
+						//	this._orbRope3 = ige.box2d._world.CreateJoint(DistanceJointDef3);
+                        //
+						//	var RevoluteJointDef4 = new ige.box2d.b2RevoluteJointDef(),
+						//		bodyA = plan1._box2dBody,
+						//		bodyB = plan5._box2dBody;
+                        //
+						//	RevoluteJointDef4.Initialize(
+						//		bodyA,
+						//		bodyB,
+						//		bodyA.GetWorldCenter(),
+						//		bodyB.GetWorldCenter()
+						//	);
+                        //
+						//	this._orbRope4 = ige.box2d._world.CreateJoint(RevoluteJointDef4);
+                        //
+						//	var DistanceJointDef5 = new ige.box2d.b2DistanceJointDef(),
+						//		bodyA = plan5._box2dBody,
+						//		bodyB = plan6._box2dBody;
+                        //
+						//	DistanceJointDef5.Initialize(
+						//		bodyA,
+						//		bodyB,
+						//		bodyA.GetWorldCenter(),
+						//		bodyB.GetWorldCenter()
+						//	);
+                        //
+						//	this._orbRope5 = ige.box2d._world.CreateJoint(DistanceJointDef5);
+                        //
+						//	var DistanceJointDef6 = new ige.box2d.b2DistanceJointDef(),
+						//		bodyA = plan6._box2dBody,
+						//		bodyB = plan7._box2dBody;
+                        //
+						//	DistanceJointDef6.Initialize(
+						//		bodyA,
+						//		bodyB,
+						//		bodyA.GetWorldCenter(),
+						//		bodyB.GetWorldCenter()
+						//	);
+                        //
+						//	this._orbRope6 = ige.box2d._world.CreateJoint(DistanceJointDef6);
+                        //
+                        //
+                         //   /*
+                         //   new Planetoid(fixedorbrad)
+                         //       //.rotateTo(0, 0, Math.radians(Math.random() * 360))
+                         //       .translateTo(-700, -500, 0);
+                        //
+                         //   new Planetoid(fixedorbrad)
+                         //       //.rotateTo(0, 0, Math.radians(Math.random() * 360))
+                         //       .translateTo(-700, 1100, 0);
+                         //   */
+                        //
+                        //}
+						//self.spawnBoss();
 
-                        self.spawnBoss = function() {
-                            var plan1 = new Planetoid(1)
-                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(150, 100, 0)
-								.velocity.byAngleAndPower(Math.radians(225),0.2);
-
-							plan1.isHydraHead = true;
-
-							var plan2 = new Planetoid(fixedorbrad)
-                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(300, 100, 0);
-
-							var plan3 = new Planetoid(fixedorbrad)
-                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(400, 100, 0);
-
-							var plan4 = new Planetoid(fixedorbrad)
-                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(500, 100, 0)
-								.velocity.byAngleAndPower(Math.radians(15),0.4);
-
-							var plan5 = new Planetoid(fixedorbrad)
-								//.rotateTo(0, 0, Math.radians(Math.random() * 360))
-								.translateTo(0, 100, 0);
-
-							var plan6 = new Planetoid(fixedorbrad)
-								//.rotateTo(0, 0, Math.radians(Math.random() * 360))
-								.translateTo(-100, 100, 0);
-
-							var plan7 = new Planetoid(fixedorbrad)
-								//.rotateTo(0, 0, Math.radians(Math.random() * 360))
-								.translateTo(-200, 100, 0)
-								.velocity.byAngleAndPower(Math.radians(15),0.4);
-
-
-
-							var RevoluteJointDef1 = new ige.box2d.b2RevoluteJointDef(),
-								bodyA = plan1._box2dBody,
-								bodyB = plan2._box2dBody;
-
-							RevoluteJointDef1.Initialize(
-								bodyA,
-								bodyB,
-								//bodyA.GetWorldCenter(),
-								bodyB.GetWorldCenter()
-							);
-
-							this._orbRope1 = ige.box2d._world.CreateJoint(RevoluteJointDef1);
-
-							var DistanceJointDef2 = new ige.box2d.b2DistanceJointDef(),
-								bodyA = plan2._box2dBody,
-								bodyB = plan3._box2dBody;
-
-							DistanceJointDef2.Initialize(
-								bodyA,
-								bodyB,
-								bodyA.GetWorldCenter(),
-								bodyB.GetWorldCenter()
-							);
-
-							this._orbRope2 = ige.box2d._world.CreateJoint(DistanceJointDef2);
-
-							var DistanceJointDef3 = new ige.box2d.b2DistanceJointDef(),
-								bodyA = plan3._box2dBody,
-								bodyB = plan4._box2dBody;
-
-							DistanceJointDef3.Initialize(
-								bodyA,
-								bodyB,
-								bodyA.GetWorldCenter(),
-								bodyB.GetWorldCenter()
-							);
-
-							this._orbRope3 = ige.box2d._world.CreateJoint(DistanceJointDef3);
-
-							var RevoluteJointDef4 = new ige.box2d.b2RevoluteJointDef(),
-								bodyA = plan1._box2dBody,
-								bodyB = plan5._box2dBody;
-
-							RevoluteJointDef4.Initialize(
-								bodyA,
-								bodyB,
-								bodyA.GetWorldCenter(),
-								bodyB.GetWorldCenter()
-							);
-
-							this._orbRope4 = ige.box2d._world.CreateJoint(RevoluteJointDef4);
-
-							var DistanceJointDef5 = new ige.box2d.b2DistanceJointDef(),
-								bodyA = plan5._box2dBody,
-								bodyB = plan6._box2dBody;
-
-							DistanceJointDef5.Initialize(
-								bodyA,
-								bodyB,
-								bodyA.GetWorldCenter(),
-								bodyB.GetWorldCenter()
-							);
-
-							this._orbRope5 = ige.box2d._world.CreateJoint(DistanceJointDef5);
-
-							var DistanceJointDef6 = new ige.box2d.b2DistanceJointDef(),
-								bodyA = plan6._box2dBody,
-								bodyB = plan7._box2dBody;
-
-							DistanceJointDef6.Initialize(
-								bodyA,
-								bodyB,
-								bodyA.GetWorldCenter(),
-								bodyB.GetWorldCenter()
-							);
-
-							this._orbRope6 = ige.box2d._world.CreateJoint(DistanceJointDef6);
-
-
-                            /*
-                            new Planetoid(fixedorbrad)
-                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(-700, -500, 0);
-
-                            new Planetoid(fixedorbrad)
-                                //.rotateTo(0, 0, Math.radians(Math.random() * 360))
-                                .translateTo(-700, 1100, 0);
-                            */
-
-                        }
-						self.spawnBoss();
                         //self.spawnOrbs();
-
+						new Hydra(150, 100);
 
                         /*new FixedOrbz(2)
                             .streamMode(1)
@@ -455,7 +456,7 @@ var Server = IgeClass.extend({
                                     .translateTo(200 + Math.random() * 600, -1300 + Math.random() * 2600, 0);
                             }
                         }
-                        //self.spawnRedSpheres();
+                        self.spawnRedSpheres();
 
 						//var tree1 = new Tree(0.1);
                         /*

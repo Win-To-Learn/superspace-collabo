@@ -29,6 +29,8 @@ var Client = IgeClass.extend({
 		this.textures = {
 			ship: new IgeTexture('./assets/PlayerTexture.js'),
             orb: new IgeTexture('./assets/OrbTexture.js'),
+			basicOrb: new IgeTexture('./assets/BasicOrbTexture.js'),
+			basicPlanetoid: new IgeTexture('./assets/BasicPlanetoidTexture.js'),
 			rectangle: new IgeTexture('./assets/Rectangle.js'),
             planetoid: new IgeTexture('./assets/PlanetoidTexture.js'),
             fixedorbred: new IgeTexture('./assets/FixedOrbTexture4.js'),
@@ -42,7 +44,6 @@ var Client = IgeClass.extend({
             fontid: new IgeFontSheet('./assets/arial_narrow_60pt.png'),
             coordinates: new IgeFontSheet('./assets/verdana_10px.png'),
 			titlescreen: new IgeFontSheet('./assets/arial_narrow_60pt.png')
-
 		};
 
 		ige.on('texturesLoaded', function () {

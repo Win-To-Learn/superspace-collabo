@@ -21,13 +21,30 @@ var HydraHead = BasicOrb.extend({
         BasicOrb.prototype.init.call(this, scale);
 
         this.category('hydrahead');
+        this.dying = false;
+    },
+
+    update: function (ctx) {
+        if (ige.server && this.dying) {
+            // Destroy arms
+            for (var i = 0, arm; arm = this.parentHydra.arms[i]; i++) {
+                arm.destroy();
+            }
+            new HydraEgg(this.scale)
+                .translateTo(this._translate.x, this._translate.y, 0)
+                .streamMode(1)
+                .mount(ige.$('scene1'));
+            this.destroy();
+            this.dying = false
+        }
+
+        IgeEntity.prototype.update.call(this, ctx);
     },
 
     onContact: function (other, contact) {
         switch (other.category()) {
             case 'bullet':
-                console.log('bullet hit hydra head');
-                this.destroy();     // Just testing
+                this.dying = true;
                 break;
         }
     }
@@ -61,7 +78,6 @@ var HydraArm = BasicOrb.extend({
     onContact: function (other, contact) {
         switch (other.category()) {
             case 'bullet':
-                console.log('bullet hit hydra arm');
                 other.destroy();
                 break;
             case 'ship':
@@ -72,6 +88,34 @@ var HydraArm = BasicOrb.extend({
 
 });
 
+var HydraEgg = BasicOrb.extend({
+
+    classId: 'HydraEgg',
+    color: '#ff1493',
+    textureDef: 'basicPlanetoid',
+    physics: {
+        type: 'dynamic',
+        linearDamping: 2,
+        angularDamping: 2,
+        allowSleep: true,
+        fixedRotation: false,
+        gravityScale: 0.0,
+        density: 0.1,
+        friction: 1.0,
+        restitution: 0.5,
+        categoryBits: 0x00ff,
+        maskBits: 0xffff & ~0x0008
+    },
+
+    init: function (scale) {
+        BasicOrb.prototype.init.call(this, scale);
+
+        this.category('hydraegg');
+
+        this.pointWorth = 10;
+    }
+
+})
 
 var Hydra = IgeClass.extend({
     classId: 'Hydra',
@@ -80,6 +124,7 @@ var Hydra = IgeClass.extend({
         var baseScale = 1.5;
         var pi = Math.PI;
         this.head = new HydraHead(baseScale);
+        this.head.parentHydra = this;
 
         this.head.translateTo(x, y, 0)
             .streamMode(1)
@@ -113,14 +158,15 @@ var Hydra = IgeClass.extend({
                 prevBody = arm;
             }
         }
-        for (var i = 0, j = 1, l = innerArms.length; i < l; i++, j = (i + 1) % l) {
-            joint = new ige.box2d.b2DistanceJointDef();
-            joint.Initialize(innerArms[i]._box2dBody, innerArms[j]._box2dBody,
-                innerArms[i]._box2dBody.GetWorldCenter(), innerArms[j]._box2dBody.GetWorldCenter());
-            joint.frequencyHz = 5;
-            joint.dampingRatio = 0.5;
-            ige.box2d._world.CreateJoint(joint);
-        }
+        // Keep arms separated - maybe tweak later
+        //for (var i = 0, j = 1, l = innerArms.length; i < l; i++, j = (i + 1) % l) {
+        //    joint = new ige.box2d.b2DistanceJointDef();
+        //    joint.Initialize(innerArms[i]._box2dBody, innerArms[j]._box2dBody,
+        //        innerArms[i]._box2dBody.GetWorldCenter(), innerArms[j]._box2dBody.GetWorldCenter());
+        //    joint.frequencyHz = 5;
+        //    joint.dampingRatio = 0.5;
+        //    ige.box2d._world.CreateJoint(joint);
+        //}
     }
 });
 

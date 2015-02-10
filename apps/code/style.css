@@ -5,7 +5,8 @@ html, body {
 body {
   background-color: lightyellow;
   color: #000000;
-  font-family: sans-serif;
+  /*font-family: sans-serif;*/
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
   margin: 0;
   overflow: hidden;
 }

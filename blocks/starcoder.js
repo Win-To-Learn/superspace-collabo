@@ -18,6 +18,8 @@ Blockly.Blocks['starcoder_player_shape'] = {
             .appendField('player shape');
         this.appendStatementInput('PAIRS')
             .setCheck('Pair');
+        this.setNextStatement(true);
+        this.setPreviousStatement(true);
     }
 };
 

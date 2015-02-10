@@ -107,39 +107,52 @@
             <div id="loadingProgressBar"></div>
         </div>
     </div>
-    <div class="loadingLink2">
+    <div class="loadingLink3">
 
         <a href="http://goo.gl/forms/8CpeDFfAp4" target="_blank">click here to leave feedback</a>
     </div>
     
     <style>
-  #foo {
+  #blockly-div {
     position: fixed;
     bottom: 0;
     right: 0;
 
   }
+  #blockly-iframe {
+  	display: none;
+  }
 </style>
 
 
-<div id="foo">
-
-  	<iframe src="./apps/code/index.html" width="600" height="400" align="bottom"></iframe>
+<div id="blockly-div">
+<div id="blockly-button">BLOCKLY</div>
+  	<iframe id="blockly-iframe" src="./apps/code/index.html" width="600" height="400" align="bottom"></iframe>
 
 </div>
 <script type="text/javascript">
 // Hack to toggle visibility of Blockly iframe
-var blocklyDiv = document.getElementById('foo');
-var blocklyVisible = true;
+var blocklyVisible = false;
 
-document.body.onkeydown = function (e) {
-	var key = e.which || e.keyCode;
-	if (key !== 72) return;
+//document.body.onkeydown = function (e) {
+//	var key = e.which || e.keyCode;
+//	if (key !== 72) return;
+//	if (blocklyVisible) {
+//		blocklyDiv.style.display = 'none';
+//		blocklyVisible = false;
+//	} else {
+//		blocklyDiv.style.display = 'block';
+//		blocklyVisible = true;
+//	}
+//}
+
+document.getElementById('blockly-button').onclick = function (e) {
+	var blocklyIframe = document.getElementById('blockly-iframe');
 	if (blocklyVisible) {
-		blocklyDiv.style.display = 'none';
+		blocklyIframe.style.display = 'none';
 		blocklyVisible = false;
 	} else {
-		blocklyDiv.style.display = 'block';
+		blocklyIframe.style.display = 'block';
 		blocklyVisible = true;
 	}
 }

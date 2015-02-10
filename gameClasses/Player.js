@@ -616,11 +616,11 @@ var Player = IgeEntityBox2d.extend({
 				this.gotPickup = true;
 				other.exploding = true;
 
-				for (var i in ige.server.players) {
-					ige.server.tempScores.push(
-						{'id' : ige.server.players[i].id(), 'score' : ige.server.players[i].score}
-					);
-				}
+				//for (var i in ige.server.players) {
+				//	ige.server.tempScores.push(
+				//		{'id' : ige.server.players[i].id(), 'score' : ige.server.players[i].score}
+				//	);
+				//}
 				//ige.network.send('updateTouchScore', tempScores);
 				console.log('contact with planetoid and ship');
 				ige.network.send('updateScore', this.score, this.clientId);
@@ -657,17 +657,19 @@ var Player = IgeEntityBox2d.extend({
 				this.exploding = true;
 				other.exploding = true;
 				//ige.network.send('scored', '+'+A.pointWorth+' points!', B.sourceClient);
-				this.score += other.pointWorth;
-				ige.network.send('scored', '+' + other.pointWorth + ' points!', this.clientId);
-				ige.network.send('updateScore', this.score, this.clientId);
+				//this.score += other.pointWorth;
+				//ige.network.send('scored', '+' + other.pointWorth + ' points!', this.clientId);
+				//ige.network.send('updateScore', this.score, this.clientId);
 				console.log("contact with asteroid and ship");
 				return true;
 			case 'fixedorbz':
+			case 'hydraegg':
 				console.log('contact with fixed orbz and ship');
-				if (this.orbsCollected++ === 3) {
-					ige.network.send('code', {label: 'Weapon Upgrade', code: 'player.upgradeFiringArc();'},
-						this.sourceClient);
-				}
+				//if (this.orbsCollected++ === 3) {
+				//	ige.network.send('code', {label: 'Weapon Upgrade', code: 'player.upgradeFiringArc();'},
+				//		this.sourceClient);
+				//}
+				this.addScore(other.pointWorth);
 				other.destroy();
 				return true;
 			default:
@@ -678,6 +680,18 @@ var Player = IgeEntityBox2d.extend({
 	upgradeFiringArc: function () {
 		this.bulletSpread = 40;
 		this.bulletCount = 3;
+	},
+
+	addScore: function (points) {
+		this.score += points;
+		var p = (points === 1 ? ' point!' : ' points!');
+		ige.network.send('scored', '+' + points + p, this.clientId);
+		ige.network.send('updateScore', this.score, this.clientId);
+		// Scoring thresholds
+		if (this.score === 10) {
+			ige.network.send('code', {label: 'Laser Upgrade', code: 'player.upgradeFiringArc();'},
+				this.sourceClient);
+		}
 	}
 });
 

@@ -15,7 +15,8 @@ var FixedOrbz = IgeEntityBox2d.extend({
 			scale = 2;
 		}
 		self.scale = scale;
-		self.pointWorth = Math.round(Math.pow(1/self.scale,2)*100);
+		//self.pointWorth = Math.round(Math.pow(1/self.scale,2)*100);
+		self.pointWorth = 1;
 		self.exploding = false;
 		
 		if (ige.isServer) {
@@ -69,7 +70,7 @@ var FixedOrbz = IgeEntityBox2d.extend({
 				allowSleep: true,
 				fixtures: fixDefs,
 				fixedRotation: false,
-                gravityScale: 0.0,
+                gravityScale: 0.0
 			});
 			
 			

@@ -74,23 +74,23 @@ var Bullet = IgeEntityBox2d.extend({
 
 	onContact: function (other, contact) {
 		switch (other.category()) {
-			case 'planetoid':
-				if (other.isHydraHead) {
-					other.destroy();
-					//ige.network.send('updateTouchScore', tempScores);
-					console.log('contact with planetoid and bullet');
-					//A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
-				}
-				else {
-					other.destroy();
-				}
-				return true;
+			//case 'planetoid':
+			//	if (other.isHydraHead) {
+			//		other.destroy();
+			//		//ige.network.send('updateTouchScore', tempScores);
+			//		console.log('contact with planetoid and bullet');
+			//		//A.carryOrb(contact.igeEntityByCategory('planetoid'), contact);
+			//	}
+			//	else {
+			//		other.destroy();
+			//	}
+			//	return true;
 			case 'orb':
 				other.exploding = true;
 				this.destroy();
-				this.source.score += other.pointWorth;
-				ige.network.send('scored', '+' + other.pointWorth + ' points!', this.source.clientId);
-				ige.network.send('updateScore', this.source.score, this.source.clientId);
+				//this.source.score += other.pointWorth;
+				//ige.network.send('scored', '+' + other.pointWorth + ' points!', this.source.clientId);
+				//ige.network.send('updateScore', this.source.score, this.source.clientId);
 				//new FixedOrbz(0.8).translateTo(other._translate.x, other._translate.y, 0);
 				return true;
 			default:

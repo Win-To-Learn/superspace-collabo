@@ -22,7 +22,7 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		if(arguments.length < 1) {
 			scale = 2;
 		}
-		self.scale = scale;
+		self.scaleCache = scale;
 		self.pointWorth = Math.round(Math.pow(1/self.scale,2)*100);
 		self.exploding = false;
 		
@@ -138,7 +138,7 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		if (!this.tree) {
 			scale = 10 * Math.random();
 			this.tree = new Tree(scale)
-				.translateTo(this._translate.x, this._translate.y - 40, 0);
+				.translateTo(this._translate.x, this._translate.y - 25*this.scaleCache, 0);
 
 			this.tree.color = 'rgb(50,155,0)';
 			this.tree.fillColor = 'rgba(0,155,50,0.35)';
@@ -330,7 +330,9 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 	onContact: function (other, contact) {
 		switch (other.category()) {
 			case 'ship':
-				this.growingTree = true;
+				if (other.score >= 20) {
+					this.growingTree = true;
+				}
 				break;
 			case 'planetoid':
 				console.log("red orb and planetoid");

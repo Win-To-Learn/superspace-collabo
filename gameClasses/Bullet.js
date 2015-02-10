@@ -70,7 +70,7 @@ var Bullet = IgeEntityBox2d.extend({
 			}
 		}
 		IgeEntity.prototype.tick.call(this, ctx);
-    }
+    },
 
 	onContact: function (other, contact) {
 		switch (other.category()) {

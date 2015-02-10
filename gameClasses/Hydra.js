@@ -45,7 +45,9 @@ var HydraHead = BasicOrb.extend({
         switch (other.category()) {
             case 'bullet':
                 this.dying = true;
-                break;
+                return true;
+            default:
+                return false;
         }
     }
 });
@@ -79,10 +81,12 @@ var HydraArm = BasicOrb.extend({
         switch (other.category()) {
             case 'bullet':
                 other.destroy();
-                break;
+                return true;
             case 'ship':
                 other.exploding = true;
-                break;
+                return true;
+            default:
+                return false;
         }
     }
 

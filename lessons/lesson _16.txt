@@ -1,0 +1,25 @@
+CODE 16;16
+
+
+//    Used nested loops to animate the shape and change the color of your ship
+
+
+var delayMs = 10; //this is the delay in milliseconds
+    var i = 0;
+    var j = 0;
+
+        var timingInterval = setInterval(function(){
+    		if(i < 10 && j < 50) {
+
+    			player.shape = [[-i*i/10,0],[2,i],[i,0]];
+    			i++
+    			player.color = "rgb(" + i*20 +"," + 155+i*10 + ",50)";
+    		}
+    		else{
+    		    i=0;
+    		    j++
+
+    		}
+
+        }, delayMs);
+

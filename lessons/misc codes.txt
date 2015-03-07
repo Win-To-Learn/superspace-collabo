@@ -66,3 +66,29 @@ MISC. CODES
     //angle.
 
 
+    //to create a new Hydra at x = 0, y = 0
+    //you will need to use a command to create a new object like
+    //in lesson 5 except instead of giving the function the radius
+    //of an orb, you will give it the coordinates of the Hydra
+    //in the format (0,0)
+
+
+
+    //secret super laser upgrade
+
+    //to upgrade you laser, you will have to use dot notation
+    //and access the properties bulletSpread (the angle within which the lasers are fired)
+    //and bulletCount (the number of bullets fired each time)
+    //of the player object
+
+    //the code will start like player.
+    //and the you will have to add the properties at the end
+    //and set them equal to the values you want
+
+    //the code below sets the bulletSpread
+
+    //player.bulletSpread = 40;
+
+    //you will have to write the code for the bullet count below here
+
+

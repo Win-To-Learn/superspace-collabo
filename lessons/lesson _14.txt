@@ -1,5 +1,12 @@
 CODE 14;14
 
-ige.server.spawnRedSpheres();
+fr = new FixedOrbRed(9)
+    .translateTo(-800,200,0);
 
-//create some red planetoids to make things interesting
+fr.color = 'rgb(50,155,0)';
+fr.fillColor = 'rgba(0,155,50,0.35)';
+
+//create your own planet
+//change coordinates to move it to another part of the galaxy
+
+//after you get 15 points, contact the planet to bring it to life

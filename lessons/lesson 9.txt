@@ -4,18 +4,30 @@ CODE 9;9
 
     var i = 0;
     var moveInterval = setInterval(function(){
-		if(i < 360) {
-			new Orb(0.3)
-				.translateTo(Math.cos(-Math.radians(i))*300,Math.sin(-Math.radians(i))*300,0);
-			i=i+18;
-		}
-		else {
-			clearInterval(moveInterval);
-		}
+
+
+		//paste new code under here
+
+
+
     }, 500);
+
+
 
     //The code above creates asteroids on a timer in a spiral pattern.
     //How can you use the trigonometry strategically?
     //Are you safe in they eye of a hurricane?
+
+
+    //You will need to copy and paste code like this:
+    //          if(i < 360) {
+    //  			new Orb(0.3)
+    //  				.translateTo(Math.cos(-Math.radians(i))*300,Math.sin(-Math.radians(i))*300,0);
+    //  			i=i+18;
+    //  		}
+    //  		else {
+    //  			clearInterval(moveInterval);
+    //  		}
+
 
     //Try zooming out in your browser to see all of the asteroids you created.

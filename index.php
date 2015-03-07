@@ -126,7 +126,7 @@
 
 
 <div id="blockly-div">
-<div id="blockly-button">BLOCKLY</div>
+<div id="blockly-button">_BLOCKLY</div>
   	<iframe id="blockly-iframe" src="./apps/code/index.html" width="600" height="400" align="bottom"></iframe>
 
 </div>

@@ -11,6 +11,7 @@ var Player = IgeEntityBox2d.extend({
         self.clientId = clientId;
         self.score = 0;
 		self.gotPickup = false;
+		self.laserUpgraded = false;
 
         self.lastSoundTime = Date.now();
 
@@ -86,7 +87,7 @@ var Player = IgeEntityBox2d.extend({
 					restitution: 0.2,
 					filter: {
 						categoryBits: 0x0004,
-						maskBits: 0x0016 & 0x00ff
+						maskBits: 0x0016 | 0x00ff | 0x0002 | 0x0004
 						//maskBits: 0xffff
 					},
 					//shape: {
@@ -248,12 +249,20 @@ var Player = IgeEntityBox2d.extend({
 				var deltaA = steps ? bulletSpreadRad / steps : 0;
 				for (var i = 0, a = -bulletSpreadRad / 2; i <= steps; i++, a += deltaA) {
 					var bullet = new Bullet()
+
 						.streamMode(1)
 						.addComponent(IgeVelocityComponent)
-						//.velocity.byAngleAndPower(this._rotate.z-Math.radians(90), 0.1+velocity*0.012)
-						.velocity.byAngleAndPower(shipAngle -Math.PI/2 + a, 0.14+velocity*0.017)
+						.velocity.byAngleAndPower(this._rotate.z-Math.radians(90)+a, 0.14+velocity*0.015)
+
+						//the velocity below is when firing in the direction you are moving
+						//.velocity.byAngleAndPower(shipAngle -Math.PI/2 + a, 0.14+velocity*0.017)
 						.translateTo(this._translate.x, this._translate.y, 0)
+
+						//.translateTo(this._translate.x + Math.cos(shipAngle -Math.PI/2)*80, this._translate.y + Math.sin(shipAngle -Math.PI/2)*80, 0)
+
+
 						.mount(ige.server.scene1);
+					//this.addScore(-5);
 					bullet.source = this;
 				}
                 //var bullet = new Bullet()
@@ -397,30 +406,30 @@ var Player = IgeEntityBox2d.extend({
 			/* CEXCLUDE */
 			if (ige.isServer) {
 				if (this.controls.left) {
-					//this.rotateBy(0, 0, Math.radians(-0.15 * ige._tickDelta));
+					this.rotateBy(0, 0, Math.radians(-0.15 * ige._tickDelta));
 					var radians = Math.radians(180);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower*0.2, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 				if (this.controls.right) {
-					//this.rotateBy(0, 0, Math.radians(0.15 * ige._tickDelta));
+					this.rotateBy(0, 0, Math.radians(0.15 * ige._tickDelta));
 					var radians = Math.radians(0);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower*0.2, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 				if (this.controls.thrust) {
-					//var radians = this._rotate.z + Math.radians(-90),
-					//thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
-					//this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
+					var radians = this._rotate.z + Math.radians(-90),
+					thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
+					this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
 
-					var radians = Math.radians(270);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					//var radians = Math.radians(270);
+					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 
 
 				if (this.controls.down) {
-					var radians = Math.radians(90);
-					this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
+					//var radians = Math.radians(90);
+					//this._box2dBody.ApplyForce(new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower), this._box2dBody.GetWorldCenter());
 				}
 				
 				if (this.controls.turn) {
@@ -438,6 +447,7 @@ var Player = IgeEntityBox2d.extend({
 					//this.respawn();
 					this.translateTo(-2100+Math.random()*4200,-1200+Math.random()*2400,0)
 				}*/
+				/*
 				if (this._translate.x > 4200){
 					this.translateTo(this._translate.x-200,this._translate.y,0);
 				}
@@ -450,6 +460,7 @@ var Player = IgeEntityBox2d.extend({
 				if (this._translate.y > 2400){
 					this.translateTo(this._translate.x,this._translate.y-200,0);
 				}
+				*/
 
 			} // isServer
 			/* CEXCLUDE */
@@ -612,7 +623,7 @@ var Player = IgeEntityBox2d.extend({
 	onContact: function (other, contact) {
 		switch (other.category()) {
 			case 'planetoid':
-				this.score = this.score + 1;
+				this.score = this.score + 100;
 				this.gotPickup = true;
 				other.exploding = true;
 
@@ -626,14 +637,20 @@ var Player = IgeEntityBox2d.extend({
 				ige.network.send('updateScore', this.score, this.clientId);
 				return true;
 			case 'fixedorbred':
-				if (ige.server.score > 100){
+				if (ige.server.score > 200){
 					other.growingTree = true;
 				}
+				return true;
+			case 'bullet':
+				//ige.network.send('updateScore', this.score, this.clientId);
+				//this.addScore(-30);
+				console.log('bullet hit ship');
 				return true;
 			case 'ship':
 				//ige.network.send('updateTouchScore', tempScores);
 				console.log('contact with ship and ship');
 				//B.carryShip(contact.igeEntityByCategory('ship'), contact);
+				/**
 				this.shape = [
 
 					[1,0],
@@ -651,8 +668,9 @@ var Player = IgeEntityBox2d.extend({
 					[-1,0],
 					[-1,1],
 					[0,1]
-				];
+				];**/
 				return true;
+				
 			case 'orb':
 				this.exploding = true;
 				other.exploding = true;
@@ -684,13 +702,14 @@ var Player = IgeEntityBox2d.extend({
 
 	addScore: function (points) {
 		this.score += points;
-		var p = (points === 1 ? ' point!' : ' points!');
+		var p = ((points === 1 | points === -1) ? ' point!' : ' points!');
 		ige.network.send('scored', '+' + points + p, this.clientId);
 		ige.network.send('updateScore', this.score, this.clientId);
 		// Scoring thresholds
-		if (this.score === 10) {
+		if (this.score > 200 && this.laserUpgraded == false) {
 			ige.network.send('code', {label: 'Laser Upgrade', code: 'player.upgradeFiringArc();'},
 				this.sourceClient);
+				this.laserUpgraded = true;
 		}
 	}
 });

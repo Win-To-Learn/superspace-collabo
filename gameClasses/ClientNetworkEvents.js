@@ -39,11 +39,16 @@ var ClientNetworkEvents = {
 	},
 	
 	_onScored: function (data) {
-        blastSound.play();
+		//collectiblesSound.play();
 		new ClientScore(data)
 			.translateTo(0, 0, 0)
 			.mount(ige.client.uiScene)
 			.start();
+	},
+
+	_onExploded: function (data) {
+		collectiblesSound.play();
+
 	},
 
 	//_onFixedorbzContact: function (data) {
@@ -93,18 +98,21 @@ var ClientNetworkEvents = {
 	},
 	
 	_onUpdateScore: function(data) {
-        blastSound.play();
-        if (parseInt(data) > 0) {
+		if (parseInt(data)>parseInt(ige.client.scoreText._text)) {
+			//collectiblesSound.play();
+		}
+        //if (parseInt(data) > 0) {
+		console.log(ige.client.scoreText._text);
             console.log(data);
             console.log(parseInt(data));
             ige.client.scoreText.text(data + ' points');
-        }
-        else if (parseInt(data)<0){
-            console.log(data);
-            console.log(parseInt(data));
-            scoreb = parseInt(data)*-1;
-            ige.client.scoreText2.text(scoreb + ' points');
-        }
+        //}
+        //else if (parseInt(data)<0){
+        //    console.log(data);
+        //    console.log(parseInt(data));
+        //    scoreb = parseInt(data)*-1;
+        //    ige.client.scoreText2.text(scoreb + ' points');
+        //}
 
 		/*
 		var lessonId = "someNewId";

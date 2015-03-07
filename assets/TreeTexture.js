@@ -8,7 +8,7 @@ var image = {
 		//ctx.lineWidth = 1/entity._scale.x;
 
 		ctx.fillStyle = 'rgba(0,0,0,0.8)';
-		ctx.strokeStyle = '#e371ff';
+		ctx.strokeStyle = '#33CC33';
 		//ctx.lineWidth = 1/entity._scale.x;
 
 		ctx.lineWidth = 1;

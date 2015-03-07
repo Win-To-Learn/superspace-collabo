@@ -31,6 +31,8 @@ var Client = IgeClass.extend({
             orb: new IgeTexture('./assets/OrbTexture.js'),
 			basicOrb: new IgeTexture('./assets/BasicOrbTexture.js'),
 			basicPlanetoid: new IgeTexture('./assets/BasicPlanetoidTexture.js'),
+			dragon: new IgeTexture('./assets/DragonTexture.js'),
+			heart: new IgeTexture('./assets/HeartTexture.js'),
 			rectangle: new IgeTexture('./assets/Rectangle.js'),
             planetoid: new IgeTexture('./assets/PlanetoidTexture.js'),
             fixedorbred: new IgeTexture('./assets/FixedOrbTexture4.js'),
@@ -60,13 +62,13 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
-
-
+					var serverUrl = 'http://10.10.120.183:7610';
+					//var serverUrl = 'http://starcoder3.jit.su/';
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
-					if(location.origin.indexOf("http://192") == 0) {
-						serverUrl = 'http://192.168.1.33:7610'; // This is the url for running the server on LAN for mobile debugging
+					if(location.origin.indexOf("http://172") == 0) {
+						serverUrl = 'http://172.16.0.161:7610'; // This is the url for running the server on LAN for mobile debugging
 					}
 					else if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0 || location.origin.indexOf("http://127.0.0.1") == 0) {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
@@ -105,6 +107,7 @@ var Client = IgeClass.extend({
 							ige.network.define('chatJoin', self._onChatJoin); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('chatMessage', self._onChatMessage); // Defined in ./gameClasses/ClientNetworkEvents.js
 							ige.network.define('scored', self._onScored); // Defined in ./gameClasses/ClientNetworkEvents.js
+							ige.network.define('exploded', self._onExploded); // Defined in ./gameClasses/ClientNetworkEvents.js
 							//ige.network.define('fixedorbzContact', self._onFixedorbzContact); // Defined in ./gameClasses/ClientNetworkEvents.js
 
 							ige.network.define('code', self._onCode); // Defined in ./gameClasses/ClientNetworkEvents.js
@@ -340,7 +343,7 @@ var Client = IgeClass.extend({
 								.texture(ige.client.textures.font)
 								.width(600)
 								.height(200)
-								.text('_do not get tagged!\n_ARROW keys to move\n_press B to shoot asteroids in path\n_play limits shown in minimap\n_edit power codes for advantages')
+								.text('_ARROW keys to move\n_press B to shoot asteroids in path\n_edit power codes for advantages\n_create a custom code to defeat the space hydra\n_mine asteroids to get new power code at 5 points')
 								.colorOverlay('#ff6000')
 								.top(20)
 								.left(300)
@@ -352,7 +355,7 @@ var Client = IgeClass.extend({
 							.texture(ige.client.textures.font)
 							.width(600)
 							.height(400)
-							.text('_click to play\nSTARCODERGAME.COM\n_alpha ver 0_2')
+							.text('_click to play\nSTARCODERGAME.COM\n_beta version 1_7')
 							.colorOverlay('#ff6000')
 							.top(130)
 							.left(300)

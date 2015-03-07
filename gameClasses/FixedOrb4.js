@@ -16,6 +16,7 @@ var FixedOrbRed = IgeEntityBox2d.extend({
         //this._rectColor = '#ffc600';
 		self.color = 'rgb(255,0,0)';
 		self.fillColor = 'rgba(0,255,0,0.25)';
+		self.numtrees = 0;
 
 
 		
@@ -135,13 +136,15 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 
 		//console.log('growing tree');
-		if (!this.tree) {
-			scale = 10 * Math.random();
+		//if (!this.tree) {
+		if (this.numtrees < 3) {
+			this.numtrees++;
+			scale = 8 + Math.random() * 2;
 			this.tree = new Tree(scale)
-				.translateTo(this._translate.x, this._translate.y - 25*this.scaleCache, 0);
+				.translateTo(this._translate.x, this._translate.y - 320, 0);
 
-			this.tree.color = 'rgb(50,155,0)';
-			this.tree.fillColor = 'rgba(0,155,50,0.35)';
+			this.tree.color = 'rgb(255,255,5)';
+			this.tree.fillColor = 'rgba(255,255,19,0.55)';
 
 			var joint = new ige.box2d.b2RevoluteJointDef();
 			joint.Initialize(this._box2dBody, this.tree._box2dBody, this._box2dBody.GetWorldCenter());
@@ -150,24 +153,25 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 			joint.upperAngle = 0;
 			ige.box2d._world.CreateJoint(joint);
 		}
+		//}
 
 		this.growingTree = false;
 
 
 		/**var distanceJointDef2 = new ige.box2d.b2DistanceJointDef(),
-			bodyA = contact.m_fixtureA.m_body,
-			bodyB = contact.m_fixtureB.m_body;
+		 bodyA = contact.m_fixtureA.m_body,
+		 bodyB = contact.m_fixtureB.m_body;
 
-		distanceJointDef2.Initialize(
-			bodyA,
-			bodyB,
-			bodyA.GetWorldCenter(),
-			bodyB.GetWorldCenter()
-		);
+		 distanceJointDef2.Initialize(
+		 bodyA,
+		 bodyB,
+		 bodyA.GetWorldCenter(),
+		 bodyB.GetWorldCenter()
+		 );
 
 
-		this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef2);
-		**/
+		 this._orbRope = ige.box2d._world.CreateJoint(distanceJointDef2);
+		 **/
 
 		//var b2WeldJoint = Box2D.Dynamics.Joints.b2WeldJoint;
 		//var b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef;
@@ -177,9 +181,9 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		//var joint = ige.box2d.world().CreateJoint(joint_def);
 
 		//var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
-			//bodyA = this._box2dBody,
-			//bodyB = tree1._box2dBody;
-			//bodyC = contact.m_fixtureA.m_body;
+		//bodyA = this._box2dBody,
+		//bodyB = tree1._box2dBody;
+		//bodyC = contact.m_fixtureA.m_body;
 		//bodyA = contact.m_fixtureA.m_body,
 		//bodyB = contact.m_fixtureB.m_body;
 
@@ -330,7 +334,7 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 	onContact: function (other, contact) {
 		switch (other.category()) {
 			case 'ship':
-				if (other.score >= 20) {
+				if (other.score > 15) {
 					this.growingTree = true;
 				}
 				break;

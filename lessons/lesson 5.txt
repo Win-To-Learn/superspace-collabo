@@ -1,7 +1,7 @@
 CODE 5;5
     //////    CODE #5: CREATING A NEW ORB OBJECT    //////
 
-    new Orb(1.5)
+    new Orb(1.5);
 
     //This code creates an asteroid or "Orb" with a radius
     //of 1.5

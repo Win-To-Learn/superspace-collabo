@@ -10,6 +10,8 @@ var Orb = IgeEntityBox2d.extend({
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         this._rectColor = '#ffc600';
+		self.color = 'rgb(255,255,0)';
+		self.fillColor = 'rgba(255,255,0,0.25)';
 		
 		if(arguments.length < 1) {
 			scale = 2;
@@ -85,11 +87,35 @@ var Orb = IgeEntityBox2d.extend({
 
         if (!ige.isServer) {
             this.texture(ige.client.textures.orb);
+			self.streamSections(['transform', 'color']);
         }
 
         this.scaleTo(scale,scale,1);
 		
     },
+
+
+
+	streamSectionData: function (sectionId, data) {
+		// Check if the section is one that we are handling
+		switch(sectionId) {
+			case 'color':
+				if (data) {
+					var s = JSON.parse(data);
+					this.color = s[0];
+					this.fillColor = s[1];
+				}
+				else {
+					return JSON.stringify([this.color,this.fillColor]);
+				}
+				break;
+			default:
+				return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
+				break;
+		}
+	},
+
+
 
 
     tick: function (ctx) {
@@ -117,6 +143,12 @@ var Orb = IgeEntityBox2d.extend({
 				this._box2dBody.SetAngularVelocity(-0.4);
 			}
 			
+		}
+		if (!ige.isServer) {
+			if (this.exploding){
+				blastSound.play();
+				console.log("exploding orb");
+			}
 		}
 		IgeEntity.prototype.tick.call(this, ctx);
     },
@@ -153,6 +185,7 @@ var Orb = IgeEntityBox2d.extend({
 		//ige.server.score += this.pointWorth;
 		//ige.network.send('updateScore', ige.server.score);
         //ige.network.send('updateScore', 0);
+
 		this.destroy();
 	}
 	

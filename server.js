@@ -157,8 +157,8 @@ var Server = IgeClass.extend({
 		//ige.addComponent(IgeNetIoComponent)
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
-			//.network.start(5000, function () {
-            .network.start(7610, function () {
+			.network.start(7610, function () {
+            //.network.start(7610, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
@@ -172,6 +172,7 @@ var Server = IgeClass.extend({
                         ige.network.define('chatJoin', self._onChatJoin);
                         ige.network.define('chatMessage', self._onChatMessage);
                         ige.network.define('scored');
+						ige.network.define('exploded');
 						//ige.network.define('fixedorbzContact');
                         ige.network.define('updateScore');
                         ige.network.define('updateTouchScore');
@@ -382,7 +383,14 @@ var Server = IgeClass.extend({
 						//self.spawnBoss();
 
                         //self.spawnOrbs();
-						new Hydra(150, 100);
+						//new Hydra(150, 100);
+						//new Hydra(1000, -4000);
+						new Hydra(3000, -2000);
+
+						new Dragon(3000, 2000);
+						//new Hydra(-4200, 2400);
+						//new Hydra(4200, 2600);
+						//new Hydra(-4800, -1900);
 
                         /*new FixedOrbz(2)
                             .streamMode(1)
@@ -456,7 +464,7 @@ var Server = IgeClass.extend({
                                     .translateTo(200 + Math.random() * 600, -1300 + Math.random() * 2600, 0);
                             }
                         }
-                        self.spawnRedSpheres();
+                        //self.spawnRedSpheres();
 
 						//var tree1 = new Tree(0.1);
                         /*

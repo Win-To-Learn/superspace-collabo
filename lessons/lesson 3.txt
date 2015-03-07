@@ -3,13 +3,17 @@ CODE 3;3
     //////                                          //////
 
 
-    player.translateTo(4000,2200,0);
+    player.translateTo(200,-100,0);
 
     //“translate” is a math term for move
-    //the code about moves you to the lower right corner
+    //the code about moves you 200 units to the right
+    //and 100 units up from the the center at 0,0
 
     //the first number is the x coordinate
     //the second number is the y coordinate
+
+    //the third number is the z coordinate but
+    //keep this at 0 since this is a 2d game
 
     //(the y is reverse from what you are used to)
     //(negative y is down, and positive y is up)

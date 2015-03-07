@@ -1,10 +1,14 @@
-CODE 15;15
+CODE 14;14
 
-fr = new FixedOrbRed(8)
-    .translateTo(-800,200,0);
 
-fr.color = 'rgb(50,155,0)';
-fr.fillColor = 'rgba(0,155,50,0.35)';
+//    Try using a combination of these codes
+//    to defeat the hydra.
 
-//create your own planet
-//change coordinates to move it to another part of the galaxy
+//    player.translateBy(10,0,0);
+
+//    the code above will move your ship 10 units to the right
+//    of its current location
+
+//    player.shoot()
+
+

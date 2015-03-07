@@ -4,15 +4,32 @@ CODE 8;8
 
     var i = 0;
     var moveInterval = setInterval(function(){
-		if(i < 5) {
-			new Orb(1.0)
-				.translateTo(200*i,200*i,0)
-			i++;
-		}
-		else {
-			clearInterval(moveInterval);
-		}
+
+
+		//put the conditional statement under here
+
+
     }, 1000);
 
-    //This code creates asteroids on a timer.
-    //How can you use this to your advantage?
+    //This code uses a timing function built into javascript
+
+    //You need to tell the program to do something
+    //by putting code in the middle of the function
+
+    //You can try to copy and paste something like this in there
+    //It will keep creating asteroids as long as the variable i
+    //is less than 3.
+    //Once i is no longer less than 3, it stops the timer
+
+    //        if(i < 3) {
+    //			new Orb(1.0)
+    //				.translateTo(200*i,200*i,0)
+    //			    i++;
+    //		    }
+    //		   else {
+    //			clearInterval(moveInterval);
+    //		   }
+
+
+
+

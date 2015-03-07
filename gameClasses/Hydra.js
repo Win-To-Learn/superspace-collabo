@@ -116,7 +116,7 @@ var HydraEgg = BasicOrb.extend({
 
         this.category('hydraegg');
 
-        this.pointWorth = 10;
+        this.pointWorth = 200;
     }
 
 })
@@ -138,7 +138,8 @@ var Hydra = IgeClass.extend({
         var innerArms = [];
         for (var a = 0, angle = pi/4; a < 4; a++, angle += pi/2) {
             var prevBody = this.head;
-            for (var r = 1, scaleFactor = 0.8; r <= 6; r++, scaleFactor *= 0.8) {
+            //for (var r = 1, scaleFactor = 0.8; r <= 6; r++, scaleFactor *= 0.8) {
+			for (var r = 1, scaleFactor = 1.5; r <= 4; r++, scaleFactor *= 0.8) {
                 var ax = x + r*200*Math.sqrt(scaleFactor)*Math.cos(angle);
                 var ay = y + r*200*Math.sqrt(scaleFactor)*Math.sin(angle);
                 var arm = new HydraArm(baseScale*scaleFactor)
@@ -150,8 +151,10 @@ var Hydra = IgeClass.extend({
                 joint.Initialize(prevBody._box2dBody, arm._box2dBody, prevBody._box2dBody.GetWorldCenter());
                 if (r === 1) {
                     joint.enableMotor = true;
-                    joint.motorSpeed = 1000*pi;
-                    joint.maxMotorTorque = 50000;
+                    //joint.motorSpeed = 1000*pi;
+                    //joint.maxMotorTorque = 50000;
+					joint.motorSpeed = 6000*pi;
+					joint.maxMotorTorque = 600000;
                 } else {
                     joint.enableLimit = true;
                     joint.lowerAngle = pi/6;
@@ -173,5 +176,7 @@ var Hydra = IgeClass.extend({
         //}
     }
 });
+
+
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Hydra; }

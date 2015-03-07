@@ -2,8 +2,9 @@ CODE 6;6
     //////    CODE #6: CREATING A NEW ORB OBJECT    //////
     //////         AND MOVING IT TO A LOCATION      //////
 
-    new Orb(1.5)
-		.translateTo(3800,2000,0);
+    var myOrb = new Orb(1.5);
+
+	myOrb.translateTo(3800,2000,0);
 
     //This code creates an Orb with a radius of 1.5 and then
     //moves it to the lower right hand corner of the map.

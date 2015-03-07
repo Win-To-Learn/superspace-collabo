@@ -12,7 +12,7 @@ var Tree = IgeEntityBox2d.extend({
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         //this._rectColor = '#ffc600';
-		self.color = 'rgb(255,0,0)';
+		self.color = 'rgb(255,255,0)';
 		self.fillColor = 'rgba(0,255,0,0.25)';
 
 

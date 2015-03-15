@@ -31,7 +31,7 @@ var Bullet = IgeEntityBox2d.extend({
 				isSensor: true,
 				filter: {
 					categoryBits: 0x0002,
-					maskBits: 0x0001 | 0x00ff | 0x0004
+					maskBits: 0x0001 | 0x00ff | 0x0004 | 0x8000
 				},
 				shape: {
 					type: 'circle',

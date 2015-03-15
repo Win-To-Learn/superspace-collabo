@@ -82,7 +82,6 @@ var Orb = IgeEntityBox2d.extend({
 				.mount(ige.$('scene1'));
 				
 			ige.server.orbs.push(this);
-			
 		}
 
         if (!ige.isServer) {
@@ -91,7 +90,6 @@ var Orb = IgeEntityBox2d.extend({
         }
 
         this.scaleTo(scale,scale,1);
-		
     },
 
 
@@ -118,7 +116,7 @@ var Orb = IgeEntityBox2d.extend({
 
 
 
-    tick: function (ctx) {
+    update: function (ctx) { // was tick
 		if (ige.isServer) {
 			if(this.exploding) {
 				this.explode();
@@ -139,10 +137,10 @@ var Orb = IgeEntityBox2d.extend({
 				var radians = this._rotate.z,
 				thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 				this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
-				
+
 				this._box2dBody.SetAngularVelocity(-0.4);
 			}
-			
+
 		}
 		if (!ige.isServer) {
 			if (this.exploding){

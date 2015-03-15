@@ -122,8 +122,6 @@ var DragonEgg = BasicOrb.extend({
 
 })
 
-
-
 var Dragon = IgeClass.extend({
 	classId: 'Dragon',
 
@@ -165,19 +163,19 @@ var Dragon = IgeClass.extend({
 					innerArms.push(arm);
 				}
 
-				var moveInterval = setInterval(function(){
-					if (this.neworb) {
-						this.neworb.destroy();
-					}
-					this.neworb = new Orb(1.5)
-						.translateTo(ax,ay,0)
-						.velocity.byAngleAndPower(Math.radians(Math.random()*225),2)
-						//.color = 'rgb(50,155,0)'
-						//.fillColor = 'rgba(0,155,50,0.35)';
-					//put the conditional statement under here
-
-
-				}, 800);
+				//var moveInterval = setInterval(function(){
+				//	if (this.neworb) {
+				//		this.neworb.destroy();
+				//	}
+				//	this.neworb = new Orb(1.5)
+				//		.translateTo(ax,ay,0)
+				//		.velocity.byAngleAndPower(Math.radians(Math.random()*225),2)
+				//		//.color = 'rgb(50,155,0)'
+				//		//.fillColor = 'rgba(0,155,50,0.35)';
+				//	//put the conditional statement under here
+                //
+                //
+				//}, 800);
 				ige.box2d._world.CreateJoint(joint);
 				prevBody = arm;
 			}

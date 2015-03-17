@@ -387,7 +387,8 @@ var Server = IgeClass.extend({
 						//new Hydra(1000, -4000);
 						new Hydra(3000, -2000);
 
-						new Dragon(3000, 2000);
+						var dragon1 = new Dragon(3000, 2000);
+						//dragon1.scaleTo(.1,.1,1);
 						//new Hydra(-4200, 2400);
 						//new Hydra(4200, 2600);
 						//new Hydra(-4800, -1900);

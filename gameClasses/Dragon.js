@@ -128,7 +128,7 @@ var Dragon = IgeClass.extend({
 	classId: 'Dragon',
 
 	init: function (x, y) {
-		var baseScale = 3.5;
+		var baseScale = 1.5;
 		var pi = Math.PI;
 		this.head = new DragonHead(baseScale);
 		this.head.parentDragon = this;
@@ -156,8 +156,8 @@ var Dragon = IgeClass.extend({
 					joint.enableMotor = true;
 					//joint.motorSpeed = 1000*pi;
 					//joint.maxMotorTorque = 50000;
-					joint.motorSpeed = 6000*pi;
-					joint.maxMotorTorque = 600000;
+					joint.motorSpeed = 2000*pi;
+					joint.maxMotorTorque = 10000;
 				} else {
 					joint.enableLimit = true;
 					joint.lowerAngle = pi/6;
@@ -165,13 +165,16 @@ var Dragon = IgeClass.extend({
 					innerArms.push(arm);
 				}
 
+				var d = new Date();
+				var n = d.getSeconds();
 				var moveInterval = setInterval(function(){
 					if (this.neworb) {
 						this.neworb.destroy();
 					}
+
 					this.neworb = new Orb(1.5)
 						.translateTo(ax,ay,0)
-						.velocity.byAngleAndPower(Math.radians(Math.random()*225),2)
+						.velocity.byAngleAndPower(Math.radians(Math.random()*225),1)
 						//.color = 'rgb(50,155,0)'
 						//.fillColor = 'rgba(0,155,50,0.35)';
 					//put the conditional statement under here

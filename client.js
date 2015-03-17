@@ -31,7 +31,7 @@ var Client = IgeClass.extend({
             orb: new IgeTexture('./assets/OrbTexture.js'),
 			basicOrb: new IgeTexture('./assets/BasicOrbTexture.js'),
 			basicPlanetoid: new IgeTexture('./assets/BasicPlanetoidTexture.js'),
-			dragon: new IgeTexture('./assets/DragonTexture.js'),
+			dragon: new IgeTexture('./assets/DragonTexture2.js'),
 			heart: new IgeTexture('./assets/HeartTexture.js'),
 			rectangle: new IgeTexture('./assets/Rectangle.js'),
             planetoid: new IgeTexture('./assets/PlanetoidTexture.js'),

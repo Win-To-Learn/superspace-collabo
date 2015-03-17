@@ -175,3 +175,6 @@ FakesAssemblies/
 
 # Webstorm stuff
 .idea/
+gameClasses/Dragon.js
+
+server.js

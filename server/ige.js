@@ -1,3 +1,6 @@
+//require('heapdump');
+//require('v8-profiler');
+
 console.log('Executing IGE Under Node.js Version ' + process.version);
 
 // Set a global variable for the location of

@@ -87,7 +87,7 @@ var Player = IgeEntityBox2d.extend({
 					restitution: 0.2,
 					filter: {
 						categoryBits: 0x0004,
-						maskBits: 0x0016 | 0x00ff | 0x0002 | 0x0004
+						maskBits: 0x0016 | 0x00ff | 0x0002 | 0x0004 | 0x8000
 						//maskBits: 0xffff
 					},
 					//shape: {

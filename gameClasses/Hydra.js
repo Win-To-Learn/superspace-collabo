@@ -13,8 +13,10 @@ var HydraHead = BasicOrb.extend({
         density: 100,
         friction: 1.0,
         restitution: 0.5,
-        categoryBits: 0x00ff,
-        maskBits: 0xffff & ~0x0008
+        categoryBits: 0x80000,
+        maskBits: 0xffff & ~0x8000
+        //categoryBits: 0x00ff,
+        //maskBits: 0xffff & ~0x0008
     },
 
     init: function (scale) {
@@ -67,8 +69,10 @@ var HydraArm = BasicOrb.extend({
         density: 4,
         friction: 1.0,
         restitution: 0.5,
-        categoryBits: 0x00ff,
-        maskBits: 0xffff & ~0x0008
+        categoryBits: 0x8000,
+        maskBits: 0xffff & ~0x8000
+        //categoryBits: 0x00ff,
+        //maskBits: 0xffff & ~0x0008
     },
 
     init: function (scale) {
@@ -135,7 +139,7 @@ var Hydra = IgeClass.extend({
             .mount(ige.$('scene1'));
 
         this.arms = [];
-        var innerArms = [];
+        //var innerArms = [];
         for (var a = 0, angle = pi/4; a < 4; a++, angle += pi/2) {
             var prevBody = this.head;
             //for (var r = 1, scaleFactor = 0.8; r <= 6; r++, scaleFactor *= 0.8) {
@@ -159,7 +163,7 @@ var Hydra = IgeClass.extend({
                     joint.enableLimit = true;
                     joint.lowerAngle = pi/6;
                     joint.upperAngle = pi/6;
-                    innerArms.push(arm);
+                    //innerArms.push(arm);
                 }
                 ige.box2d._world.CreateJoint(joint);
                 prevBody = arm;

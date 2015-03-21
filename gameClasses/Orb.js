@@ -148,7 +148,8 @@ var Orb = IgeEntityBox2d.extend({
 				console.log("exploding orb");
 			}
 		}
-		IgeEntity.prototype.tick.call(this, ctx);
+		//IgeEntity.prototype.tick.call(this, ctx);
+		IgeEntity.prototype.update.call(this, ctx);
     },
 	
 	explode: function() {

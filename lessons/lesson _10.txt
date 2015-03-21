@@ -12,7 +12,7 @@ CODE 10;10
 
 
     //The code above will cycle through all the orbs stored in
-    /an array on the server
+    //an array on the server
 
     //To destroy them you will need to reference them in order using the
     //i variable such as the code shown below

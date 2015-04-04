@@ -106,8 +106,8 @@ var ServerNetworkEvents = {
 	
 	_onCode: function(data, clientId) {
 		var me = ige.server.players[clientId];
-
-		var player = ige.server.players[clientId];
+		var player = me;
+		ige.codeRunner = me;
 
 		var msgs = [];
 		var oldLog = console.log;
@@ -123,6 +123,7 @@ var ServerNetworkEvents = {
 		catch(e) {
 			console.log(e);
 		}
+		delete ige.codeRunner;
 		ige.network.send('code', msgs, clientId);
 	},
 

@@ -8,6 +8,11 @@ var Orb = IgeEntityBox2d.extend({
 		
 		var self = this;
 
+		if (ige.codeRunner) {
+			ige.codeRunner.addOrb(this);
+			scale = Math.min(4, scale);
+		}
+
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         this._rectColor = '#ffc600';
 		self.color = 'rgb(255,255,0)';
@@ -16,6 +21,7 @@ var Orb = IgeEntityBox2d.extend({
 		if(arguments.length < 1) {
 			scale = 2;
 		}
+
 		self.scale = scale;
 		self.pointWorth = Math.round(Math.pow(1/self.scale,2)*100);
 		self.exploding = false;
@@ -176,16 +182,26 @@ var Orb = IgeEntityBox2d.extend({
 			}
 		}
 		 **/
-		scale = 1 + Math.random();
-		var orb3 = new Orb(scale)
-			.translateTo(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800, 0)
-			.rotateTo(0, 0, Math.radians(Math.random() * 360))
+		// Don't create a new orb when player created orbs are destroyed
+		if (!this.playerOwner) {
+			scale = 1 + Math.random();
+			var orb3 = new Orb(scale)
+				.translateTo(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800, 0)
+				.rotateTo(0, 0, Math.radians(Math.random() * 360));
+		}
 		var fixed = new FixedOrbz(0.8).translateTo(this._translate.x, this._translate.y, 0);
 		//ige.server.score += this.pointWorth;
 		//ige.network.send('updateScore', ige.server.score);
         //ige.network.send('updateScore', 0);
 
 		this.destroy();
+	},
+
+	destroy: function () {
+		if (this.playerOwner) {
+			this.playerOwner.removeOrb(this);
+		}
+		IgeEntityBox2d.prototype.destroy.call(this);
 	}
 	
 });

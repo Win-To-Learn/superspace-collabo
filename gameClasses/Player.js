@@ -29,6 +29,11 @@ var Player = IgeEntityBox2d.extend({
 		self.bulletSpread = 0;
 		self.bulletCount = 1;
 
+		self.orbLimit = 4;
+		self.orbsOwned = {};
+
+		self.homePlanet = null;
+
 		var scale = 1.0;
 		
 		/*self.shape = [
@@ -244,7 +249,7 @@ var Player = IgeEntityBox2d.extend({
 
 				}
 
-				var steps = this.bulletCount - 1;
+				var steps = Math.min(8, this.bulletCount) - 1;
 				var bulletSpreadRad = steps ? this.bulletSpread * Math.PI / 180 : 0;
 				var deltaA = steps ? bulletSpreadRad / steps : 0;
 				for (var i = 0, a = -bulletSpreadRad / 2; i <= steps; i++, a += deltaA) {
@@ -698,6 +703,32 @@ var Player = IgeEntityBox2d.extend({
 	upgradeFiringArc: function () {
 		this.bulletSpread = 40;
 		this.bulletCount = 3;
+	},
+
+	addOrb: function (orb) {
+		if (Object.keys(this.orbsOwned).length >= this.orbLimit) {
+			throw new Error('Orb limit reached');
+		}
+		this.orbsOwned[orb.id()] = orb;
+		orb.playerOwner = this;
+	},
+
+	removeOrb: function (orb) {
+		delete this.orbsOwned[orb.id()];
+		delete orb.playerOwner;
+	},
+
+	addHomePlanet: function (hp) {
+		if (this.homePlanet) {
+			throw new Error('Home planet already exists');
+		}
+		this.homePlanet = hp;
+		hp.playerOwner = this;
+	},
+
+	removeHomePlanet: function () {
+		delete this.homePlanet.playerOwner;
+		this.homePlanet = null;
 	},
 
 	addScore: function (points) {

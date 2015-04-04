@@ -8,6 +8,10 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		
 		var self = this;
 
+		if (ige.codeRunner) {
+			ige.codeRunner.addHomePlanet(this);
+		}
+
 		self.growingTree = false;
 
         //self.touched = false;
@@ -384,6 +388,13 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 			default:
 				return false;
 		}
+	},
+
+	destroy: function () {
+		if (this.playerOwner) {
+			this.playerOwner.removeHomePlanet();
+		}
+		IgeEntityBox2d.prototype.destroy.call(this);
 	}
 
 });

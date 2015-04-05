@@ -3,35 +3,53 @@
 var image = {
 	render: function (ctx, entity) {
 		// Draw the tree entity
-		//ctx.fillStyle = 'rgba(0,0,0,0.8)';
-		//ctx.strokeStyle = '#e371ff';
-		//ctx.lineWidth = 1/entity._scale.x;
-
-		ctx.fillStyle = 'rgba(0,0,0,0.8)';
-		ctx.strokeStyle = '#33CC33';
+		var scale = entity.scale;
+		ctx.strokeStyle = entity.color;
 		//ctx.lineWidth = 1/entity._scale.x;
 
 		ctx.lineWidth = 1;
 		ctx.beginPath();
 
-		ctx.moveTo(-2.5, -5.0);
-		ctx.lineTo(-1.0, -8.0);
-		ctx.lineTo(-2.0, -8.0);
-		ctx.lineTo(-0.5, -11.0);
-		ctx.lineTo(-1.5, -11.0);
+		function drawBranch (graph) {
+			var c;
+			for (var i = 0, l = graph.children.length; i < l; i++) {
+				c = graph.children[i];
+				ctx.moveTo(graph.x, graph.y);
+				ctx.lineTo(c.x, c.y);
+				if (c.children) {
+					drawBranch(c);
+				}
+			}
+		}
 
-		// Top of the tree
-		ctx.lineTo(0, -14.0);
+		// Testing
+		var g = {x: 0, y: 0, children: [
+			{x: -40, y: 40, children: [
+				{x: -50, y: 70}, {x: -30, y:70}
+			]},
+			{x: 40, y: 40, children: [
+				{x: 50, y: 70}, {x: 30, y: 70}
+			]}
+		]};
 
-		ctx.lineTo(1.5, -11.0);
-		ctx.lineTo(0.5, -11.0);
-		ctx.lineTo(2.0, -8.0);
-		ctx.lineTo(1.0, -8.0);
-		ctx.lineTo(2.5, -5.0);
+		drawBranch(entity.graph);
 
-		// Close the path back to its start point
+		//ctx.moveTo(-20, -20);
+		//ctx.lineTo(-20, 20);
+		//ctx.lineTo(20, 20);
+		//ctx.lineTo(20, -20);
+
+		//ctx.moveTo(-entity._geometry.x * scale, -entity._geometry.y * scale / 2);
+		//ctx.lineTo(-entity._geometry.x * scale / 2, -entity._geometry.y * scale);
+		//ctx.lineTo(entity._geometry.x * scale / 2, -entity._geometry.y * scale);
+		//ctx.lineTo(entity._geometry.x * scale, -entity._geometry.y * scale / 2);
+		//ctx.lineTo(entity._geometry.x * scale, entity._geometry.y * scale / 2);
+		//ctx.lineTo(entity._geometry.x * scale / 2, entity._geometry.y * scale);
+		//ctx.lineTo(-entity._geometry.x * scale / 2, entity._geometry.y * scale);
+		//ctx.lineTo(-entity._geometry.x * scale, entity._geometry.y * scale / 2);
+
 		ctx.closePath();
-		ctx.fill();
+		//ctx.fill();
 		ctx.stroke();
 
 

@@ -5,7 +5,7 @@ var Orb = IgeEntityBox2d.extend({
 	
     init: function (scale) {
 		IgeEntityBox2d.prototype.init.call(this);
-		
+
 		var self = this;
 
 		if (ige.codeRunner) {
@@ -78,7 +78,7 @@ var Orb = IgeEntityBox2d.extend({
 				allowSleep: true,
 				fixtures: fixDefs,
 				fixedRotation: false,
-                gravityScale: 0.0,
+                gravityScale: 0.0
 			});
 			
 			

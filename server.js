@@ -304,13 +304,11 @@ var Server = IgeClass.extend({
 						/* ------------------------------------------- *\
 										Contact listeners
 						\* ------------------------------------------- */
-                        
 						ige.box2d.contactListener(
 							// Listen for when contact's begin
 							function myContactListener (contact) {
 								var A = contact.igeEntityA();
 								var B = contact.igeEntityB();
-
 								// Try calling A's collision handler on B; if not handled, try the other way
 								if (!A.onContact || !A.onContact(B, contact)) {
 									if (B.onContact) {

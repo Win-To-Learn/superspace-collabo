@@ -140,9 +140,9 @@ var Dragon = IgeClass.extend({
 		for (var a = 0, angle = pi/4; a < 1; a++, angle += pi/2) {
 			var prevBody = this.head;
 			//for (var r = 1, scaleFactor = 0.8; r <= 6; r++, scaleFactor *= 0.8) {
-			for (var r = 1, scaleFactor = 1.5; r <= 1; r++, scaleFactor *= 0.8) {
-				var ax = x + r*200*Math.sqrt(scaleFactor)*Math.cos(angle);
-				var ay = y + r*200*Math.sqrt(scaleFactor)*Math.sin(angle);
+			for (var r = 1, scaleFactor = 0.2; r <= 1; r++, scaleFactor *= 0.8) {
+				var ax = x + r*Math.sqrt(scaleFactor)*Math.cos(angle);
+				var ay = y + r*Math.sqrt(scaleFactor)*Math.sin(angle);
 				var arm = new DragonArm(baseScale*scaleFactor)
 					.translateTo(ax, ay, 0)
 					.streamMode(1)
@@ -154,8 +154,8 @@ var Dragon = IgeClass.extend({
 					joint.enableMotor = true;
 					//joint.motorSpeed = 1000*pi;
 					//joint.maxMotorTorque = 50000;
-					joint.motorSpeed = 6000*pi;
-					joint.maxMotorTorque = 600000;
+					joint.motorSpeed = 10*pi;
+					joint.maxMotorTorque = 10;
 				} else {
 					joint.enableLimit = true;
 					joint.lowerAngle = pi/6;

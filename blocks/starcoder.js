@@ -104,6 +104,107 @@ Blockly.JavaScript['starcoder_shape_pair_input'] = function (block) {
 };
 
 /**
+ * Block to set tree spread
+ */
+Blockly.Blocks['starcoder_treespread'] = {
+	init: function() {
+		this.appendDummyInput()
+			.appendField('tree spread')
+			.appendField(new Blockly.FieldTextInput("120"), "TREESPREAD");
+		this.setNextStatement(true);
+		this.setPreviousStatement(true);
+	}
+};
+
+/**
+ * Code generation for tree spread block
+ */
+Blockly.JavaScript['starcoder_treespread'] = function (block) {
+	return 'player.treeSpread = ' + block.getFieldValue('TREESPREAD') + ';'+ '\n';
+};
+
+// treescale
+Blockly.Blocks['starcoder_treescale'] = {
+	init: function() {
+		this.appendDummyInput()
+			.appendField('tree scale')
+			.appendField(new Blockly.FieldTextInput("2.7"), "TREESCALE");
+
+		this.setNextStatement(true);
+		this.setPreviousStatement(true);
+	}
+};
+
+/**
+ * Code generation for tree scale block
+ */
+Blockly.JavaScript['starcoder_treescale'] = function (block) {
+	return 'player.treeScale = ' + block.getFieldValue('TREESCALE') + ';'+ '\n';
+};
+
+
+// treebranch factor
+Blockly.Blocks['starcoder_treebranchfactor'] = {
+	init: function() {
+		this.appendDummyInput()
+			.appendField('tree branch factor')
+			.appendField(new Blockly.FieldTextInput("3"), "TREEBRANCHFACTOR");
+
+		this.setNextStatement(true);
+		this.setPreviousStatement(true);
+	}
+};
+
+/**
+ * Code generation for tree branch factor
+ */
+Blockly.JavaScript['starcoder_treebranchfactor'] = function (block) {
+	return 'player.treeBranchFactor = ' + block.getFieldValue('TREEBRANCHFACTOR') + ';'+ '\n';
+};
+
+
+// treebranch decay
+Blockly.Blocks['starcoder_treebranchdecay'] = {
+	init: function() {
+		this.appendDummyInput()
+			.appendField('tree branch decay')
+			.appendField(new Blockly.FieldTextInput("0.7"), "TREEBRANCHDECAY");
+
+		this.setNextStatement(true);
+		this.setPreviousStatement(true);
+	}
+};
+
+
+
+/**
+ * Code generation for tree branch decay
+ */
+Blockly.JavaScript['starcoder_treebranchdecay'] = function (block) {
+	return 'player.treeBranchDecay = ' + block.getFieldValue('TREEBRANCHDECAY') + ';'+ '\n';
+};
+
+// tree depth
+Blockly.Blocks['starcoder_treedepth'] = {
+	init: function() {
+		this.appendDummyInput()
+			.appendField('tree depth')
+			.appendField(new Blockly.FieldTextInput("7"), "TREEDEPTH");
+
+		this.setNextStatement(true);
+		this.setPreviousStatement(true);
+	}
+};
+
+/**
+ * Code generation for tree branch depth
+ */
+Blockly.JavaScript['starcoder_treedepth'] = function (block) {
+	return 'player.treeDepth = ' + block.getFieldValue('TREEDEPTH') + ';' + '\n';
+};
+
+
+/**
  * Block to change ship color
  */
 Blockly.Blocks['starcoder_player_color'] = {
@@ -121,7 +222,7 @@ Blockly.Blocks['starcoder_player_color'] = {
  * Code generation for ship color block
  */
 Blockly.JavaScript['starcoder_player_color'] = function (block) {
-    return 'player.color = "' + hexToRGB(block.getFieldValue('COLOR')) + '";';
+    return 'player.color = "' + hexToRGB(block.getFieldValue('COLOR')) + '";'+ '\n';
 };
 
 /**

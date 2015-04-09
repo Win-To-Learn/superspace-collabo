@@ -14,14 +14,29 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 		self.growingTree = false;
 
+		if (scale > 9){
+			scale = 9;
+		}
+
         //self.touched = false;
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
         //this._rectColor = '#ffc600';
-		self.color = 'rgb(255,0,0)';
+		//self.color = 'rgb(255,0,0)';
 		self.fillColor = 'rgba(0,255,0,0.25)';
 		self.numtrees = 0;
 
+
+		var treeScale = 2.7;
+		var treeBranchFactor = 3;
+		var treeBranchDecay = 0.7;
+		var treeSpread = 150;
+		var treeDepth = 5;
+
+		var playerScore = 0;
+
+
+		var treeColor;
 
 		
 		if(arguments.length < 1) {
@@ -58,9 +73,9 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 			for (var i = 0; i < self.triangles.length; i++) {
 				fixDefs.push({
-					density: 10,
+					density: 0.2,
 					friction: 0.2,
-					restitution: 0.1,
+					restitution: 0.01,
 					filter: {
 						//with all commented out, there is no collision
 						//categoryBits: 0x00ff,
@@ -83,8 +98,8 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 			self.box2dBody({
                 //isSensor: true,
 				type: 'dynamic',
-				linearDamping: 0.5,
-				angularDamping: 0,
+				linearDamping: 0.2,
+				angularDamping: 10,
 				allowSleep: true,
 				fixtures: fixDefs,
 				fixedRotation: false,
@@ -141,14 +156,20 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 		//console.log('growing tree');
 		//if (!this.tree) {
-		if (this.numtrees < 3) {
-			this.numtrees++;
-			scale = 8 + Math.random() * 2;
-			this.tree = new Tree(scale)
-				.translateTo(this._translate.x, this._translate.y - 320, 0);
+		//if (this.numtrees < 20) {
+		if (playerScore >= 50) {
 
-			this.tree.color = 'rgb(255,255,5)';
-			this.tree.fillColor = 'rgba(255,255,19,0.55)';
+			//this.numtrees++;
+			scale = 8 + Math.random() * 2;
+			//this.tree = new Tree(scale)
+			//function (scale, branchFactor, branchDecay, spread, depth)
+			//this.tree = new Tree(2.7,3,0.7,this.spread,5)
+			this.tree = new Tree(treeScale,treeBranchFactor,treeBranchDecay,treeSpread,treeDepth)
+				.translateTo(this._translate.x, this._translate.y - 370, 0);
+			this.tree.color = treeColor;
+			//this.tree.color = 'rgb(255,255,5)';
+			//this.tree.color = treeColor;
+			//this.tree.fillColor = 'rgba(255,255,19,0.55)';
 
 			var joint = new ige.box2d.b2RevoluteJointDef();
 			joint.Initialize(this._box2dBody, this.tree._box2dBody, this._box2dBody.GetWorldCenter());
@@ -258,7 +279,9 @@ var FixedOrbRed = IgeEntityBox2d.extend({
         this._originalStart = translate.clone();
     },
 
-    carryOrb: function (fixedorbred, contact) {
+    carryOrb: function (other, contact) {
+
+		/**
         if (!this._oldOrb || (this._oldOrb !== fixedorbred)) {
             var distanceJointDef = new ige.box2d.b2DistanceJointDef(),
                 bodyA = contact.m_fixtureA.m_body,
@@ -278,6 +301,13 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
             fixedorbred.originalStart(fixedorbred._translate);
         }
+		 **/
+		var joint = new ige.box2d.b2RevoluteJointDef();
+		joint.Initialize(this._box2dBody, other._box2dBody, this._box2dBody.GetWorldCenter());
+		joint.enableLimit = true;
+		joint.lowerAngle = 0;
+		joint.upperAngle = 0;
+		ige.box2d._world.CreateJoint(joint);
     },
 
 	attachTree: function (fixedorbred, contact) {
@@ -337,10 +367,31 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 
 	onContact: function (other, contact) {
 		switch (other.category()) {
+			case 'fixedorbred':
+				//this.carryOrb(contact.igeEntityByCategory('fixedorbred'), contact);
+				this.carryOrb(other, contact);
+				this._box2dBody.SetAngularVelocity(0);
+				other._box2dBody.SetAngularVelocity(0);
 			case 'ship':
-				if (other.score > 15) {
+				//if (other.score > 15) {
+
+				treeColor = other.color;
+				treeScale = other.treeScale;
+				treeBranchFactor = other.treeBranchFactor;
+				treeBranchDecay = other.treeBranchDecay;
+				treeSpread = other.treeSpread;
+				treeDepth = other.treeDepth;
+				playerScore = other.score;
 					this.growingTree = true;
+				// now lower the score by 50
+				other.score -= 50;
+				if (other.score < 0)
+				{
+					other.score = 0;
 				}
+				ige.network.send('updateScore', other.score, other.clientId);
+				//return true;
+				//}
 				break;
 			case 'planetoid':
 				console.log("red orb and planetoid");

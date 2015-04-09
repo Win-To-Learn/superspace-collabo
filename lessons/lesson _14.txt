@@ -1,12 +1,32 @@
 CODE 14;14
+//create your own home planet
+
+
+//give it a radius
 
 fr = new FixedOrbRed(9)
-    .translateTo(-800,200,0);
 
-fr.color = 'rgb(50,155,0)';
-fr.fillColor = 'rgba(0,155,50,0.35)';
+//change the coordinates of your planet to move it
+//to another part of the galaxy
+//so you don't put it on top of another planet
 
-//create your own planet
-//change coordinates to move it to another part of the galaxy
+//be sure to use 3 coordinates (x,y,z)   and always set z to 0
 
-//after you get 15 points, contact the planet to bring it to life
+//fr.translateTo(0,0,0)  creates your planet in the middle of the screen
+    fr.translateTo(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800, 0)
+
+
+//set the color of the lines in your planet
+fr.color = 'green';
+
+//if you want, you can use rgb to give it a fancy color
+//fr.color = 'rgb(50,155,0)';
+
+//set the fill color of your planet
+fr.fillColor = 'blue';
+
+//if you want, you can use rgb to give it a fancy color
+//fr.fillColor = 'rgba(0,155,50,0.35)';
+
+
+

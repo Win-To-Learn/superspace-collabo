@@ -9,7 +9,7 @@ var Player = IgeEntityBox2d.extend({
 
 		var self = this;
         self.clientId = clientId;
-        self.score = 0;
+
 		self.gotPickup = false;
 		self.laserUpgraded = false;
 
@@ -35,6 +35,17 @@ var Player = IgeEntityBox2d.extend({
 		self.homePlanet = null;
 
 		var scale = 1.0;
+
+
+		self.treeScale = 2.7;
+		self.treeBranchFactor = 3;
+		self.treeBranchDecay = 0.7;
+		self.treeSpread = 150;
+		self.treeDepth = 5;
+
+
+		//function (scale, branchFactor, branchDecay, spread, depth)
+		//new Tree(2.7,3,0.7,90,5)
 		
 		/*self.shape = [
 			[0,-1],
@@ -654,6 +665,19 @@ var Player = IgeEntityBox2d.extend({
 			case 'ship':
 				//ige.network.send('updateTouchScore', tempScores);
 				console.log('contact with ship and ship');
+				console.log(other.score + " " + this.score);
+				//alert("color thing");
+				if (other.score > this.score){
+					//alert("1 greater than 2")
+					this.color = other.color;
+				}
+
+				if (this.score > other.score){
+					//alert("2 greater than 1")
+					other.color = this.color;
+				}
+
+
 				//B.carryShip(contact.igeEntityByCategory('ship'), contact);
 				/**
 				this.shape = [
@@ -733,7 +757,7 @@ var Player = IgeEntityBox2d.extend({
 
 	addScore: function (points) {
 		this.score += points;
-		var p = ((points === 1 | points === -1) ? ' point!' : ' points!');
+		var p = ((points === 1 | points === -1) ? ' crystal!' : ' crystals!');
 		ige.network.send('scored', '+' + points + p, this.clientId);
 		ige.network.send('updateScore', this.score, this.clientId);
 		// Scoring thresholds

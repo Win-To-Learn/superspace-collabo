@@ -62,9 +62,9 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					//var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
+					var serverUrl = 'http://aequoreagames.com:7610'; // This is the url for remote deployment
 
-					var serverUrl = 'http://10.10.120.183:7610';
+					//var serverUrl = 'http://10.10.120.183:7610';
 					//var serverUrl = 'http://starcoder3.jit.su/';
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
 					if(location.origin.indexOf("http://172") == 0) {
@@ -266,9 +266,9 @@ var Client = IgeClass.extend({
                             self.playerscore = new IgeFontEntity()
 								.texture(ige.client.textures.font)
 								.width(100)
-								.text('Score')
+								.text('SYLVENIUM')
 								.top(-80)
-								.right(10)
+								.right(30)
 								.height(200)
                                 //.hide()
 								.mount(self.uiScene);
@@ -277,10 +277,10 @@ var Client = IgeClass.extend({
 								.id('scoreText')
 								.texture(ige.client.textures.font)
 								.width(100)
-								.text('0 points')
+								.text('0 crystals')
 								.colorOverlay('#ff6000')
 								.top(35)
-								.right(10)
+								.right(30)
 								//.hide()
 								.mount(self.uiScene);
 
@@ -343,7 +343,7 @@ var Client = IgeClass.extend({
 								.texture(ige.client.textures.font)
 								.width(600)
 								.height(200)
-								.text('_ARROW keys to move\n_press B to shoot asteroids in path\n_edit power codes for advantages\n_create a custom code to defeat the space hydra\n_mine asteroids to get new power code at 5 points')
+								.text('_ARROW keys to move\n_press B to shoot asteroids in path\n_edit power codes for advantages\n_create a custom code to defeat the space hydra\n_mine asteroids to get SYLVENIUM crystals')
 								.colorOverlay('#ff6000')
 								.top(20)
 								.left(300)

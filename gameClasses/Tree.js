@@ -17,9 +17,12 @@ var Tree = IgeEntityBox2d.extend({
 		self.fillColor = 'rgba(0,255,0,0.25)';
 
 		// TODO: More robust sanitizing
-		scale = scale || 2;
-		branchFactor = Math.min(5, branchFactor || 2);
-		depth = Math.min(6, depth || 4);
+		//scale = scale || 2;
+		scale = scale || 2.7;
+		//branchFactor = Math.min(5, branchFactor || 2);
+		branchFactor = Math.min(5, branchFactor || 3);
+		//depth = Math.min(6, depth || 4);
+		depth = Math.min(7, depth || 5);
 		spread = spread || 90;
 		if (branchDecay > 1) {
 			this.branchDecay = 1 / branchDecay;
@@ -112,10 +115,10 @@ var Tree = IgeEntityBox2d.extend({
 
 			for (i = 0; i < triangles.length; i++) {
 				fixDefs.push({
-					density: 0.1,
+					density: 0.01,
 					friction: 0.2,
-					restitution: 2.5,
-					filter: {categoryBits: 0xffff, maskBits: 0xffff},
+					restitution: 0,
+					filter: {categoryBits: 0x9000, maskBits: 0xffff & ~0x004 & ~0x0016 & ~9000},
 					shape: {type: 'polygon', data: triangles[i]}
 				});
 			}

@@ -13,7 +13,7 @@ var HydraHead = BasicOrb.extend({
         density: 100,
         friction: 1.0,
         restitution: 0.5,
-        categoryBits: 0x80000,
+        categoryBits: 0x8000,
         maskBits: 0xffff & ~0x8000
         //categoryBits: 0x00ff,
         //maskBits: 0xffff & ~0x0008
@@ -38,6 +38,8 @@ var HydraHead = BasicOrb.extend({
                 .mount(ige.$('scene1'));
             this.destroy();
             this.dying = false
+
+			new Hydra(-4200 + Math.random() * 8400, -2400 + Math.random() * 4800);
         }
 
         IgeEntity.prototype.update.call(this, ctx);
@@ -47,6 +49,11 @@ var HydraHead = BasicOrb.extend({
         switch (other.category()) {
             case 'bullet':
                 this.dying = true;
+
+				//var hydraRegen = new Hydra(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800);
+				this.hydraRegen = true;
+
+
                 return true;
             default:
                 return false;
@@ -70,7 +77,7 @@ var HydraArm = BasicOrb.extend({
         friction: 1.0,
         restitution: 0.5,
         categoryBits: 0x8000,
-        maskBits: 0xffff & ~0x8000
+        maskBits: 0xffff & ~0x8000 | ~0x00ff
         //categoryBits: 0x00ff,
         //maskBits: 0xffff & ~0x0008
     },
@@ -120,7 +127,7 @@ var HydraEgg = BasicOrb.extend({
 
         this.category('hydraegg');
 
-        this.pointWorth = 200;
+        this.pointWorth = 1000;
     }
 
 })
@@ -159,6 +166,8 @@ var Hydra = IgeClass.extend({
                     //joint.maxMotorTorque = 50000;
 					joint.motorSpeed = 6000*pi;
 					joint.maxMotorTorque = 600000;
+					//joint.motorSpeed = 50000*pi;
+					//joint.maxMotorTorque = 800000;
                 } else {
                     joint.enableLimit = true;
                     joint.lowerAngle = pi/6;

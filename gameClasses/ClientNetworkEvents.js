@@ -105,7 +105,7 @@ var ClientNetworkEvents = {
 		console.log(ige.client.scoreText._text);
             console.log(data);
             console.log(parseInt(data));
-            ige.client.scoreText.text(data + ' points');
+            ige.client.scoreText.text(data + ' crystals');
         //}
         //else if (parseInt(data)<0){
         //    console.log(data);

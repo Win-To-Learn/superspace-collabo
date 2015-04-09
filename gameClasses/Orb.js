@@ -69,7 +69,7 @@ var Orb = IgeEntityBox2d.extend({
 			// collision definition END
 			
 		
-			self._thrustPower = 8*scale;
+			self._thrustPower = 16*scale;
 
 			self.box2dBody({
 				type: 'dynamic',

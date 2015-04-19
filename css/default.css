@@ -29,7 +29,7 @@ body {
 \* ------------------------------------------- */
 
 #login {
-	display: none;
+	/*display: none;*/
 	font-family: Verdana, sans-serif;
 	color: white;
 	background: rgb(55,55,75);
@@ -45,7 +45,8 @@ body {
 		padding-bottom: 10px;
 	}
 	.loginStatus {
-		display: none;
+		/*display: none;*/
+        color: red;
 	}
 	.loginStatus[data-status=denied] { color: red; }
 	.loginStatus[data-status=successful] { color: green; }

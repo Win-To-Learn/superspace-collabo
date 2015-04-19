@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+	header('Location: /login.php');
+	exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,6 +52,7 @@
 
 
 
+<!--
 <div id="login">
 	<div class="loginTitle">Login / register</div>
 	<div class="loginField">Username: <input type="text" name="username" class="right"></div>
@@ -52,11 +60,11 @@
 	<div class="loginField">Remember me <input type="checkbox" name="remember"><button name="submit" class="right">Login/register</button></div>
 	<div class="loginStatus"></div>
 </div>
+-->
 <!--
 <audio id="Audio1" controls="controls" autoplay="autoplay" src="http://listen.ai-radio.org:8000/radio.ogg?cc=US&now=1411446531.126">
 </audio>
 -->
-
 <!--<button onclick="TogetherJS(this); return false;" style="position:absolute;">Start TogetherJS</button>-->
 
 <div id="chatBox">

@@ -29,6 +29,11 @@
 var Code = {};
 
 /**
+ * Create a namespace for Starcoder stuff.
+ */
+var Starcoder = {};
+
+/**
  * Lookup for names of supported languages.  Keys should be in ISO 639 format.
  */
 Code.LANGUAGE_NAME = {
@@ -499,9 +504,19 @@ Code.discard = function() {
 	}
 };
 
+/**
+ * Get translated text for Starcoder blocks
+ */
+Starcoder.getMsg = function (msg) {
+    return this.Msg[msg];
+};
+Starcoder.Msg = {};
+
 // Load the Code demo's language strings.
 document.write('<script src="msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
 document.write('<script src="../../msg/js/' + Code.LANG + '.js"></script>\n');
+// Load Starcoder language strings
+document.write('<script src="../../msg/starcoder/' + Code.LANG + '.js"></script>\n');
 
 window.addEventListener('load', Code.init);

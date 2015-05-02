@@ -15,7 +15,7 @@ Blockly.Blocks['starcoder_player_shape'] = {
     init: function () {
         this.setColour(300);
         this.appendDummyInput()
-            .appendField('player shape');
+            .appendField(Starcoder.getMsg('PLAYER_SHAPE'));
         this.appendStatementInput('PAIRS')
             .setCheck('Pair');
         this.setNextStatement(true);
@@ -109,7 +109,7 @@ Blockly.JavaScript['starcoder_shape_pair_input'] = function (block) {
 Blockly.Blocks['starcoder_treespread'] = {
 	init: function() {
 		this.appendDummyInput()
-			.appendField('tree spread')
+			.appendField(Starcoder.getMsg('TREE_SPREAD'))
 			.appendField(new Blockly.FieldTextInput("120"), "TREESPREAD");
 		this.setNextStatement(true);
 		this.setPreviousStatement(true);
@@ -127,7 +127,7 @@ Blockly.JavaScript['starcoder_treespread'] = function (block) {
 Blockly.Blocks['starcoder_treescale'] = {
 	init: function() {
 		this.appendDummyInput()
-			.appendField('tree scale')
+			.appendField(Starcoder.getMsg('TREE_SCALE'))
 			.appendField(new Blockly.FieldTextInput("2.7"), "TREESCALE");
 
 		this.setNextStatement(true);
@@ -147,7 +147,7 @@ Blockly.JavaScript['starcoder_treescale'] = function (block) {
 Blockly.Blocks['starcoder_treebranchfactor'] = {
 	init: function() {
 		this.appendDummyInput()
-			.appendField('tree branch factor')
+			.appendField(Starcoder.getMsg('TREE_BRANCH_FACTOR'))
 			.appendField(new Blockly.FieldTextInput("3"), "TREEBRANCHFACTOR");
 
 		this.setNextStatement(true);
@@ -167,7 +167,7 @@ Blockly.JavaScript['starcoder_treebranchfactor'] = function (block) {
 Blockly.Blocks['starcoder_treebranchdecay'] = {
 	init: function() {
 		this.appendDummyInput()
-			.appendField('tree branch decay')
+			.appendField(Starcoder.getMsg('TREE_BRANCH_DECAY'))
 			.appendField(new Blockly.FieldTextInput("0.7"), "TREEBRANCHDECAY");
 
 		this.setNextStatement(true);
@@ -188,7 +188,7 @@ Blockly.JavaScript['starcoder_treebranchdecay'] = function (block) {
 Blockly.Blocks['starcoder_treedepth'] = {
 	init: function() {
 		this.appendDummyInput()
-			.appendField('tree depth')
+			.appendField(Starcoder.getMsg('TREE_DEPTH'))
 			.appendField(new Blockly.FieldTextInput("7"), "TREEDEPTH");
 
 		this.setNextStatement(true);
@@ -210,7 +210,7 @@ Blockly.JavaScript['starcoder_treedepth'] = function (block) {
 Blockly.Blocks['starcoder_player_color'] = {
     init: function () {
         this.appendDummyInput()
-            .appendField('ship color')
+            .appendField(Starcoder.getMsg('SHIP_COLOR'))
             .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR');
         this.setColour(300);
         this.setNextStatement(true);
@@ -263,11 +263,11 @@ Blockly.Blocks['starcoder_vector_polar'] = {
     init: function () {
         this.appendValueInput('MAG')
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField('magnitude')
+            .appendField(Starcoder.getMsg('MAGNITUDE'))
             .setCheck('Number');
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField('angle')
+            .appendField(Starcoder.getMsg('ANGLE'))
             .appendField(new Blockly.FieldAngle('45'), 'ANGLE');
         this.setOutput(true, 'Vector');
         this.setInputsInline(true);
@@ -294,15 +294,16 @@ Blockly.JavaScript['starcoder_vector_polar'] = function (block) {
 Blockly.Blocks['starcoder_object_create'] = {
     init: function () {
         this.appendDummyInput()
-            .appendField('create')
-            .appendField(new Blockly.FieldDropdown([['orb', 'Orb'], ['planetoid', 'Planetoid']]), 'KIND');
+            .appendField(Starcoder.getMsg('CREATE'))
+            .appendField(new Blockly.FieldDropdown([[Starcoder.getMsg('ORB'), 'Orb'],
+                [Starcoder.getMsg('PLANETOID'), 'Planetoid']]), 'KIND');
         this.appendValueInput('RADIUS')
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField('radius')
+            .appendField(Starcoder.getMsg('RADIUS'))
             .setCheck('Number');
         this.appendValueInput('VELOCITY')
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField('velocity')
+            .appendField(Starcoder.getMsg('VELOCITY'))
             .setCheck('Vector');
         this.setNextStatement(true);
         this.setPreviousStatement(true);
@@ -332,7 +333,7 @@ Blockly.Blocks['starcoder_player_translate'] = {
     init: function () {
         this.appendValueInput('DISPLACEMENT')
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField('warp')
+            .appendField(Starcoder.getMsg('WARP'))
             .setCheck('Vector');
         this.setNextStatement(true);
         this.setPreviousStatement(true);
@@ -358,15 +359,15 @@ Blockly.JavaScript['starcoder_player_translate'] = function (block) {
 Blockly.Blocks['starcoder_timer_repeating'] = {
     init: function () {
         this.appendDummyInput()
-            .appendField('every')
+            .appendField(Starcoder.getMsg('EVERY'))
             .appendField(new Blockly.FieldTextInput('1', Blockly.FieldTextInput.numberValidator), 'INTERVAL')
-            .appendField('seconds');
+            .appendField(Starcoder.getMsg('SECONDS'));
         this.appendValueInput('CONDITION')
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField('until')
+            .appendField(Starcoder.getMsg('UNTIL'))
             .setCheck('Boolean');
         this.appendStatementInput('DO')
-            .appendField('do');
+            .appendField(Starcoder.getMsg('DO'));
         this.setNextStatement(true);
         this.setPreviousStatement(true);
         this.setColour(120);

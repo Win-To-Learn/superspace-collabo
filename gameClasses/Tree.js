@@ -22,7 +22,7 @@ var Tree = IgeEntityBox2d.extend({
 		//branchFactor = Math.min(5, branchFactor || 2);
 		branchFactor = Math.min(5, branchFactor || 3);
 		//depth = Math.min(6, depth || 4);
-		depth = Math.min(7, depth || 5);
+		this.depth = Math.min(7, depth || 5);
 		spread = spread || 90;
 		if (branchDecay > 1) {
 			this.branchDecay = 1 / branchDecay;
@@ -59,7 +59,7 @@ var Tree = IgeEntityBox2d.extend({
 
 			this.graph = {x: 0, y: 0};
             this.stage = 0;
-			makeBranch(this.graph, scale*40, -Math.PI/2, depth);
+			makeBranch(this.graph, scale*40, -Math.PI/2, this.depth);
 			//console.log(this.graph);
 
 			// Define the polygon for collision
@@ -193,7 +193,7 @@ var Tree = IgeEntityBox2d.extend({
             // Age graph for gradual growth
             function ageGraph () {
                 self.stage += 1;
-                if (self.stage < self.graph.depth) {
+                if (self.stage < self.depth) {
                     new IgeTimeout(ageGraph, 500);
                 }
             }

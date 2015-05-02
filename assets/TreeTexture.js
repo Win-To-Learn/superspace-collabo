@@ -10,29 +10,18 @@ var image = {
 		ctx.lineWidth = 1;
 		ctx.beginPath();
 
-		function drawBranch (graph) {
+		function drawBranch (graph, stage) {
 			var c;
 			for (var i = 0, l = graph.children.length; i < l; i++) {
 				c = graph.children[i];
 				ctx.moveTo(graph.x, graph.y);
 				ctx.lineTo(c.x, c.y);
-				if (c.children) {
-					drawBranch(c);
+				if (stage && c.children) {
+					drawBranch(c, stage - 1);
 				}
 			}
 		}
-
-		// Testing
-		var g = {x: 0, y: 0, children: [
-			{x: -40, y: 40, children: [
-				{x: -50, y: 70}, {x: -30, y:70}
-			]},
-			{x: 40, y: 40, children: [
-				{x: 50, y: 70}, {x: 30, y: 70}
-			]}
-		]};
-
-		drawBranch(entity.graph);
+		drawBranch(entity.graph, entity.stage);
 
 		//ctx.moveTo(-20, -20);
 		//ctx.lineTo(-20, 20);

@@ -58,6 +58,7 @@ var Tree = IgeEntityBox2d.extend({
 			var leaves = [];
 
 			this.graph = {x: 0, y: 0};
+            this.stage = 0;
 			makeBranch(this.graph, scale*40, -Math.PI/2, depth);
 			//console.log(this.graph);
 
@@ -188,6 +189,16 @@ var Tree = IgeEntityBox2d.extend({
 				.mount(ige.server.scene1);
 
 			ige.server.trees.push(this);
+
+            // Age graph for gradual growth
+            function ageGraph () {
+                self.stage += 1;
+                if (self.stage < self.graph.depth) {
+                    new IgeTimeout(ageGraph, 500);
+                }
+            }
+
+            new IgeTimeout(ageGraph, 500);
 			
 		}
 
@@ -197,7 +208,7 @@ var Tree = IgeEntityBox2d.extend({
         }
 
         //this.scaleTo(scale,scale,1);
-		self.streamSections(['transform', 'color']);
+		self.streamSections(['transform', 'color', 'stage']);
 		
     },
 
@@ -220,6 +231,13 @@ var Tree = IgeEntityBox2d.extend({
 			//	} else {
 			//		return JSON.stringify(this.graph);
 			//	}
+            case 'stage':
+                if (data) {
+                    this.stage = JSON.parse(data);
+                } else {
+                    return JSON.stringify(this.stage);
+                }
+                break;
 			default:
 				return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
 				break;

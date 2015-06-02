@@ -192,6 +192,13 @@ var Server = IgeClass.extend({
                         ige.network.define('playerControlShootUp', self._onPlayerShootUp);
                         ige.network.define('playerControlTurnUp', self._onPlayerTurnUp);
 
+						ige.network.define('moisture1', self._onMoisture1);
+						ige.network.define('moisture2', self._onMoisture2);
+						ige.network.define('moisture3', self._onMoisture3);
+						ige.network.define('moisture4', self._onMoisture4);
+						ige.network.define('moisture5', self._onMoisture5);
+
+
                         ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
                         ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 
@@ -254,7 +261,7 @@ var Server = IgeClass.extend({
 						
                         var fixedorbrad = 1.5;
 
-						new Hydra(3000, -2000);
+						//new Hydra(3000, -2000);
 
 						//new Dragon(3000, 2000);
 

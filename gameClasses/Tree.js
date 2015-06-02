@@ -119,7 +119,7 @@ var Tree = IgeEntityBox2d.extend({
 					density: 0.01,
 					friction: 0.2,
 					restitution: 0,
-					filter: {categoryBits: 0x9000, maskBits: 0xffff & ~0x004 & ~0x0016 & ~9000},
+					filter: {categoryBits: 0x9000, maskBits: 0xffff | 0x0002 & ~0x0004 & ~0x0016 & ~9000},
 					shape: {type: 'polygon', data: triangles[i]}
 				});
 			}
@@ -262,9 +262,20 @@ var Tree = IgeEntityBox2d.extend({
 			case 'orb':
 				this.destroy();
 				return true;
+			case 'bullet':
+				console.log('bullet hit tree');
+				if (this.color != other.color) {
+					this.color = other.color;
+					//this.destroy();
+				}
+				return true;
+
+
+
 			default:
 				return false;
 		}
+
 	}
 	
 });

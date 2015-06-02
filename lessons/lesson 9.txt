@@ -1,14 +1,18 @@
-CODE 9;9
-    //////  CODE #9: CREATING ASTEROIDS ON A TIMER  //////
-    //////                 SPIRAL                     //////
+SPIRALROIDS;9
+    //////  CREATING ASTEROIDS ON A TIMER  //////
+    //////             SPIRAL              //////
 
     var i = 0;
     var moveInterval = setInterval(function(){
 
-
-		//paste new code under here
-
-
+            if(i < 360) {
+      			new Orb(1.0)
+      				.translateTo(Math.cos(-Math.radians(i))*300,Math.sin(-Math.radians(i))*300,0);
+      			i=i+18;
+      		}
+      		else {
+      			clearInterval(moveInterval);
+      		}
 
     }, 500);
 
@@ -18,16 +22,25 @@ CODE 9;9
     //How can you use the trigonometry strategically?
     //Are you safe in they eye of a hurricane?
 
-
-    //You will need to copy and paste code like this:
-    //          if(i < 360) {
-    //  			new Orb(0.3)
-    //  				.translateTo(Math.cos(-Math.radians(i))*300,Math.sin(-Math.radians(i))*300,0);
-    //  			i=i+18;
-    //  		}
-    //  		else {
-    //  			clearInterval(moveInterval);
-    //  		}
-
-
     //Try zooming out in your browser to see all of the asteroids you created.
+
+
+
+
+
+    /**
+    //wait what? asteroids are my friends?
+    var i = 0;
+        var moveInterval = setInterval(function(){
+
+                if(i < 360) {
+          			new Orb(1.0)
+          				.translateTo(player._translate.x+Math.cos(-Math.radians(i))*300,player._translate.y+Math.sin(-Math.radians(i))*300,0);
+          			i=i+18;
+          		}
+          		else {
+          			clearInterval(moveInterval);
+          		}
+
+        }, 500);
+    **/

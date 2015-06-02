@@ -36,6 +36,7 @@ var Client = IgeClass.extend({
 			rectangle: new IgeTexture('./assets/Rectangle.js'),
             planetoid: new IgeTexture('./assets/PlanetoidTexture.js'),
             fixedorbred: new IgeTexture('./assets/FixedOrbTexture4.js'),
+			//fixedorbred: new IgeTexture('./assets/FixedOrbTexture4-spiro.js'),
 			tree: new IgeTexture('./assets/TreeTexture.js'),
             fixedorbz: new IgeTexture('./assets/FixedOrbTexture3.js'),
             bullet: new IgeTexture('./assets/BulletTexture.js'),
@@ -67,12 +68,27 @@ var Client = IgeClass.extend({
 					//var serverUrl = 'http://10.10.120.183:7610';
 					//var serverUrl = 'http://starcoder3.jit.su/';
 					//var serverUrl = 'http://superspace.mayumi.fi:7610'; // This is the url for remote deployment
+
 					if(location.origin.indexOf("http://172") == 0) {
-						serverUrl = 'http://172.16.0.161:7610'; // This is the url for running the server on LAN for mobile debugging
+						serverUrl = 'http://172.16.0.145:7610'; // This is the url for running the server on LAN for mobile debugging
 					}
 					else if(location.origin == "file://" || location.origin.indexOf("http://localhost") == 0 || location.origin.indexOf("http://127.0.0.1") == 0) {
 						serverUrl = 'http://localhost:7610'; // This is the url for running the server locally
 					}
+					else if(location.origin.indexOf("http://10") == 0) {
+						serverUrl = 'http://10.10.121.71:7610'; // This is the url for running the server on LAN for mobile debugging
+					}
+					else if(location.origin.indexOf("http://192") == 0) {
+						serverUrl = 'http://192.168.1.48:7610'; // This is the url for running the server on LAN for mobile debugging
+					}
+
+
+
+
+
+
+
+
 
                     //var port = process.env.PORT || 5000;
 					//var port = 5000;
@@ -266,7 +282,7 @@ var Client = IgeClass.extend({
                             self.playerscore = new IgeFontEntity()
 								.texture(ige.client.textures.font)
 								.width(100)
-								.text('SYLVENIUM')
+								.text('INVENTORY')
 								.top(-80)
 								.right(30)
 								.height(200)
@@ -343,7 +359,7 @@ var Client = IgeClass.extend({
 								.texture(ige.client.textures.font)
 								.width(600)
 								.height(200)
-								.text('_ARROW keys to move\n_press B to shoot asteroids in path\n_edit power codes for advantages\n_create a custom code to defeat the space hydra\n_mine asteroids to get SYLVENIUM crystals')
+								.text('_ARROW keys to move\n_press B to shoot asteroids in path\n_edit power codes for advantages\n_create a custom code to defeat the space hydra\n_mine asteroids to get crystals')
 								.colorOverlay('#ff6000')
 								.top(20)
 								.left(300)
@@ -394,6 +410,13 @@ var Client = IgeClass.extend({
 							ige.input.mapAction('thrust', ige.input.key.up);
 							ige.input.mapAction('down', ige.input.key.down);
 							ige.input.mapAction('shoot', ige.input.key.b);
+
+						ige.input.mapAction('moisture1', ige.input.key.a);
+						ige.input.mapAction('moisture2', ige.input.key.s);
+						ige.input.mapAction('moisture3', ige.input.key.d);
+						ige.input.mapAction('moisture4', ige.input.key.f);
+						ige.input.mapAction('moisture5', ige.input.key.g);
+
 							
 							//if($.browser.mobile) {
 								//$(document).on("mobileinit", function() {

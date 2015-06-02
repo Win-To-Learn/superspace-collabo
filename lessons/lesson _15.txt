@@ -1,14 +1,17 @@
-CODE 15;15
+DEFEAT HYDRA;5
 
 
 //    Try using a combination of these codes
 //    to defeat the hydra.
 
-//    player.translateBy(10,0,0);
+//    player.translateBy(200,0,0);
 
-//    the code above will move your ship 10 units to the right
+//    the code above will move your ship 200 units to the right
 //    of its current location
 
-//    player.shoot()
+//    player.shoot();
+
+
+//    player.translateBy(-200,0,0);
 
 

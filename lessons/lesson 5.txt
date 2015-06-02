@@ -1,5 +1,5 @@
-CODE 5;5
-    //////    CODE #5: CREATING A NEW ORB OBJECT    //////
+MAKE AN ASTEROID;6
+    //////    CREATING A NEW ASTEROID    //////
 
     new Orb(1.5);
 

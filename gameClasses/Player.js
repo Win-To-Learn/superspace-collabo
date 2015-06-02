@@ -9,6 +9,7 @@ var Player = IgeEntityBox2d.extend({
 
 		var self = this;
         self.clientId = clientId;
+		self.moistureSetting = 0;
 
 		self.gotPickup = false;
 		self.laserUpgraded = false;
@@ -18,7 +19,7 @@ var Player = IgeEntityBox2d.extend({
 		this.drawBounds(false);
 		
 		self._thrustPower = 550;
-		self._shootInterval = 100;
+		self._shootInterval = 200;
 		self._lastShoot = ige._timeScaleLastTimestamp;
 		self.exploding = false;
 		self.color = "white";
@@ -33,6 +34,7 @@ var Player = IgeEntityBox2d.extend({
 		self.orbsOwned = {};
 
 		self.homePlanet = null;
+		self.homePlanetNumber = 0;
 
 		var scale = 1.0;
 
@@ -73,7 +75,8 @@ var Player = IgeEntityBox2d.extend({
 			down: false,
 			shoot: false,
 			turn: false,
-			turnData: [0,0]
+			turnData: [0,0],
+
 		};
 
 		if (ige.isServer) {
@@ -103,7 +106,7 @@ var Player = IgeEntityBox2d.extend({
 					restitution: 0.2,
 					filter: {
 						categoryBits: 0x0004,
-						maskBits: 0x0016 | 0x00ff | 0x0002 | 0x0004 | 0x8000
+						maskBits: 0x0016 | 0x00ff | 0x0002 | 0x0004 | 0x8000 && ~ 0x9000
 						//maskBits: 0xffff
 					},
 					//shape: {
@@ -239,6 +242,49 @@ var Player = IgeEntityBox2d.extend({
         }
     },
 
+	moisture1: function(clientId) {
+		if(ige.isServer) {
+			this.moistureSetting = 1;
+			this.treeDepth = 1;
+			console.log("moisture");
+		}
+
+	},
+
+	moisture2: function(clientId) {
+		if(ige.isServer) {
+			this.moistureSetting = 2;
+			this.treeDepth = 2;
+			console.log("moisture");
+		}
+
+	},
+	moisture3: function(clientId) {
+		if(ige.isServer) {
+			this.moistureSetting = 3;
+			this.treeDepth = 3;
+			console.log("moisture");
+		}
+
+	},
+	moisture4: function(clientId) {
+		if(ige.isServer) {
+			this.moistureSetting = 4;
+			this.treeDepth = 4;
+			console.log("moisture");
+		}
+
+	},
+	moisture5: function(clientId) {
+		if(ige.isServer) {
+			this.moistureSetting = 5;
+			this.treeDepth = 5;
+			console.log("moisture");
+		}
+
+	},
+
+
 
 	shoot: function(clientId) {
 		if(ige.isServer) { // server
@@ -260,7 +306,7 @@ var Player = IgeEntityBox2d.extend({
 
 				}
 
-				var steps = Math.min(8, this.bulletCount) - 1;
+				var steps = Math.min(6, this.bulletCount) - 1;
 				var bulletSpreadRad = steps ? this.bulletSpread * Math.PI / 180 : 0;
 				var deltaA = steps ? bulletSpreadRad / steps : 0;
 				for (var i = 0, a = -bulletSpreadRad / 2; i <= steps; i++, a += deltaA) {
@@ -274,10 +320,13 @@ var Player = IgeEntityBox2d.extend({
 						//.velocity.byAngleAndPower(shipAngle -Math.PI/2 + a, 0.14+velocity*0.017)
 						.translateTo(this._translate.x, this._translate.y, 0)
 
+
 						//.translateTo(this._translate.x + Math.cos(shipAngle -Math.PI/2)*80, this._translate.y + Math.sin(shipAngle -Math.PI/2)*80, 0)
 
 
 						.mount(ige.server.scene1);
+						//bullet.color = "red";
+						bullet.color = this.color;
 					//this.addScore(-5);
 					bullet.source = this;
 				}
@@ -434,7 +483,7 @@ var Player = IgeEntityBox2d.extend({
 				}
 
 				if (this.controls.thrust) {
-					var radians = this._rotate.z + Math.radians(-90),
+					var radians = this._rotate.z + Math.radians(-90);
 					thrustVector = new ige.box2d.b2Vec2(Math.cos(radians) * this._thrustPower, Math.sin(radians) * this._thrustPower);
 					this._box2dBody.ApplyForce(thrustVector, this._box2dBody.GetWorldCenter());
 
@@ -629,6 +678,39 @@ var Player = IgeEntityBox2d.extend({
 						ige.network.send('playerControlShootUp');
 					}
 				}
+
+				if (ige.input.actionState('moisture1')) {
+
+					ige.network.send('moisture1');
+					this.treeDepth = 1;
+					console.log("moisture");
+				}
+				if (ige.input.actionState('moisture2')) {
+
+					ige.network.send('moisture2');
+					this.treeDepth = 2;
+					console.log("moisture");
+				}
+				if (ige.input.actionState('moisture3')) {
+
+					ige.network.send('moisture3');
+					this.treeDepth = 3;
+					console.log("moisture");
+				}
+				if (ige.input.actionState('moisture4')) {
+
+					ige.network.send('moisture4');
+					this.treeDepth = 4;
+					console.log("moisture");
+				}
+				if (ige.input.actionState('moisture5')) {
+
+					ige.network.send('moisture5');
+					this.treeDepth = 5;
+					console.log("moisture");
+				}
+
+
 			} // !isServer
 		} // !exploding
 
@@ -661,6 +743,42 @@ var Player = IgeEntityBox2d.extend({
 				//ige.network.send('updateScore', this.score, this.clientId);
 				//this.addScore(-30);
 				console.log('bullet hit ship');
+				if (this.color != other.color) {
+					this.color = other.color;
+					//ige.network.send('playerControlThrustDown');
+					//var radians = other._rotate.z + Math.radians(-90);
+					//var thrustVector = new ige.box2d.b2Vec2(100, 100);
+					//other._box2dBody.ApplyForce(thrustVector, other._box2dBody.GetWorldCenter());
+					this.controls.thrust = true;
+					ige.network.send('playerControlThrustDown');
+
+					//thrustSound.play();
+					//this.thrustEmitter.start();
+					//console.log("emitter started");
+					var rndNum = Math.random();
+					if (rndNum < 0.5) {
+						this.controls.right = true;
+						ige.network.send('playerControlRightDown');
+						this.rotateTo(0, 0, -1);
+
+					}
+					else{
+						this.controls.left = true;
+						ige.network.send('playerControlLeftDown');
+						this.rotateTo(0, 0, 1);
+
+					}
+
+					//this.controls.thrust = false;
+					//ige.network.send('playerControlThrustUp');
+
+
+
+
+					//thrustSound.play();
+					//this.thrustEmitter.start();
+					//this.exploding = true;
+				}
 				return true;
 			case 'ship':
 				//ige.network.send('updateTouchScore', tempScores);
@@ -757,8 +875,152 @@ var Player = IgeEntityBox2d.extend({
 
 	addScore: function (points) {
 		this.score += points;
+		var randNum = Math.floor(Math.random()*44);
+
+		var crystalType = "";
+		switch(randNum){
+			case 0:
+				crystalType = "Anjite";
+				break;
+			case 1:
+				crystalType = "Joshium";
+				break;
+			case 2:
+				crystalType = "Toddite";
+				break;
+			case 3:
+				crystalType = "Alisonium";
+				break;
+			case 4:
+				crystalType = "Scottite";
+				break;
+			case 5:
+				crystalType = "Tessium";
+				break;
+			case 6:
+				crystalType = "Stevite";
+				break;
+			case 7:
+				crystalType = "Laurium";
+				break;
+			case 8:
+				crystalType = "Liviate";
+				break;
+			case 9:
+				crystalType = "Stephine";
+				break;
+			case 10:
+				crystalType = "Seanine";
+				break;
+			case 11:
+				crystalType = "Tannite";
+				break;
+			case 12:
+				crystalType = "Wilburnum";
+				break;
+			case 13:
+				crystalType = "Guadalupine";
+				break;
+			case 14:
+				crystalType = "Angelite";
+				break;
+			case 15:
+				crystalType = "SETIUM";
+				break;
+			case 16:
+				crystalType = "Shwetate";
+				break;
+			case 17:
+				crystalType = "Brigantium";
+				break;
+			case 18:
+				crystalType = "Martite";
+				break;
+			case 19:
+				crystalType = "Blaisine";
+				break;
+			case 20:
+				crystalType = "Silthate";
+				break;
+			case 21:
+				crystalType = "Meredite";
+				break;
+			case 22:
+				crystalType = "Lewisite";
+				break;
+			case 23:
+				crystalType = "Lapidium";
+				break;
+			case 24:
+				crystalType = "Flintine";
+				break;
+			case 25:
+				crystalType = "Coughlite";
+				break;
+			case 26:
+				crystalType = "Pinskite";
+				break;
+			case 27:
+				crystalType = "Jennifite";
+				break;
+			case 28:
+				crystalType = "Stumbrisium";
+				break;
+			case 29:
+				crystalType = "Jessitrite";
+				break;
+			case 30:
+				crystalType = "Jordite";
+				break;
+			case 31:
+				crystalType = "Sterlium";
+				break;
+			case 32:
+				crystalType = "Estellate";
+				break;
+			case 33:
+				crystalType = "Jamesium";
+				break;
+			case 34:
+				crystalType = "Baytite";
+				break;
+			case 35:
+				crystalType = "Louisite";
+				break;
+			case 36:
+				crystalType = "Danum";
+				break;
+			case 37:
+				crystalType = "Menticite";
+				break;
+			case 38:
+				crystalType = "Shanlondium";
+				break;
+			case 39:
+				crystalType = "Benjamite";
+				break;
+			case 40:
+				crystalType = "Johntum";
+				break;
+			case 41:
+				crystalType = "Jasonate";
+				break;
+			case 42:
+				crystalType = "Nancium";
+				break;
+			case 43:
+				crystalType = "Drozine";
+				break;
+
+
+
+
+
+
+		}
+
 		var p = ((points === 1 | points === -1) ? ' crystal!' : ' crystals!');
-		ige.network.send('scored', '+' + points + p, this.clientId);
+		ige.network.send('scored', '+' + points + " " + crystalType + p, this.clientId);
 		ige.network.send('updateScore', this.score, this.clientId);
 		// Scoring thresholds
 		if (this.score > 200 && this.laserUpgraded == false) {

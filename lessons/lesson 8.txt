@@ -1,6 +1,6 @@
-CODE 8;8
-    //////  CODE #8: CREATING ASTEROIDS ON A TIMER  //////
-    //////                DIAGONAL                  //////
+TRIPLEROIDS;8
+    //////  CREATING ASTEROIDS ON A TIMER  //////
+    //////             DIAGONAL            //////
 
     var i = 0;
     var moveInterval = setInterval(function(){
@@ -21,14 +21,16 @@ CODE 8;8
     //is less than 3.
     //Once i is no longer less than 3, it stops the timer
 
-    //        if(i < 3) {
-    //			new Orb(1.0)
-    //				.translateTo(200*i,200*i,0)
-    //			    i++;
-    //		    }
-    //		   else {
-    //			clearInterval(moveInterval);
-    //		   }
+    /**
+            if(i < 3) {
+    			new Orb(1.0)
+    				.translateTo(200*i,200*i,0)
+    			    i++;
+    		    }
+    		   else {
+    			clearInterval(moveInterval);
+    		   }
+    **/
 
 
 

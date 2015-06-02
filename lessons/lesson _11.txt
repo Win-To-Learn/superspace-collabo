@@ -1,6 +1,6 @@
-CODE 11;11
-    //////       CODE #11: CHANGING THE COLOR       //////
-    //////               OF YOUR SHIP                 //////
+NEW COLOR;2
+    //////       CHANGING THE COLOR       //////
+    //////          OF YOUR SHIP          //////
 
     player.color = "blue"
 

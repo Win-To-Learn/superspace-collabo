@@ -1,94 +1,13 @@
-MISC. CODES
-    //////               MISC. CODES                 //////
+LASER UPGRADE;4
+    //////           LASER UPGRADE CODES             //////
     //////                                           //////
 
 
-    //delete the */ above the code and the */ below the code
-    //to activate each one
+    //angle your laser bullets are fired within
 
-    /* delete this line to activate code below
+    player.bulletSpread = 40;
 
-    player.velocity.byAngleAndPower(0,5);
+    //player.bulletCount = 5;
 
-    delete this line to activate code above */
-
-
-    /*
-    var i = 0;
-    var moveInterval = setInterval(function(){
-    if(i < 20) {
-    player.shoot();
-    i++;
-    }
-    }, 100);
-    */
-
-    /*
-    ige.server.spawnOrbs();
-    */
-
-    /*
-    var i = 0;
-    var moveInterval = setInterval(function(){
-    if(i < 20) {
-    player.translateBy(15,-15,0);
-    i++;
-    }
-    else {
-    clearInterval(moveInterval);
-    }
-    }, 100);
-    */
-
-    //CODE ZZZ9317 EXPERIMENTAL NOT FOR RELEASE//
-    //////  CREATING A NEW PLAYER OBJECT   //////
-    //////                                 //////
-
-    /*
-    ige.server.players[clientId] = new Player(clientId)
-		.streamMode(1)
-		.translateTo(Math.random()*100,-200,0)
-		.scaleTo(1,1,1)
-		.rotateTo(0,0,Math.radians(90))
-		.mount(ige.server.scene1);
-		ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
-    */
-
-    //The code above creates a new "Player" object.
-    //The code is a little more complicated because when you
-    //first access this website, you are assigned a special
-    //"clientId".  This id lets the server know who you are
-    //as distinct from other players that log on.
-    //Since you have a unique id, when you do something,
-    //the server can tell the other players what you did
-    //and make your actions or movements show up on their screen
-    //The rotation code makes the ship show up at a 90 degree
-    //angle.
-
-
-    //to create a new Hydra at x = 0, y = 0
-    //you will need to use a command to create a new object like
-    //in lesson 5 except instead of giving the function the radius
-    //of an orb, you will give it the coordinates of the Hydra
-    //in the format (0,0)
-
-
-
-    //secret super laser upgrade
-
-    //to upgrade you laser, you will have to use dot notation
-    //and access the properties bulletSpread (the angle within which the lasers are fired)
-    //and bulletCount (the number of bullets fired each time)
-    //of the player object
-
-    //the code will start like player.
-    //and the you will have to add the properties at the end
-    //and set them equal to the values you want
-
-    //the code below sets the bulletSpread
-
-    //player.bulletSpread = 40;
-
-    //you will have to write the code for the bullet count below here
-
+    //the number of laser bullets fired
 

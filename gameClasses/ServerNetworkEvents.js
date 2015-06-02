@@ -189,7 +189,36 @@ var ServerNetworkEvents = {
 	
 	_onPlayerShootUp: function (data, clientId) {
 		ige.server.players[clientId].controls.shoot = false;
+	},
+
+	_onMoisture1: function (data, clientId) {
+		ige.server.players[clientId].moistureSetting = 1;
+		ige.server.players[clientId].treeDepth = 1;
+	},
+
+	_onMoisture2: function (data, clientId) {
+		ige.server.players[clientId].moistureSetting = 2;
+		ige.server.players[clientId].treeDepth = 2;
+	},
+
+	_onMoisture3: function (data, clientId) {
+		ige.server.players[clientId].moistureSetting = 3;
+		ige.server.players[clientId].treeDepth = 3;
+	},
+
+	_onMoisture4: function (data, clientId) {
+		ige.server.players[clientId].moistureSetting = 4;
+		ige.server.players[clientId].treeDepth = 4;
+	},
+
+	_onMoisture5: function (data, clientId) {
+		ige.server.players[clientId].moistureSetting = 5;
+		ige.server.players[clientId].treeDepth = 5;
 	}
+
+
+
+
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ServerNetworkEvents; }

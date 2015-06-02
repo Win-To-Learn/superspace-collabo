@@ -31,7 +31,7 @@ var Bullet = IgeEntityBox2d.extend({
 				isSensor: true,
 				filter: {
 					categoryBits: 0x0002,
-					maskBits: 0x0001 | 0x00ff | 0x0004 | 0x8000
+					maskBits: 0x0001 | 0x00ff | 0x0004 | 0x8000 | 0x9000 | 0x0016
 				},
 				shape: {
 					type: 'circle',
@@ -61,7 +61,35 @@ var Bullet = IgeEntityBox2d.extend({
         this.category('bullet')
             .width(2)
             .height(2);
+
+		self.streamSections(['transform', 'mount', 'color', 'shape']);
     },
+
+	streamSectionData: function (sectionId, data) {
+		// Check if the section is one that we are handling
+		switch(sectionId) {
+			case 'color':
+				if (data) {
+					this.color = data;
+				}
+				else {
+					return this.color;
+				}
+				break;
+			case 'shape':
+				if (data) {
+					this.shape = JSON.parse(data);
+				}
+				else {
+					return JSON.stringify(this.shape);
+				}
+				break;
+			default:
+				return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
+				break;
+		}
+	},
+
 
     tick: function (ctx) {
 		if(ige.isServer) {
@@ -92,6 +120,10 @@ var Bullet = IgeEntityBox2d.extend({
 				//ige.network.send('scored', '+' + other.pointWorth + ' points!', this.source.clientId);
 				//ige.network.send('updateScore', this.source.score, this.source.clientId);
 				//new FixedOrbz(0.8).translateTo(other._translate.x, other._translate.y, 0);
+				return true;
+			case 'fixedorbred':
+
+				this.destroy();
 				return true;
 			default:
 				return false;

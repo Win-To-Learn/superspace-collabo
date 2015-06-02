@@ -1,6 +1,6 @@
-CODE 4;4
-    //////    CODE #4: HYPERSPACE ON A TIMER        //////
-    //////                                          //////
+SCOOT;10
+    //////    HYPERSPACE ON A TIMER        //////
+    //////                                 //////
 
     var delayMs = 1000; //this is the delay in milliseconds
     var i = 0;          //this is a variable used to count

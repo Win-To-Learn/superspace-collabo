@@ -1,6 +1,6 @@
-CODE 2;1
-    ////// CODE #2: CHANGING THE SCALE OF YOUR SHIP //////
-    //////             USING VARIABLES              //////
+SCALE SHIP & VAR;11
+    ////// CHANGING THE SCALE OF YOUR SHIP //////
+    //////        USING VARIABLES          //////
 
 
 

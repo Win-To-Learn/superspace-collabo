@@ -1,4 +1,4 @@
-CODE 13;13
+GOGOGO!;3
 
 player._thrustPower = 500;
 

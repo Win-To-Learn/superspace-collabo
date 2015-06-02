@@ -1,32 +1,20 @@
-CODE 10;10
-    //////       CODE #10: DELETING ASTEROIDS       //////
-    //////                                            //////
+BYE ASTEROIDS;10
+    //////       DELETING ASTEROIDS       //////
+    //////                                //////
 
     for(var i in ige.server.orbs) {
-
 
     //put the code to destroy the asteroids in here
 
 
     }
 
-
     //The code above will cycle through all the orbs stored in
     //an array on the server
 
     //To destroy them you will need to reference them in order using the
-    //i variable such as the code shown below
+    //i variable such as the code shown below and use destroy()
+
+    //ige.server.orbs[i].destroy();
 
 
-    //ige.server.orbs[i]
-
-
-    //but then you will need to use a function built into each orb
-    //Copy the function below to the end of orbs[i] above
-
-    //.destroy();
-
-
-    //You probably have a lot of asteroids at this point.
-    //The code above allows you to destroy all of them to
-    //start over with no asteroids in space.

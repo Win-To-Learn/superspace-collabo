@@ -1,8 +1,8 @@
-CODE 1;1
-    ////// CODE #1: CHANGING THE SCALE OF YOUR SHIP //////
+SCALE SHIP;12
+    ////// CHANGING THE SCALE OF YOUR SHIP //////
 
 
-    player.scaleTo(1,2,1);
+    player.scaleTo(2,2,1);
 
     //don't be afraid to change the numbers above
     //changing them one way might give you an

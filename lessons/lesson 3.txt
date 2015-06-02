@@ -1,6 +1,6 @@
-CODE 3;3
-    //////           CODE #3: HYPERSPACE            //////
-    //////                                          //////
+GO HOME;6
+    //////           HYPERSPACE            //////
+    //////                                 //////
 
 
     player.translateTo(200,-100,0);

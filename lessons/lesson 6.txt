@@ -1,6 +1,6 @@
-CODE 6;6
-    //////    CODE #6: CREATING A NEW ORB OBJECT    //////
-    //////         AND MOVING IT TO A LOCATION      //////
+MOVE ASTEROID;14
+    //////    CREATING A NEW ASTEROID    //////
+    //////  AND MOVING IT TO A LOCATION  //////
 
     var myOrb = new Orb(1.5);
 

@@ -1,8 +1,6 @@
-CODE 16;16
-
+FLASHY SHIP;16
 
 //    Used nested loops to animate the shape and change the color of your ship
-
 
 var delayMs = 10; //this is the delay in milliseconds
     var i = 0;

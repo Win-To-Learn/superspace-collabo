@@ -39,7 +39,7 @@ var HydraHead = BasicOrb.extend({
             this.destroy();
             this.dying = false
 
-			new Hydra(-4200 + Math.random() * 8400, -2400 + Math.random() * 4800);
+			//new Hydra(-4200 + Math.random() * 8400, -2400 + Math.random() * 4800);
         }
 
         IgeEntity.prototype.update.call(this, ctx);

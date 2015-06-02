@@ -1,89 +1,154 @@
-CODE 12;12
-
+NEW SHAPE;1
 //The coordinates below define the corners of different shapes.
-//Test them out to see how they change the shape of your ship.
 
-//Remove the "comments" shown as /*  or */
-//to activate the different shapes
+//Remove the "comments" shown as // or /*  or */ to activate code
 
-//Triangle
+//ROCKET DESIGN #1
+player.shape = [[0,0],[2,2],[2,6],[3,7],[-3,7],[-2,6],[-2,2],[0,0],[2,6],[-2,6]];
 
-player.shape = [
+//ROCKET DESIGN #2
+//player.shape = [[0,0],[2,2],[2,6],[3,7],[-3,7],[-2,6],[-2,2]];
 
-[0,-1],
-[-0.5,0],
-[0.5,0]
-		];
+//STAR DESIGN
+//player.shape = [[0,-0.75],[1.5,-1.5],[0.75,0],[1.5,1.5],[0,0.75],[-1.5,1.5],[-0.75,0],[-1.5,-1.5]];
 
-//Square
+//WINGED SHIP #1
+//player.shape = [[0,0],[2,4],[0,2],[-2,4],[0,0],[1,5],[0,3],[-1,5]];
 
+//WINGED SHIP #2
+//player.shape = [[0,0],[2,4],[0,2],[-2,4]];
+
+//TRIANGLE SHIP
+//player.shape = [[2,3],[-2,3],[0,0]];
+
+
+//MYSTERY SHAPE
 /*
 player.shape = [
-
-[1,-1],
-[-1,-1],
-[-1,1],
-[1,1]
-		];
+[18,20], [12,13],  [2,20], [8,13],  [20,7], [14,8],[10,20], [12,13], [20,13], [14,8], [17,0],
+[10,5], [3,0], [6,8],[0,13], [8,13], [10,20] , [0,7], [6,8] , [10,0], [10,5],[10,16], [9,12],
+[4,12], [8,9], [6,4], [10,7], [14,4], [12,9],[16,12], [11,12], [10,16]];
+player.scaleTo(0.2,0.2,1);
 */
 
-//Pentagon
 
 /*
+var startX = 0;
+var startY = 0;
+
+var letScale = 3;
+
+//a
 player.shape = [
 
-[0,-1],
-[-1,0],
-[-1,1],
-[1,1],
-[1,0]
-		];
-*/
+[startX,startY],
 
-//Hexagon
+[startX,startY+letScale*2],
+[startX,startY],
+[startX+letScale,startY],
+[startX+letScale,letScale],
+[startX,letScale],
+[startX,startY],
+[startX+letScale,startY],
+[startX+letScale,startY+letScale],
+[startX+letScale,startY+letScale*2],
+[startX+letScale,startY],
+[startX+letScale*1.67,startY],
+
+]
+*/
 
 /*
+var startX = 0;
+var startY = 0;
+
+var letScale = 3;
+
+//aa
 player.shape = [
 
-[1,0],
-[1,-1],
-[0,-1],
-[-1,0],
-[-1,1],
-[0,1]
-		];
+[startX,startY],
+
+[startX,startY+letScale*2],
+[startX,startY],
+[startX+letScale,startY],
+[startX+letScale,letScale],
+[startX,letScale],
+[startX,startY],
+[startX+letScale,startY],
+[startX+letScale,startY+letScale],
+[startX+letScale,startY+letScale*2],
+[startX+letScale,startY],
+[startX+letScale*1.67,startY],
+
+[startX+letScale*1.67,startY+letScale*2],
+[startX+letScale*1.67,startY],
+[startX+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale,letScale],
+[startX+letScale*1.67,letScale],
+[startX+letScale*1.67,startY],
+[startX+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale,startY+letScale],
+[startX+letScale*1.67+letScale,startY+letScale*2],
+[startX+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale*1.67,startY],
+
+]
 */
 
-//Heptagon
 
 /*
+var letScale = 1;
+
+var startX = -letScale*2;
+var startY = 0;
+
+
+
+//aaa
 player.shape = [
 
-[3,0],
-[2,-2],
-[-1,-3],
-[-3,-1],
-[-3,1],
-[-1,3],
-[2,2]
-		];
+[startX,startY],
+
+[startX,startY+letScale*2],
+[startX,startY],
+[startX+letScale,startY],
+[startX+letScale,letScale],
+[startX,letScale],
+[startX,startY],
+[startX+letScale,startY],
+[startX+letScale,startY+letScale],
+[startX+letScale,startY+letScale*2],
+[startX+letScale,startY],
+[startX+letScale*1.67,startY],
+
+[startX+letScale*1.67,startY+letScale*2],
+[startX+letScale*1.67,startY],
+[startX+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale,letScale],
+[startX+letScale*1.67,letScale],
+[startX+letScale*1.67,startY],
+[startX+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale,startY+letScale],
+[startX+letScale*1.67+letScale,startY+letScale*2],
+[startX+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale*1.67,startY],
+
+
+[startX+letScale*1.67+letScale*1.67,startY+letScale*2],
+[startX+letScale*1.67+letScale*1.67,startY],
+[startX+letScale*1.67+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale*1.67+letScale,letScale],
+[startX+letScale*1.67+letScale*1.67,letScale],
+[startX+letScale*1.67+letScale*1.67,startY],
+[startX+letScale*1.67+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale*1.67+letScale,startY+letScale],
+[startX+letScale*1.67+letScale*1.67+letScale,startY+letScale*2],
+[startX+letScale*1.67+letScale*1.67+letScale,startY],
+[startX+letScale*1.67+letScale*1.67,startY],
+
+]
+
 */
-
-//Mystery Shape
-
-/*
-player.shape = [
-[18,20], [12,13],  [2,20], [8,13],  [20,7], [14,8],
-
-[10,20], [12,13], [20,13], [14,8], [17,0], [10,5], [3,0], [6,8],
-
-[0,13], [8,13], [10,20] , [0,7], [6,8] , [10,0], [10,5],
-
-[10,16], [9,12], [4,12], [8,9], [6,4], [10,7], [14,4], [12,9],
-
-[16,12], [11,12], [10,16]
-		];
-*/
-
 
 

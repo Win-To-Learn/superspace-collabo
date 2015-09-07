@@ -306,7 +306,7 @@ var Player = IgeEntityBox2d.extend({
 
 				}
 
-				var steps = Math.min(6, this.bulletCount) - 1;
+				var steps = Math.min(3, this.bulletCount) - 1;
 				var bulletSpreadRad = steps ? this.bulletSpread * Math.PI / 180 : 0;
 				var deltaA = steps ? bulletSpreadRad / steps : 0;
 				for (var i = 0, a = -bulletSpreadRad / 2; i <= steps; i++, a += deltaA) {
@@ -735,10 +735,23 @@ var Player = IgeEntityBox2d.extend({
 				ige.network.send('updateScore', this.score, this.clientId);
 				return true;
 			case 'fixedorbred':
+				console.log(other.treeSpread);
+
+				ige.network.send('code', {label: 'Tree Code', code: 'player.treeSpread = ' + other.oldTreeSpread.toString()+';'
+						+'\nplayer.treeBranchDecay = ' + other.oldTreeBranchDecay.toString()+';'
+						+'\nplayer.treeScale = ' + other.oldTreeScale.toString()+';'
+						+'\nplayer.treeBranchFactor = ' + other.oldTreeBranchFactor.toString()+';'
+
+					},
+					this.sourceClient);
 				if (ige.server.score > 200){
 					other.growingTree = true;
 				}
+				var otherTreeSpread = other.treeSpread;
+
 				return true;
+
+
 			case 'bullet':
 				//ige.network.send('updateScore', this.score, this.clientId);
 				//this.addScore(-30);
@@ -861,9 +874,9 @@ var Player = IgeEntityBox2d.extend({
 	},
 
 	addHomePlanet: function (hp) {
-		if (this.homePlanet) {
-			throw new Error('Home planet already exists');
-		}
+		//if (this.homePlanet) {
+		//	throw new Error('Home planet already exists');
+		//}
 		this.homePlanet = hp;
 		hp.playerOwner = this;
 	},

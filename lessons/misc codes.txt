@@ -7,7 +7,7 @@ LASER UPGRADE;4
 
     player.bulletSpread = 40;
 
-    //player.bulletCount = 5;
+    //player.bulletCount = 3;
 
     //the number of laser bullets fired
 

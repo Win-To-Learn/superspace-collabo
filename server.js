@@ -245,7 +245,7 @@ var Server = IgeClass.extend({
 						\* ------------------------------------------- */
 
 						self.spawnOrbs = function spawnOrbs () {
-							for (var i = 0; i < 25; i++) {
+							for (var i = 0; i < 10; i++) {
 								scale = 1 + Math.random();
 								var orb3 = new Orb(scale)
 									.translateTo(-4200 + (Math.random()) * 8400, -2400 + (Math.random()) * 4800, 0)

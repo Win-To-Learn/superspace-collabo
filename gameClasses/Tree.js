@@ -9,6 +9,8 @@ var Tree = IgeEntityBox2d.extend({
 		var self = this;
 		var d2r = Math.PI / 180;
 
+		var treeSpread = 100;
+
         //self.touched = false;
 
         // Set the rectangle colour (this is read in the Rectangle.js smart texture)
@@ -29,6 +31,7 @@ var Tree = IgeEntityBox2d.extend({
 		} else if (branchDecay > 0) {
 			this.brachDecay = branchDecay;
 		} else {
+			branchDecay = 0.7;
 			branchDecay = 0.7;
 		}
 

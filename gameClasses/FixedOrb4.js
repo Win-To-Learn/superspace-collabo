@@ -27,11 +27,17 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		self.numtrees = 0;
 
 
-		var treeScale = 2.7;
-		var treeBranchFactor = 3;
-		var treeBranchDecay = 0.7;
-		var treeSpread = 150;
-		var treeDepth = 5;
+		this.treeScale = 2.7;
+		this.treeBranchFactor = 3;
+		this.treeBranchDecay = 0.7;
+		this.treeSpread = 150;
+		this.treeDepth = 5;
+
+
+		this.oldTreeSpread = 0;
+		this.oldTreeBranchFactor= 0;
+		this.oldTreeBranchDecay = 0;
+		this.oldTreeScale = 0;
 
 		var playerScore = 0;
 
@@ -157,16 +163,16 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 		//console.log('growing tree');
 		//if (!this.tree) {
 		//if (this.numtrees < 20) {
-		if (playerScore >= 50) {
+		if (this.playerScore >= 50) {
 
 			//this.numtrees++;
 			scale = 8 + Math.random() * 2;
 			//this.tree = new Tree(scale)
 			//function (scale, branchFactor, branchDecay, spread, depth)
 			//this.tree = new Tree(2.7,3,0.7,this.spread,5)
-			this.tree = new Tree(treeScale,treeBranchFactor,treeBranchDecay,treeSpread,treeDepth)
+			this.tree = new Tree(this.treeScale,this.treeBranchFactor,this.treeBranchDecay,this.treeSpread,this.treeDepth)
 				.translateTo(this._translate.x, this._translate.y - 370, 0);
-			this.tree.color = treeColor;
+			this.tree.color = this.treeColor;
 			//this.tree.color = 'rgb(255,255,5)';
 			//this.tree.color = treeColor;
 			//this.tree.fillColor = 'rgba(255,255,19,0.55)';
@@ -374,15 +380,21 @@ var FixedOrbRed = IgeEntityBox2d.extend({
 				other._box2dBody.SetAngularVelocity(0);
 			case 'ship':
 				//if (other.score > 15) {
+				this.oldTreeSpread = this.treeSpread;
+				this.oldTreeBranchDecay = this.treeBranchDecay;
+				this.oldTreeScale = this.treeScale;
+				this.oldTreeBranchFactor = this.treeBranchFactor;
 
-				treeColor = other.color;
-				treeScale = other.treeScale;
-				treeBranchFactor = other.treeBranchFactor;
-				treeBranchDecay = other.treeBranchDecay;
-				treeSpread = other.treeSpread;
-				treeDepth = other.treeDepth;
-				playerScore = other.score;
+
+				this.treeColor = other.color;
+				this.treeScale = other.treeScale;
+				this.treeBranchFactor = other.treeBranchFactor;
+				this.treeBranchDecay = other.treeBranchDecay;
+				this.treeSpread = other.treeSpread;
+				this.treeDepth = other.treeDepth;
+				this.playerScore = other.score;
 					this.growingTree = true;
+				console.log(this.treeSpread);
 				// now lower the score by 50
 				other.score -= 50;
 				if (other.score < 0)
